@@ -193,4 +193,10 @@ const sections = [
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: clamp(16px, 2.5vw, 24px);
   }
+
+  @media (max-width: 520px) {
+    .skills-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>

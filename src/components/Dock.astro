@@ -194,9 +194,23 @@ const { sections = [] } = Astro.props;
     clip: rect(0 0 0 0);
   }
 
+  @media (max-width: 720px) {
+    .dock {
+      width: calc(100vw - 24px);
+      bottom: 12px;
+    }
+  }
+
   @media (max-width: 520px) {
     .dock-grid {
       grid-template-columns: 1fr;
+    }
+    .dock-bar {
+      padding: 9px 12px;
+      gap: 10px;
+    }
+    .dock-prog {
+      width: 36px;
     }
   }
 </style>

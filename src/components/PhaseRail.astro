@@ -124,4 +124,21 @@ const { phases = ORCAS_PHASES } = Astro.props;
     line-height: 1.6;
     margin: 0;
   }
+
+  @media (max-width: 480px) {
+    .phase-item {
+      grid-template-columns: 36px 1fr;
+      gap: 12px;
+    }
+    .phase-node {
+      width: 28px;
+      height: 28px;
+      font-size: 10px;
+    }
+    .phase-head {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+  }
 </style>

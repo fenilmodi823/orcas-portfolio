@@ -226,6 +226,25 @@
     line-height: 1.6;
     margin: 0;
   }
+
+  @media (max-width: 720px) {
+    .sim-stage {
+      height: clamp(280px, 46svh, 400px);
+    }
+    .sim-dock {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 14px;
+    }
+    .sim-ctl {
+      margin-left: 0;
+      width: 100%;
+      justify-content: space-between;
+    }
+    .sim-els {
+      gap: 12px 18px;
+    }
+  }
 </style>
 
 <script>

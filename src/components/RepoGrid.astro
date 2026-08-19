@@ -136,6 +136,15 @@
     text-decoration: underline;
     text-underline-offset: 3px;
   }
+
+  @media (max-width: 480px) {
+    .repo-grid {
+      grid-template-columns: 1fr;
+    }
+    :global(.repo-card) {
+      padding: 16px 16px;
+    }
+  }
 </style>
 
 <script>

@@ -458,6 +458,22 @@ const personLd = {
       gap: 24px;
     }
   }
+
+  @media (max-width: 480px) {
+    .timeline-grid {
+      grid-template-columns: 1fr;
+    }
+    .orcas-teaser-card {
+      padding: 22px 18px;
+    }
+    .teaser-actions {
+      flex-direction: column;
+    }
+    .btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
 </style>
 
 <script>

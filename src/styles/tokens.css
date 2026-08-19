@@ -1,44 +1,50 @@
-:root{
+:root {
   /* surface */
-  --void:        #04070F;
-  --void-2:      #070C18;
-  --void-3:      #0A1120;
+  --void: #04070f;
+  --void-2: #070c18;
+  --void-3: #0a1120;
 
   /* type */
-  --text-hi:     #E8EDF7;
-  --text:        #9FADC4;
-  --text-lo:     #6E7C97;   /* 4.8:1 on void — small mono labels stay legible */
-  --text-xlo:    #3D4859;
+  --text-hi: #e8edf7;
+  --text: #9fadc4;
+  --text-lo: #6e7c97; /* 4.8:1 on void — small mono labels stay legible */
+  --text-xlo: #3d4859;
 
   /* the one accent — scarce by decree */
-  --cyan:        #00E5FF;
-  --cyan-lift:   #5CF2FF;
-  --cyan-deep:   #0891A8;
+  --cyan: #00e5ff;
+  --cyan-lift: #5cf2ff;
+  --cyan-deep: #0891a8;
 
   /* structure */
-  --line:        rgba(232,237,247,.09);
-  --line-hi:     rgba(232,237,247,.16);
+  --line: rgba(232, 237, 247, 0.09);
+  --line-hi: rgba(232, 237, 247, 0.16);
 
   /* glass — Apple-true */
-  --glass-fill:  rgba(11,17,30,.45);
-  --glass-blur:  30px;
-  --glass-sat:   200%;
-  --glass-edge:  rgba(232,237,247,.18);
+  --glass-fill: rgba(11, 17, 30, 0.45);
+  --glass-blur: 30px;
+  --glass-sat: 200%;
+  --glass-edge: rgba(232, 237, 247, 0.18);
 
   /* radii — mixed scale. Beats the glass spec where they disagree. */
-  --r-chip:  8px;  --r-cell:  10px; --r-rail: 12px;
-  --r-panel: 18px; --r-modal: 20px; --r-pill: 999px;
+  --r-chip: 8px;
+  --r-cell: 10px;
+  --r-rail: 12px;
+  --r-panel: 18px;
+  --r-modal: 20px;
+  --r-pill: 999px;
 
   /* motion */
-  --ease:    cubic-bezier(.22,.61,.36,1);
-  --ease-io: cubic-bezier(.65,.05,.36,1);
-  --t-fast:  180ms;  --t-base: 380ms;  --t-slow: 700ms;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-io: cubic-bezier(0.65, 0.05, 0.36, 1);
+  --t-fast: 180ms;
+  --t-base: 380ms;
+  --t-slow: 700ms;
 
   /* rhythm */
-  --gutter:  clamp(20px, 5vw, 88px);
-  --stack:   clamp(84px, 13vh, 168px);
+  --gutter: clamp(14px, 4vw, 88px);
+  --stack: clamp(64px, 11vh, 168px);
 
   /* logo focus — written by scroll, read by the background mark */
   --mark-blur: 0px;
-  --mark-op:   .05;
+  --mark-op: 0.05;
 }

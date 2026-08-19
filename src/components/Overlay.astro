@@ -230,6 +230,22 @@ const { id = 'readme-overlay' } = Astro.props;
     color: var(--text-lo);
     font-weight: 400;
   }
+
+  @media (max-width: 720px) {
+    .ov-panel {
+      width: 100vw;
+      height: 100svh;
+      border-radius: 0;
+      border: 0;
+    }
+    .ov-top {
+      padding: 14px 16px;
+      gap: 12px;
+    }
+    .ov-body {
+      padding: 20px 16px;
+    }
+  }
 </style>
 
 <script>

@@ -3,7 +3,7 @@ kind: Project
 title: "Diablex — Medical Data Analytics Platform"
 ---
 
-**Ongoing**
+## Ongoing
 
 A full-stack platform for collecting, validating and analysing continuous glucose
 monitoring data from Bluetooth-enabled medical devices.

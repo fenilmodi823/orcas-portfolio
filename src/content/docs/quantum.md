@@ -3,7 +3,7 @@ kind: Project
 title: "Quantum-Enhanced AES Encryption"
 ---
 
-**Completed · Aug – Dec 2023 · course research project, Cyber Security**
+## Completed · Aug – Dec 2023 · course research project, Cyber Security
 
 AES is only as strong as the randomness behind its keys. This project asked a narrow
 question: does quantum-generated randomness measurably improve key material over a

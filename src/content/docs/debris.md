@@ -3,7 +3,7 @@ kind: Project
 title: "Space Debris Tracking & Analysis System"
 ---
 
-**Ongoing · team lead since January 2024 · Silver Oak University**
+## Ongoing · team lead since January 2024 · Silver Oak University
 
 The system the ORCAS paper grew out of. A hybrid Python/React platform that fetches,
 propagates and visualises orbital data for the public catalogue.

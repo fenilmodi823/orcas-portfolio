@@ -32,7 +32,8 @@ Presented online, 28–30 July 2026. *Not yet indexed in IEEE Xplore.*
 ## Academic experience
 
 ### Team Lead, Space Debris Tracking System — Jan 2024 to present
-*Silver Oak University*
+
+#### Silver Oak University
 
 - Leading a multi-member team designing a system for tracking, predicting and visualising
   orbital debris using NASA APIs and TLE data.
@@ -43,7 +44,8 @@ Presented online, 28–30 July 2026. *Not yet indexed in IEEE Xplore.*
 - Developed the backend in Python and a frontend prototype in React.js.
 
 ### Research Project: Quantum-Enhanced AES Encryption — Aug – Dec 2023
-*Cyber Security course project*
+
+#### Cyber Security course project
 
 - Implemented AES encryption enhanced with quantum-random keys generated via Qiskit.
 - Analysed entropy and avalanche effect using data-visualisation metrics.

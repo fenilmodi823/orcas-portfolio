@@ -51,7 +51,8 @@ cross-validation, hyperparameter tuning
 ## Projects
 
 ### Space Debris Tracking & Analysis System — ongoing
-*Python, scikit-learn, Pandas, Skyfield*
+
+#### Python, scikit-learn, Pandas, Skyfield
 
 - Collected and preprocessed orbital element datasets (TLE format) from NASA and NORAD
   databases, handling missing values, outliers and temporal inconsistencies across
@@ -68,7 +69,8 @@ cross-validation, hyperparameter tuning
 - Created an interactive visualisation dashboard for multi-dimensional orbital data
 
 ### Quantum-Random Key Analysis for Cryptography — completed
-*Python, Qiskit, NumPy, statistical testing*
+
+#### Python, Qiskit, NumPy, statistical testing
 
 - Designed controlled experiments comparing quantum-generated random keys with
   pseudo-random number generators using standardised cryptographic test suites
@@ -81,7 +83,8 @@ cross-validation, hyperparameter tuning
   techniques following scientific reporting standards
 
 ### Medical Data Analytics Platform (Diablex) — ongoing
-*Node.js, React, MongoDB, statistical analysis*
+
+#### Node.js, React, MongoDB, statistical analysis
 
 - Architected a full-stack platform for collecting, validating and analysing continuous
   glucose monitoring data from Bluetooth-enabled medical devices

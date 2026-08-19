@@ -1,6 +1,6 @@
 ---
 interface Props {
-  variant?: 'feature' | 'tall' | 'wide' | 'note' | 'half';
+  variant?: 'feature' | 'tall' | 'half';
   title: string;
   description: string;
   href: string;
@@ -54,17 +54,8 @@ const { variant = 'half', title, description, href, tag, meta, eyebrow } = Astro
     grid-column: span 6;
     min-height: 380px;
   }
-  .card-wide {
-    grid-column: span 12;
-  }
   .card-half {
     grid-column: span 6;
-  }
-  .card-note {
-    grid-column: span 6;
-    border: 1px dashed var(--line-hi);
-    background: none;
-    backdrop-filter: none;
   }
   .card-eyebrow {
     font-size: 10px;
@@ -111,8 +102,7 @@ const { variant = 'half', title, description, href, tag, meta, eyebrow } = Astro
 
   @media (max-width: 840px) {
     .card-tall,
-    .card-half,
-    .card-note {
+    .card-half {
       grid-column: span 12;
       min-height: auto;
     }

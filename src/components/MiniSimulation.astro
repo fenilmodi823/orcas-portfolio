@@ -37,10 +37,10 @@
   </div>
 
   <div class="sim-legend mono">
-    <span><i style="background: #5cf2ff;"></i> LEO / SSO</span>
-    <span><i style="background: #7fa8c9;"></i> MEO</span>
-    <span><i style="background: #9c8fc4;"></i> GEO</span>
-    <span><i style="background: #c48f9c;"></i> HEO</span>
+    <span><i style="background: var(--cyan-lift);"></i> LEO / SSO</span>
+    <span><i style="background: var(--regime-meo);"></i> MEO</span>
+    <span><i style="background: var(--regime-geo);"></i> GEO</span>
+    <span><i style="background: var(--regime-heo);"></i> HEO</span>
   </div>
 
   <p class="sim-caveat mono">
@@ -266,6 +266,18 @@
 
     const SATS = CATALOG;
     const HOME = { az: -0.6, el: 0.42, d: 118000 };
+
+    // Resolved once from tokens.css so canvas fillStyle/strokeStyle (which can't take var()) stays in sync with the design system.
+    const rootStyle = getComputedStyle(document.documentElement);
+    const tok = (name: string) => rootStyle.getPropertyValue(name).trim();
+    const CYAN = tok('--cyan');
+    const REGIME_COLORS: Record<string, string> = {
+      LEO: tok('--cyan-lift'),
+      SSO: tok('--cyan-lift'),
+      MEO: tok('--regime-meo'),
+      GEO: tok('--regime-geo'),
+      HEO: tok('--regime-heo'),
+    };
     let cam = { ...HOME };
     let tgt = [0, 0, 0];
     let tgtWant = [0, 0, 0];
@@ -453,7 +465,7 @@
       screenPts.length = 0;
       SATS.forEach((sat, idx) => {
         const isSelected = sel === idx;
-        const color = sat.regime === 'LEO' || sat.regime === 'SSO' ? '#5cf2ff' : sat.regime === 'MEO' ? '#7fa8c9' : sat.regime === 'GEO' ? '#9c8fc4' : '#c48f9c';
+        const color = REGIME_COLORS[sat.regime] || CYAN;
 
         // Orbit ellipse trail
         ctx.beginPath();
@@ -485,7 +497,7 @@
 
           ctx.beginPath();
           ctx.arc(curScreen[0], curScreen[1], isSelected ? 4.5 : 2.8, 0, Math.PI * 2);
-          ctx.fillStyle = isSelected ? '#00e5ff' : color;
+          ctx.fillStyle = isSelected ? CYAN : color;
           ctx.fill();
 
           if (isSelected) {

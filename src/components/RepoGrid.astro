@@ -149,6 +149,7 @@
 
 <script>
   import { fetchPinnedRepos } from '@/lib/github';
+  import { esc } from '@/lib/markdown';
 
   const grid = document.getElementById('repoGrid');
   const stamp = document.getElementById('repoStamp');
@@ -172,19 +173,19 @@
           <div class="repo-card">
             <div>
               <div class="repo-top">
-                <h4 class="repo-name">${r.name}</h4>
+                <h4 class="repo-name">${esc(r.name)}</h4>
               </div>
-              <p class="repo-desc">${r.description || 'Public repository by Fenil Modi.'}</p>
+              <p class="repo-desc">${esc(r.description || 'Public repository by Fenil Modi.')}</p>
             </div>
             <div class="repo-foot mono">
               <span class="repo-lang">
                 <span class="lang-dot"></span>
-                <span>${r.language || 'Code'}</span>
+                <span>${esc(r.language || 'Code')}</span>
               </span>
               <div class="repo-stats">
                 <span>★ ${r.stars}</span>
                 <span>⑂ ${r.forks}</span>
-                <button class="repo-btn" onclick="window.openReadmeOverlay && window.openReadmeOverlay('${r.name}', '${r.url}')">README</button>
+                <button class="repo-btn" onclick="window.openReadmeOverlay && window.openReadmeOverlay('${esc(r.name)}', '${esc(r.url)}')">README</button>
               </div>
             </div>
           </div>

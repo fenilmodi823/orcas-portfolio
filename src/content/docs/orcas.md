@@ -62,7 +62,7 @@ time-decoupled, using the historical elements:
 | Quantity | Value |
 | --- | --- |
 | Altitude at T₀ | 788.6 km |
-| Relative velocity | 7.46 / 7.42 km s⁻¹ |
+| Velocity (Iridium 33 / Cosmos 2251) | 7.46 / 7.42 km s⁻¹ |
 | Covariance determinant, primary | 2.4 × 10⁴ km² |
 | Covariance determinant, secondary | 4.1 × 10⁴ km² |
 | Mahalanobis distance D_M | 1.84 |

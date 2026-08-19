@@ -47,4 +47,20 @@
   /* logo focus — written by scroll, read by the background mark */
   --mark-blur: 0px;
   --mark-op: 0.05;
+
+  /* status — single sanctioned exception to the cyan-only accent rule */
+  --critical: #ff6b5e;
+
+  /* mini-simulation orbit regimes — LEO/SSO reuse --cyan-lift */
+  --regime-meo: #7fa8c9;
+  --regime-geo: #9c8fc4;
+  --regime-heo: #c48f9c;
+
+  /* background watermark — second, dimmer orca mark */
+  --orca-body-faint: #6ea8d8;
+  --orca-mark-faint: #050b16;
+
+  /* Plate footer core gradient */
+  --plate-core-1: #123f66;
+  --plate-core-2: #081a2c;
 }

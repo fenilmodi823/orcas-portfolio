@@ -13,7 +13,7 @@ function safeUrl(u: string): string {
   return SAFE_URL_RE.test(String(u).trim()) ? String(u).trim() : '#';
 }
 
-function esc(s: string): string {
+export function esc(s: string): string {
   return s
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')

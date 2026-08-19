@@ -1,0 +1,190 @@
+---
+---
+
+<div class="paper-block-grid">
+  <div class="paper-summary">
+    <div class="paper-badge mono">
+      <span>Accepted · ICSSIT 2026 · Paper ID 1849</span>
+    </div>
+    <h3 class="paper-title">
+      Probabilistic Space Debris Conjunction Assessment Using Machine Learning and Covariance Intersection Analysis
+    </h3>
+    <p class="paper-authors">
+      <em>Fenil Miteshkumar Modi</em>, Satvik V. Khara, Gaurav D. Tivari, Jay Patel, Prathmesh Patel, Gautam Kumawat
+    </p>
+    <p class="paper-venue">
+      Department of Computer Engineering, Silver Oak University · Technically sponsored by the IEEE SMC Society
+    </p>
+    <div class="paper-actions">
+      <a href="/research" class="btn btn-pri">Read Research Paper</a>
+      <a href="/projects/orcas" class="btn">View ORCAS System</a>
+    </div>
+  </div>
+
+  <aside class="paper-result">
+    <div class="pr-head mono">
+      <span>Validation · T₀ 2009-02-10 16:56 UTC</span>
+      <h4>Iridium 33 / Cosmos 2251</h4>
+    </div>
+
+    <dl class="pr-rows mono">
+      <div><dt>Altitude</dt><dd>788.6 km</dd></div>
+      <div><dt>Relative velocity</dt><dd>7.46 / 7.42 km s⁻¹</dd></div>
+      <div><dt>Covariance det. (P)</dt><dd>2.4 × 10⁴ km²</dd></div>
+      <div><dt>Covariance det. (S)</dt><dd>4.1 × 10⁴ km²</dd></div>
+      <div><dt>Mahalanobis <i>D<sub>M</sub></i></dt><dd>1.84</dd></div>
+      <div class="hi"><dt>Probability <i>P<sub>c</sub></i></dt><dd>4.2 × 10⁻³</dd></div>
+      <div><dt>Alert threshold</dt><dd>1.0 × 10⁻⁴</dd></div>
+    </dl>
+
+    <p class="pr-verdict">
+      Two orders of magnitude above threshold. Deterministic models called this a <b>miss</b>. The probabilistic pipeline flags it <span class="crit mono">CRITICAL</span>.
+    </p>
+  </aside>
+</div>
+
+<style>
+  .paper-block-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: clamp(24px, 4vw, 48px);
+    align-items: start;
+    padding: clamp(24px, 4vw, 40px);
+    background: var(--glass-fill);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    border: 1px solid var(--glass-edge);
+    border-radius: var(--r-panel);
+  }
+  .paper-badge {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 12px;
+    display: block;
+  }
+  .paper-title {
+    font-size: clamp(1.25rem, 2.2vw, 1.65rem);
+    font-weight: 300;
+    color: var(--text-hi);
+    line-height: 1.3;
+    margin: 0 0 14px;
+  }
+  .paper-authors {
+    font-size: 13.5px;
+    color: var(--text);
+    margin: 0 0 8px;
+  }
+  .paper-authors em {
+    color: var(--text-hi);
+    font-style: normal;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .paper-venue {
+    font-size: 12.5px;
+    color: var(--text-lo);
+    margin: 0 0 24px;
+  }
+  .paper-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 9px 18px;
+    border-radius: var(--r-pill);
+    font-size: 12.5px;
+    text-decoration: none;
+    border: 1px solid var(--line);
+    color: var(--text-hi);
+    background: rgba(232, 237, 247, 0.04);
+    transition: all var(--t-fast) var(--ease);
+  }
+  .btn:hover {
+    border-color: var(--line-hi);
+    background: rgba(232, 237, 247, 0.08);
+  }
+  .btn-pri {
+    border-color: rgba(0, 229, 255, 0.4);
+    color: var(--cyan);
+    background: rgba(0, 229, 255, 0.06);
+  }
+  .btn-pri:hover {
+    border-color: var(--cyan);
+    background: rgba(0, 229, 255, 0.12);
+  }
+
+  /* Result Aside */
+  .paper-result {
+    border: 1px solid var(--line);
+    border-radius: var(--r-cell);
+    padding: 20px;
+    background: var(--void-2);
+  }
+  .pr-head {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .pr-head span {
+    font-size: 9.5px;
+    color: var(--text-lo);
+    letter-spacing: 0.1em;
+  }
+  .pr-head h4 {
+    font-size: 13.5px;
+    color: var(--text-hi);
+    margin: 0;
+    font-family: inherit;
+  }
+  .pr-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0 0 16px;
+    font-size: 11.5px;
+  }
+  .pr-rows div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 2px 0;
+  }
+  .pr-rows dt {
+    color: var(--text-lo);
+  }
+  .pr-rows dd {
+    margin: 0;
+    color: var(--text-hi);
+  }
+  .pr-rows div.hi dt,
+  .pr-rows div.hi dd {
+    color: var(--cyan);
+    font-weight: 500;
+  }
+  .pr-verdict {
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--text);
+    margin: 0;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+  }
+  .crit {
+    color: #ff5252;
+    letter-spacing: 0.1em;
+  }
+
+  @media (max-width: 840px) {
+    .paper-block-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

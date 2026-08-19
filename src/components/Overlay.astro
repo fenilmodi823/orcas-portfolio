@@ -1,0 +1,347 @@
+---
+interface Props {
+  id?: string;
+}
+
+const { id = 'readme-overlay' } = Astro.props;
+---
+
+<div class="ov" id={id} hidden role="dialog" aria-modal="true" aria-labelledby="ovTitle">
+  <div class="ov-scrim" data-close></div>
+  <div class="ov-panel">
+    <div class="ov-top">
+      <span class="ov-kind" id="ovKind">README</span>
+      <h3 class="ov-title" id="ovTitle">Repository preview</h3>
+      <button class="ov-x" data-close aria-label="Close dialog">
+        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <div class="ov-body" id="ovBody" tabindex="-1"></div>
+  </div>
+</div>
+
+<style>
+  .ov {
+    position: fixed;
+    inset: 0;
+    z-index: 120;
+    display: none;
+  }
+  .ov.open {
+    display: block;
+  }
+  .ov-scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(2, 4, 9, 0.62);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    opacity: 0;
+    transition: opacity var(--t-base) var(--ease);
+  }
+  .ov.in .ov-scrim {
+    opacity: 1;
+  }
+  .ov-panel {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: min(96vw, 1080px);
+    height: min(94svh, 1000px);
+    display: flex;
+    flex-direction: column;
+    background: rgba(9, 14, 26, 0.72);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    border: 1px solid var(--glass-edge);
+    border-radius: var(--r-modal);
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(16px) scale(0.994);
+    transition: opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease);
+  }
+  .ov.in .ov-panel {
+    opacity: 1;
+    transform: none;
+  }
+  .ov-top {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 16px 20px 16px 24px;
+    border-bottom: 1px solid var(--line);
+    flex: none;
+  }
+  .ov-kind {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    flex: none;
+  }
+  .ov-title {
+    flex: 1;
+    min-width: 0;
+    font-size: 15px;
+    color: var(--text-hi);
+    font-weight: 300;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+  }
+  .ov-x {
+    width: 34px;
+    height: 34px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    border-radius: var(--r-pill);
+    border: 1px solid var(--line);
+    background: none;
+    color: var(--text-lo);
+    cursor: pointer;
+    transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+  }
+  .ov-x:hover {
+    color: var(--text-hi);
+    border-color: var(--line-hi);
+  }
+  .ov-body {
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: clamp(22px, 3.4vw, 48px);
+  }
+  .ov-body:focus {
+    outline: none;
+  }
+
+  /* Document styles */
+  :global(.doc) {
+    max-width: 74ch;
+    margin: 0 auto;
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.72;
+  }
+  :global(.doc > *:first-child) {
+    margin-top: 0;
+  }
+  :global(.doc h1) {
+    font-size: clamp(1.7rem, 3.2vw, 2.5rem);
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--text-hi);
+    margin: 0 0 18px;
+  }
+  :global(.doc h2) {
+    font-size: clamp(1.15rem, 2vw, 1.5rem);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: var(--text-hi);
+    margin: 44px 0 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+  }
+  :global(.doc h3) {
+    font-size: 1.02rem;
+    font-weight: 400;
+    color: var(--text-hi);
+    margin: 30px 0 10px;
+  }
+  :global(.doc p) {
+    margin: 0 0 16px;
+  }
+  :global(.doc ul),
+  :global(.doc ol) {
+    margin: 0 0 18px;
+    padding-left: 20px;
+  }
+  :global(.doc li) {
+    margin: 0 0 7px;
+  }
+  :global(.doc a) {
+    color: var(--cyan);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0, 229, 255, 0.28);
+  }
+  :global(.doc a:hover) {
+    border-bottom-color: var(--cyan);
+  }
+  :global(.doc code) {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.86em;
+    background: rgba(232, 237, 247, 0.06);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 1.5px 5px;
+    color: var(--text-hi);
+  }
+  :global(.doc pre) {
+    background: rgba(3, 6, 13, 0.62);
+    border: 1px solid var(--line);
+    border-radius: var(--r-cell);
+    padding: 16px 18px;
+    overflow-x: auto;
+    margin: 0 0 20px;
+  }
+  :global(.doc pre code) {
+    background: none;
+    border: 0;
+    padding: 0;
+    font-size: 12.5px;
+    line-height: 1.65;
+    color: var(--text);
+  }
+  :global(.doc blockquote) {
+    margin: 0 0 20px;
+    padding: 2px 0 2px 18px;
+    border-left: 2px solid rgba(0, 229, 255, 0.34);
+    color: var(--text-lo);
+  }
+  :global(.doc hr) {
+    border: 0;
+    border-top: 1px solid var(--line);
+    margin: 32px 0;
+  }
+  :global(.doc table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 0 20px;
+    font-size: 13.5px;
+  }
+  :global(.doc th),
+  :global(.doc td) {
+    text-align: left;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  :global(.doc th) {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-lo);
+    font-weight: 400;
+  }
+</style>
+
+<script>
+  import { renderMarkdown } from '@/lib/markdown';
+
+  declare global {
+    interface Window {
+      openReadmeOverlay: (repoName: string, repoUrl: string) => Promise<void>;
+      openDocOverlay: (kind: string, title: string, markdown: string) => void;
+      closeOverlay: () => void;
+    }
+  }
+
+  const el = document.getElementById('readme-overlay');
+  const body = document.getElementById('ovBody');
+  const title = document.getElementById('ovTitle');
+  const kind = document.getElementById('ovKind');
+  let lastFocus: HTMLElement | null = null;
+  let isOpen = false;
+
+  function trap(e: KeyboardEvent) {
+    if (!isOpen) return;
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      close();
+      return;
+    }
+    if (e.key !== 'Tab' || !el) return;
+    const focusable = Array.from(
+      el.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'),
+    ).filter((n) => n.offsetParent !== null);
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
+
+  function show(k: string, t: string, html: string) {
+    if (!el || !body || !title || !kind) return;
+    lastFocus = document.activeElement as HTMLElement;
+    kind.textContent = k;
+    title.textContent = t;
+    body.innerHTML = html;
+    body.scrollTop = 0;
+    el.hidden = false;
+    el.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => {
+      el.classList.add('in');
+      body.focus();
+    });
+    isOpen = true;
+    window.addEventListener('keydown', trap, true);
+  }
+
+  function close() {
+    if (!isOpen || !el || !body) return;
+    isOpen = false;
+    el.classList.remove('in');
+    window.removeEventListener('keydown', trap, true);
+    document.body.style.overflow = '';
+    setTimeout(() => {
+      el.classList.remove('open');
+      el.hidden = true;
+      body.innerHTML = '';
+    }, 280);
+    if (lastFocus && typeof lastFocus.focus === 'function') {
+      lastFocus.focus();
+    }
+  }
+
+  window.openDocOverlay = (k: string, t: string, markdown: string) => {
+    show(k, t, `<article class="doc">${renderMarkdown(markdown)}</article>`);
+  };
+
+  window.openReadmeOverlay = async (repoName: string, repoUrl: string) => {
+    show('README', repoName, '<div style="padding:60px 0;text-align:center;color:var(--text-lo)" class="mono">Fetching README from GitHub...</div>');
+    try {
+      const rawUrl = `${repoUrl.replace('github.com', 'raw.githubusercontent.com')}/HEAD/README.md`;
+      const res = await fetch(rawUrl);
+      if (res.ok) {
+        const text = await res.text();
+        if (body) {
+          body.innerHTML = `<article class="doc">${renderMarkdown(text)}</article>`;
+          body.scrollTop = 0;
+        }
+      } else {
+        throw new Error('Not found');
+      }
+    } catch {
+      if (body) {
+        body.innerHTML = `
+          <div style="padding:40px 0;text-align:center;">
+            <p class="mono" style="color:var(--text-lo);margin-bottom:12px;">Could not load live README from GitHub.</p>
+            <p><a href="${repoUrl}" target="_blank" rel="noopener noreferrer" style="color:var(--cyan);">View ${repoName} directly on GitHub →</a></p>
+          </div>
+        `;
+      }
+    }
+  };
+
+  window.closeOverlay = close;
+
+  if (el) {
+    el.querySelectorAll('[data-close]').forEach((btn) => {
+      btn.addEventListener('click', close);
+    });
+  }
+</script>

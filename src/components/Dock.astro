@@ -1,0 +1,267 @@
+---
+export interface SectionItem {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  sections?: SectionItem[];
+}
+
+const { sections = [] } = Astro.props;
+---
+
+<div class="dock show" id="dock">
+  <button class="dock-bar" id="dockBar" aria-expanded="false" aria-controls="dockPanel">
+    <img src="/brand/monogram.svg" alt="" class="dock-mark" width="16" height="16" />
+    <span class="dock-now">
+      <span class="k">Now</span>
+      <span class="v" id="dockNow">{sections.length > 0 ? sections[0].label : 'Index'}</span>
+    </span>
+    <span class="dock-prog" aria-hidden="true"><i id="dockProg"></i></span>
+    <svg class="dock-chev" viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true">
+      <path d="M1 6 6 1.6 11 6" />
+    </svg>
+    <span class="sr-only">Toggle section index</span>
+  </button>
+  {sections.length > 0 && (
+    <div class="dock-panel" id="dockPanel">
+      <nav class="dock-grid" id="dockGrid">
+        {sections.map((sec, i) => (
+          <a href={sec.href} class="dock-link" data-index={i}>
+            <span class="n">{String(i + 1).padStart(2, '0')}</span>
+            <span class="t">{sec.label}</span>
+          </a>
+        ))}
+      </nav>
+    </div>
+  )}
+</div>
+
+<style>
+  .dock {
+    position: fixed;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
+    z-index: 95;
+    width: min(92vw, 520px);
+    background: var(--glass-fill);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    border: 1px solid var(--glass-edge);
+    border-radius: var(--r-panel);
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--t-slow) var(--ease), transform var(--t-base) var(--ease);
+  }
+  .dock.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .dock.hide {
+    transform: translateX(-50%) translateY(140%);
+  }
+  .dock-bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 11px 14px 11px 16px;
+    cursor: pointer;
+    user-select: none;
+    width: 100%;
+    background: none;
+    border: 0;
+    color: inherit;
+    text-align: left;
+    font: inherit;
+  }
+  .dock-bar:hover {
+    background: rgba(232, 237, 247, 0.03);
+  }
+  .dock-mark {
+    width: 16px;
+    height: 16px;
+    flex: none;
+    filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.5));
+  }
+  .dock-now {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    overflow: hidden;
+  }
+  .dock-now .k {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-xlo);
+    flex: none;
+  }
+  .dock-now .v {
+    font-size: 13px;
+    color: var(--text-hi);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .dock-prog {
+    width: 54px;
+    height: 2px;
+    background: rgba(232, 237, 247, 0.12);
+    border-radius: 2px;
+    flex: none;
+    overflow: hidden;
+  }
+  .dock-prog i {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--cyan);
+    opacity: 0.75;
+    transition: width 160ms linear;
+  }
+  .dock-chev {
+    width: 11px;
+    height: 8px;
+    flex: none;
+    color: var(--text-lo);
+    transition: transform var(--t-base) var(--ease);
+  }
+  .dock.open .dock-chev {
+    transform: rotate(180deg);
+  }
+  .dock-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--t-slow) var(--ease);
+  }
+  .dock.open .dock-panel {
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  .dock-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    padding: 2px 8px 10px;
+    border-top: 1px solid var(--line);
+  }
+  .dock-grid a {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 10px 10px;
+    border-radius: var(--r-cell);
+    text-decoration: none;
+    transition: background var(--t-fast) var(--ease);
+  }
+  .dock-grid a:hover {
+    background: rgba(232, 237, 247, 0.05);
+  }
+  .dock-grid a.on {
+    background: rgba(0, 229, 255, 0.07);
+  }
+  .dock-grid .n {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    color: var(--text-xlo);
+    flex: none;
+    width: 16px;
+  }
+  .dock-grid a.on .n {
+    color: var(--cyan);
+  }
+  .dock-grid .t {
+    font-size: 13px;
+    color: var(--text);
+  }
+  .dock-grid a:hover .t,
+  .dock-grid a.on .t {
+    color: var(--text-hi);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  @media (max-width: 520px) {
+    .dock-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  const dock = document.getElementById('dock');
+  const dockBar = document.getElementById('dockBar');
+  const dockProg = document.getElementById('dockProg');
+  const dockNow = document.getElementById('dockNow');
+  const dockLinks = document.querySelectorAll('.dock-link');
+
+  if (dock && dockBar) {
+    dockBar.addEventListener('click', () => {
+      const isOpen = dock.classList.toggle('open');
+      dockBar.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && dock.classList.contains('open')) {
+        dock.classList.remove('open');
+        dockBar.setAttribute('aria-expanded', 'false');
+        dockBar.focus();
+      }
+    });
+
+    dockLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        dock.classList.remove('open');
+        dockBar.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // Scroll progress & section detection
+    window.addEventListener(
+      'scroll',
+      () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        if (dockProg) {
+          dockProg.style.width = `${progress}%`;
+        }
+
+        // Section observer highlight
+        const sectionEls = Array.from(document.querySelectorAll('section[id]'));
+        for (let i = sectionEls.length - 1; i >= 0; i--) {
+          const el = sectionEls[i];
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= window.innerHeight * 0.4) {
+            if (dockNow) {
+              const heading = el.querySelector('h1, h2, h3');
+              dockNow.textContent = heading ? heading.textContent?.trim() || el.id : el.id;
+            }
+            dockLinks.forEach((link) => {
+              const href = link.getAttribute('href');
+              if (href === `#${el.id}`) {
+                link.classList.add('on');
+              } else {
+                link.classList.remove('on');
+              }
+            });
+            break;
+          }
+        }
+      },
+      { passive: true },
+    );
+  }
+</script>

@@ -1,0 +1,86 @@
+---
+import type { ResearchRow as ResearchRowData } from '@/data/research';
+
+interface Props {
+  row: ResearchRowData;
+}
+
+const { row } = Astro.props;
+---
+
+<article class="res-row">
+  <div class="res-meta mono">
+    <span class="res-yr">{row.yr}</span>
+    <span class="res-st">{row.st}</span>
+  </div>
+  <div class="res-body">
+    <h3 class="res-title">{row.t}</h3>
+    <p class="res-ab">{row.ab}</p>
+    <div class="res-tags mono">
+      {row.tags.map((tag) => (
+        <span class="res-tag">{tag}</span>
+      ))}
+    </div>
+  </div>
+</article>
+
+<style>
+  .res-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: clamp(16px, 3vw, 40px);
+    padding: clamp(24px, 3.5vw, 36px) 0;
+    border-top: 1px solid var(--line);
+  }
+  .res-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--text-lo);
+  }
+  .res-yr {
+    color: var(--cyan);
+    font-size: 12px;
+  }
+  .res-st {
+    text-transform: uppercase;
+    color: var(--text-xlo);
+  }
+  .res-title {
+    font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+    font-weight: 300;
+    color: var(--text-hi);
+    margin: 0 0 12px;
+    line-height: 1.35;
+  }
+  .res-ab {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.65;
+    margin: 0 0 16px;
+    max-width: 68ch;
+  }
+  .res-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .res-tag {
+    font-size: 10px;
+    color: var(--text-lo);
+    background: rgba(232, 237, 247, 0.04);
+    border: 1px solid var(--line);
+    padding: 3px 8px;
+    border-radius: var(--r-chip);
+    letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 680px) {
+    .res-row {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+  }
+</style>

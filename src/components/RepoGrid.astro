@@ -1,0 +1,187 @@
+---
+---
+
+<div class="repo-section">
+  <div class="repo-head">
+    <div class="mono repo-meta">
+      <span>GitHub · Public Repositories</span>
+    </div>
+    <span class="repo-stamp mono" id="repoStamp">Live API Sync</span>
+  </div>
+
+  <div class="repo-grid" id="repoGrid" data-pinned="orcas,Space-Science,Quantum-Enhanced-AES-Encryption,diablex-core,Projects">
+    <div class="mono repo-loading">Loading repositories from GitHub...</div>
+  </div>
+</div>
+
+<style>
+  .repo-section {
+    margin: clamp(32px, 5vw, 64px) 0;
+  }
+  .repo-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .repo-meta {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-lo);
+  }
+  .repo-stamp {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    padding: 3px 9px;
+    border-radius: var(--r-chip);
+    background: rgba(0, 229, 255, 0.08);
+    border: 1px solid rgba(0, 229, 255, 0.25);
+    color: var(--cyan);
+  }
+  :global(.repo-stamp.offline) {
+    background: rgba(232, 237, 247, 0.04);
+    border-color: var(--line);
+    color: var(--text-xlo);
+  }
+
+  .repo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: clamp(14px, 2vw, 22px);
+  }
+  .repo-loading {
+    grid-column: 1 / -1;
+    padding: 40px 0;
+    text-align: center;
+    color: var(--text-lo);
+    font-size: 12px;
+  }
+
+  :global(.repo-card) {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px 22px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-cell);
+    background: var(--glass-fill);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    text-decoration: none;
+    color: inherit;
+    transition: all var(--t-fast) var(--ease);
+  }
+  :global(.repo-card:hover) {
+    border-color: var(--line-hi);
+    background: rgba(14, 22, 38, 0.55);
+    transform: translateY(-2px);
+  }
+  :global(.repo-top) {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  :global(.repo-name) {
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--text-hi);
+    margin: 0;
+    word-break: break-word;
+  }
+  :global(.repo-desc) {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.55;
+    margin: 0 0 16px;
+  }
+  :global(.repo-foot) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    color: var(--text-lo);
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+  }
+  :global(.repo-lang) {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  :global(.lang-dot) {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--cyan);
+  }
+  :global(.repo-stats) {
+    display: flex;
+    gap: 10px;
+  }
+  :global(.repo-btn) {
+    background: none;
+    border: 0;
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--cyan);
+    font-size: 11px;
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>
+
+<script>
+  import { fetchPinnedRepos } from '@/lib/github';
+
+  const grid = document.getElementById('repoGrid');
+  const stamp = document.getElementById('repoStamp');
+
+  if (grid) {
+    const pinned = (grid.dataset.pinned || '').split(',').map((s) => s.trim()).filter(Boolean);
+
+    fetchPinnedRepos('fenilmodi823', pinned).then(({ repos, source }) => {
+      if (stamp) {
+        if (source === 'offline-snapshot') {
+          stamp.textContent = 'Offline snapshot · API unreachable';
+          stamp.classList.add('offline');
+        } else {
+          stamp.textContent = 'Live GitHub Sync';
+        }
+      }
+
+      grid.innerHTML = repos
+        .map(
+          (r) => `
+          <div class="repo-card">
+            <div>
+              <div class="repo-top">
+                <h4 class="repo-name">${r.name}</h4>
+              </div>
+              <p class="repo-desc">${r.description || 'Public repository by Fenil Modi.'}</p>
+            </div>
+            <div class="repo-foot mono">
+              <span class="repo-lang">
+                <span class="lang-dot"></span>
+                <span>${r.language || 'Code'}</span>
+              </span>
+              <div class="repo-stats">
+                <span>★ ${r.stars}</span>
+                <span>⑂ ${r.forks}</span>
+                <button class="repo-btn" onclick="window.openReadmeOverlay && window.openReadmeOverlay('${r.name}', '${r.url}')">README</button>
+              </div>
+            </div>
+          </div>
+        `,
+        )
+        .join('');
+    });
+  }
+</script>

@@ -1,0 +1,490 @@
+---
+---
+
+<div class="sim">
+  <div class="sim-stage" id="simStage">
+    <canvas id="simCanvas"></canvas>
+    <div class="sim-hud">
+      <div class="sim-badge mono">
+        <span class="pulse-dot"></span>
+        <span id="simView">Earth-centric</span>
+      </div>
+      <div class="sim-epoch mono" id="simEpoch">T+00000.0s</div>
+    </div>
+  </div>
+
+  <div class="sim-dock">
+    <div class="sim-sel">
+      <span class="k mono">Selected Object</span>
+      <span class="v" id="simName">ISS (ZARYA)</span>
+    </div>
+    <div class="sim-els mono" id="simEls">
+      <!-- Injected by script -->
+    </div>
+    <div class="sim-ctl">
+      <div class="sim-rate">
+        <button class="rate-btn on" data-rate="60">1×</button>
+        <button class="rate-btn" data-rate="300">5×</button>
+        <button class="rate-btn" data-rate="1800">30×</button>
+      </div>
+      <button class="sim-btn" id="simReset" title="Reset Camera">
+        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+          <path d="M3 3v5h5"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="sim-legend mono">
+    <span><i style="background: #5cf2ff;"></i> LEO / SSO</span>
+    <span><i style="background: #7fa8c9;"></i> MEO</span>
+    <span><i style="background: #9c8fc4;"></i> GEO</span>
+    <span><i style="background: #c48f9c;"></i> HEO</span>
+  </div>
+
+  <p class="sim-caveat mono">
+    Honest scope note: two-body Keplerian propagation, no perturbations, representative elements rather than live TLEs. The production ORCAS engine uses SGP4/SDP4 with covariance propagation.
+  </p>
+</div>
+
+<style>
+  .sim {
+    position: relative;
+    border: 1px solid var(--line);
+    border-radius: var(--r-panel);
+    overflow: hidden;
+    background: rgba(5, 9, 18, 0.5);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    margin: clamp(24px, 4vw, 40px) 0;
+    padding-bottom: 16px;
+  }
+  .sim-stage {
+    position: relative;
+    width: 100%;
+    height: clamp(340px, 54svh, 600px);
+    cursor: grab;
+    touch-action: none;
+  }
+  .sim-stage:active {
+    cursor: grabbing;
+  }
+  .sim-stage canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .sim-hud {
+    position: absolute;
+    top: 16px;
+    left: 18px;
+    right: 18px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    pointer-events: none;
+    flex-wrap: wrap;
+  }
+  .sim-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+  .pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 8px var(--cyan);
+  }
+  .sim-epoch {
+    font-size: 11px;
+    color: var(--text-lo);
+    letter-spacing: 0.1em;
+  }
+  .sim-dock {
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: clamp(12px, 2vw, 26px);
+    padding: 12px clamp(14px, 2vw, 20px);
+    flex-wrap: wrap;
+  }
+  .sim-sel {
+    flex: 1;
+    min-width: 160px;
+    display: grid;
+    gap: 3px;
+  }
+  .sim-sel .k {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-xlo);
+  }
+  .sim-sel .v {
+    font-size: 14px;
+    color: var(--text-hi);
+    font-weight: 300;
+  }
+  .sim-els {
+    display: flex;
+    gap: clamp(10px, 1.6vw, 22px);
+    flex-wrap: wrap;
+  }
+  :global(.sim-els div) {
+    display: grid;
+    gap: 3px;
+  }
+  :global(.sim-els .k) {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-xlo);
+  }
+  :global(.sim-els .v) {
+    font-size: 12px;
+    color: var(--text);
+  }
+  .sim-ctl {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+  }
+  .sim-btn {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--r-pill);
+    border: 1px solid var(--line);
+    background: none;
+    color: var(--text-lo);
+    cursor: pointer;
+    transition: all var(--t-fast) var(--ease);
+  }
+  .sim-btn:hover {
+    color: var(--text-hi);
+    border-color: var(--line-hi);
+  }
+  .sim-rate {
+    display: flex;
+    border: 1px solid var(--line);
+    border-radius: var(--r-pill);
+    overflow: hidden;
+  }
+  .sim-rate button {
+    background: none;
+    border: 0;
+    cursor: pointer;
+    padding: 6px 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-lo);
+    transition: all var(--t-fast) var(--ease);
+  }
+  .sim-rate button:hover {
+    color: var(--text-hi);
+  }
+  .sim-rate button.on {
+    color: var(--cyan);
+    background: rgba(0, 229, 255, 0.09);
+  }
+  .sim-legend {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    padding: 12px 20px 0;
+  }
+  .sim-legend span {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-lo);
+  }
+  .sim-legend i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .sim-caveat {
+    padding: 8px 20px 0;
+    font-size: 11px;
+    color: var(--text-xlo);
+    line-height: 1.6;
+    margin: 0;
+  }
+</style>
+
+<script>
+  import { CATALOG, propagateEci, type OrbitalElements } from '@/lib/orbital';
+
+  const cv = document.getElementById('simCanvas') as HTMLCanvasElement;
+  const stage = document.getElementById('simStage') as HTMLElement;
+  const epochEl = document.getElementById('simEpoch');
+  const viewEl = document.getElementById('simView');
+  const nameEl = document.getElementById('simName');
+  const elsEl = document.getElementById('simEls');
+  const resetBtn = document.getElementById('simReset');
+  const rateBtns = document.querySelectorAll('.rate-btn');
+
+  if (cv && stage) {
+    const ctx = cv.getContext('2d')!;
+    const RE = 6371;
+    const D2R = Math.PI / 180;
+
+    const SATS = CATALOG;
+    const HOME = { az: -0.6, el: 0.42, d: 118000 };
+    let cam = { ...HOME };
+    let tgt = [0, 0, 0];
+    let tgtWant = [0, 0, 0];
+    let W = 0,
+      H = 0,
+      DPR = 1,
+      cx = 0,
+      cy = 0,
+      f = 1;
+    let t = 0;
+    let rate = 60;
+    let sel = 0; // Select ISS by default
+
+    function resize() {
+      const b = stage.getBoundingClientRect();
+      if (!b.width || !b.height) return;
+      DPR = Math.min(window.devicePixelRatio || 1, 2);
+      W = b.width;
+      H = b.height;
+      cv.width = Math.round(W * DPR);
+      cv.height = Math.round(H * DPR);
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      cx = W / 2;
+      cy = H / 2;
+      f = Math.min(W, H) * 0.92;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function proj(p: [number, number, number]): [number, number, number] | null {
+      const x = p[0] - tgt[0];
+      const y = p[1] - tgt[1];
+      const z = p[2] - tgt[2];
+      const ca = Math.cos(cam.az),
+        sa = Math.sin(cam.az);
+      const x1 = x * ca + y * sa,
+        y1 = -x * sa + y * ca;
+      const ce = Math.cos(cam.el),
+        se = Math.sin(cam.el);
+      const y2 = y1 * ce + z * se,
+        z2 = -y1 * se + z * ce;
+      const depth = cam.d - y2;
+      if (depth < 1) return null;
+      const k = (f / depth) * (cam.d / 40000);
+      return [cx + x1 * k, cy - z2 * k, depth];
+    }
+
+    function sphere(lat: number, lon: number, gmst: number): [number, number, number] {
+      const la = lat * D2R,
+        lo = lon * D2R + gmst;
+      const cl = Math.cos(la);
+      return [RE * cl * Math.cos(lo), RE * cl * Math.sin(lo), RE * Math.sin(la)];
+    }
+
+    function updateEls(s: OrbitalElements | null) {
+      if (!elsEl) return;
+      if (!s) {
+        elsEl.innerHTML = '';
+        return;
+      }
+      const rows = [
+        ['a', s.aKm.toLocaleString() + ' km'],
+        ['e', s.e.toFixed(4)],
+        ['i', s.incDeg.toFixed(1) + '°'],
+        ['Period', s.periodMin.toFixed(1) + ' min'],
+        ['Regime', s.regime],
+      ];
+      elsEl.innerHTML = rows.map(([k, v]) => `<div><span class="k">${k}</span><span class="v">${v}</span></div>`).join('');
+    }
+
+    function select(i: number) {
+      sel = i;
+      if (i < 0) {
+        if (nameEl) nameEl.textContent = 'None — click an object';
+        updateEls(null);
+        tgtWant = [0, 0, 0];
+        if (viewEl) viewEl.textContent = 'Earth-centric';
+      } else {
+        const s = SATS[i];
+        if (nameEl) nameEl.textContent = s.name;
+        updateEls(s);
+        if (viewEl) viewEl.textContent = 'Object-centric';
+      }
+    }
+
+    select(0); // Initial ISS select
+
+    // Drag camera rotation
+    let dragging = false,
+      lastMouse = [0, 0];
+    stage.addEventListener('pointerdown', (e) => {
+      dragging = true;
+      lastMouse = [e.clientX, e.clientY];
+      stage.setPointerCapture(e.pointerId);
+    });
+    stage.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      const dx = e.clientX - lastMouse[0];
+      const dy = e.clientY - lastMouse[1];
+      cam.az += dx * 0.006;
+      cam.el = Math.max(-1.4, Math.min(1.4, cam.el + dy * 0.006));
+      lastMouse = [e.clientX, e.clientY];
+    });
+    stage.addEventListener('pointerup', () => (dragging = false));
+    stage.addEventListener('pointercancel', () => (dragging = false));
+
+    // Mouse click selection
+    const screenPts: { x: number; y: number; idx: number }[] = [];
+    stage.addEventListener('click', (e) => {
+      const rect = stage.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      let clicked = -1;
+      let minDist = 22;
+      for (const pt of screenPts) {
+        const dist = Math.hypot(pt.x - mx, pt.y - my);
+        if (dist < minDist) {
+          minDist = dist;
+          clicked = pt.idx;
+        }
+      }
+      if (clicked >= 0) {
+        select(clicked);
+      }
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        cam = { ...HOME };
+        select(-1);
+      });
+    }
+
+    rateBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        rateBtns.forEach((b) => b.classList.remove('on'));
+        btn.classList.add('on');
+        rate = Number(btn.getAttribute('data-rate')) || 60;
+      });
+    });
+
+    let lastFrame = performance.now();
+    function renderLoop(now: number) {
+      const dt = Math.min((now - lastFrame) / 1000, 0.1);
+      lastFrame = now;
+      t += dt * rate;
+
+      if (epochEl) {
+        epochEl.textContent = `T+${Math.floor(t).toString().padStart(5, '0')}s`;
+      }
+
+      ctx.clearRect(0, 0, W, H);
+      const gmst = (t / 86164.0905) * 2 * Math.PI;
+
+      if (sel >= 0) {
+        const pos = propagateEci(SATS[sel], t);
+        tgtWant = [pos.x, pos.y, pos.z];
+      }
+      for (let k = 0; k < 3; k++) {
+        tgt[k] += (tgtWant[k] - tgt[k]) * 0.08;
+      }
+
+      // Earth Wireframe
+      ctx.lineWidth = 0.7;
+      ctx.strokeStyle = 'rgba(110, 160, 200, 0.2)';
+      for (let lon = 0; lon < 360; lon += 30) {
+        ctx.beginPath();
+        let on = false;
+        for (let lat = -90; lat <= 90; lat += 10) {
+          const p = proj(sphere(lat, lon, gmst));
+          if (!p) {
+            on = false;
+            continue;
+          }
+          if (on) ctx.lineTo(p[0], p[1]);
+          else {
+            ctx.moveTo(p[0], p[1]);
+            on = true;
+          }
+        }
+        ctx.stroke();
+      }
+
+      // Orbits & Satellites
+      screenPts.length = 0;
+      SATS.forEach((sat, idx) => {
+        const isSelected = sel === idx;
+        const color = sat.regime === 'LEO' || sat.regime === 'SSO' ? '#5cf2ff' : sat.regime === 'MEO' ? '#7fa8c9' : sat.regime === 'GEO' ? '#9c8fc4' : '#c48f9c';
+
+        // Orbit ellipse trail
+        ctx.beginPath();
+        ctx.strokeStyle = isSelected ? 'rgba(0, 229, 255, 0.55)' : 'rgba(232, 237, 247, 0.12)';
+        ctx.lineWidth = isSelected ? 1.2 : 0.8;
+        const steps = 60;
+        let on = false;
+        for (let s = 0; s <= steps; s++) {
+          const ptTime = (s / steps) * (sat.periodMin * 60);
+          const pEci = propagateEci(sat, ptTime);
+          const pScreen = proj([pEci.x, pEci.y, pEci.z]);
+          if (!pScreen) {
+            on = false;
+            continue;
+          }
+          if (on) ctx.lineTo(pScreen[0], pScreen[1]);
+          else {
+            ctx.moveTo(pScreen[0], pScreen[1]);
+            on = true;
+          }
+        }
+        ctx.stroke();
+
+        // Current Satellite Position
+        const curEci = propagateEci(sat, t);
+        const curScreen = proj([curEci.x, curEci.y, curEci.z]);
+        if (curScreen) {
+          screenPts.push({ x: curScreen[0], y: curScreen[1], idx });
+
+          ctx.beginPath();
+          ctx.arc(curScreen[0], curScreen[1], isSelected ? 4.5 : 2.8, 0, Math.PI * 2);
+          ctx.fillStyle = isSelected ? '#00e5ff' : color;
+          ctx.fill();
+
+          if (isSelected) {
+            ctx.beginPath();
+            ctx.arc(curScreen[0], curScreen[1], 9, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(0, 229, 255, 0.5)';
+            ctx.stroke();
+          }
+
+          // Label
+          ctx.font = '10px "JetBrains Mono", monospace';
+          ctx.fillStyle = isSelected ? '#ffffff' : 'rgba(232, 237, 247, 0.6)';
+          ctx.fillText(sat.name.split(' ')[0], curScreen[0] + 8, curScreen[1] + 3);
+        }
+      });
+
+      requestAnimationFrame(renderLoop);
+    }
+    requestAnimationFrame(renderLoop);
+  }
+</script>

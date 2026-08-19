@@ -1,0 +1,118 @@
+---
+import { LINKS } from '@/data/links';
+
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = '/' } = Astro.props;
+---
+
+<nav class="nav" id="nav">
+  <a class="nav-mark" href="/" aria-label="ORCAS — Home">
+    <img src="/brand/monogram.svg" alt="" class="m" width="20" height="20" />
+    <span class="mono brand-name">ORCAS</span>
+  </a>
+  <div class="nav-links">
+    <a href="/" class:list={[{ on: currentPath === '/' }]}>Home</a>
+    <a href="/research" class:list={[{ on: currentPath === '/research' }]}>Research</a>
+    <a href="/projects" class:list={[{ on: currentPath.startsWith('/projects') }]}>Projects</a>
+    <a href="/cv" class:list={[{ on: currentPath === '/cv' }]}>CV</a>
+    <a href={LINKS.email} class="cta">Contact</a>
+  </div>
+</nav>
+
+<style>
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 90;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px var(--gutter);
+    transition: transform var(--t-base) var(--ease), background var(--t-slow) var(--ease);
+  }
+  .nav.hide {
+    transform: translateY(-104%);
+  }
+  .nav-mark {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    text-decoration: none;
+    color: var(--text-hi);
+  }
+  .nav-mark .m {
+    width: 20px;
+    height: 20px;
+    filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.4));
+  }
+  .brand-name {
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    font-weight: 500;
+  }
+  .nav-links {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    background: var(--glass-fill);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    border: 1px solid var(--glass-edge);
+    border-radius: var(--r-pill);
+    padding: 5px 6px;
+  }
+  .nav-links a {
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    padding: 7px 15px;
+    border-radius: var(--r-pill);
+    text-decoration: none;
+    transition: color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+  }
+  .nav-links a:hover {
+    color: var(--text-hi);
+    background: rgba(232, 237, 247, 0.05);
+  }
+  .nav-links a.on {
+    color: var(--text-hi);
+    background: rgba(232, 237, 247, 0.08);
+  }
+  .nav-links a.cta {
+    color: var(--cyan);
+  }
+  .nav-links a.cta:hover {
+    background: rgba(0, 229, 255, 0.09);
+  }
+
+  @media (max-width: 720px) {
+    .nav-links a {
+      padding: 6px 10px;
+      font-size: 11px;
+    }
+  }
+</style>
+
+<script>
+  let lastY = 0;
+  const nav = document.getElementById('nav');
+
+  function onScroll() {
+    const y = window.scrollY;
+    if (nav) {
+      if (y > 260 && y > lastY) {
+        nav.classList.add('hide');
+      } else {
+        nav.classList.remove('hide');
+      }
+    }
+    lastY = y;
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+</script>

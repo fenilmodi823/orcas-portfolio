@@ -1,0 +1,459 @@
+---
+import { LINKS } from '@/data/links';
+---
+
+<section class="plate-sec" id="contact" data-sec="Contact">
+  <div class="wrap">
+    <div class="plate-intro">
+      <div>
+        <div class="eyebrow rv"><span class="mono">Plate 01</span></div>
+        <h2 class="h2 rv d1">A record of where everything was.</h2>
+      </div>
+      <div class="plate-legend rv d2 mono">
+        <div><span class="sw cy"></span>Low Earth orbit · 550 km</div>
+        <div><span class="sw dash"></span>Medium Earth orbit · 20 200 km</div>
+        <div><span class="sw dash"></span>Geostationary · 35 786 km</div>
+        <div><span class="sw"></span>Inclination fan · degrees</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="plate-stage">
+    <div class="plate rv d1">
+      <svg viewBox="0 0 1000 1000" role="img" aria-label="The ORCAS Plate — orbital shells, inclination fan and catalogue marks">
+        <defs>
+          <path id="ringTextA" fill="none" d="M500 68 a432 432 0 1 1 -.1 0"></path>
+          <!-- counter-clockwise so the lower band reads right-way-up -->
+          <path id="ringTextB" fill="none" d="M500 906 a406 406 0 1 0 -.1 0"></path>
+          <radialGradient id="coreG" cx="40%" cy="34%">
+            <stop offset="0" stop-color="#123F66"></stop>
+            <stop offset=".6" stop-color="#081A2C"></stop>
+            <stop offset="1" stop-color="#04070F"></stop>
+          </radialGradient>
+        </defs>
+
+        <!-- rim + tick band, turning -->
+        <g class="turn">
+          <circle class="etch-hi" cx="500" cy="500" r="468"></circle>
+          <circle class="etch" cx="500" cy="500" r="452"></circle>
+          <g id="rimTicks"></g>
+        </g>
+
+        <!-- annotation band -->
+        <text class="lbl-xs">
+          <textPath href="#ringTextA" startOffset="0">
+            ORCAS · ORBITAL RISK AND CONJUNCTION ASSESSMENT SYSTEM · EVERY OBJECT ABOVE EARTH, PROPAGATED · SGP4 / SDP4 · PLATE 01 OF 01 ·
+          </textPath>
+        </text>
+        <text class="lbl-xs">
+          <textPath href="#ringTextB" startOffset="0">
+            THE CATALOGUE IS PUBLIC · THE SKY IS NOT LEGIBLE WITHOUT IT · BUILT BY FENIL MODI · MMXXVI ·
+          </textPath>
+        </text>
+
+        <!-- shells -->
+        <circle class="etch" cx="500" cy="500" r="372" stroke-dasharray="5 9"></circle>
+        <circle class="etch" cx="500" cy="500" r="288" stroke-dasharray="5 9"></circle>
+        <circle class="etch-cy" cx="500" cy="500" r="198"></circle>
+
+        <!-- inclination fan -->
+        <g id="fan"></g>
+
+        <!-- two eccentric paths across the shells -->
+        <ellipse class="etch" cx="500" cy="428" rx="180" ry="330" transform="rotate(-24 500 500)" opacity=".7"></ellipse>
+        <ellipse class="etch" cx="500" cy="556" rx="330" ry="126" transform="rotate(16 500 500)" opacity=".55"></ellipse>
+
+        <!-- catalogue marks, counter-turning -->
+        <g class="turn-r" id="cat"></g>
+
+        <!-- Earth -->
+        <circle cx="500" cy="500" r="108" fill="url(#coreG)"></circle>
+        <circle class="etch-cy" cx="500" cy="500" r="108" opacity=".45"></circle>
+        <g class="etch" opacity=".45">
+          <ellipse cx="500" cy="500" rx="108" ry="38"></ellipse>
+          <ellipse cx="500" cy="500" rx="108" ry="76"></ellipse>
+          <ellipse cx="500" cy="500" rx="42" ry="108"></ellipse>
+          <ellipse cx="500" cy="500" rx="80" ry="108"></ellipse>
+        </g>
+
+        <!-- rim annotations, fixed -->
+        <text class="lbl" x="500" y="26" text-anchor="middle">00h</text>
+        <text class="lbl" x="988" y="504" text-anchor="end">06h</text>
+        <text class="lbl" x="500" y="988" text-anchor="middle">12h</text>
+        <text class="lbl" x="12" y="504">18h</text>
+
+        <text class="lbl lbl-cy" x="500" y="292" text-anchor="middle">LEO</text>
+        <text class="lbl" x="500" y="202" text-anchor="middle">MEO</text>
+        <text class="lbl" x="500" y="118" text-anchor="middle">GEO</text>
+      </svg>
+      <div class="plate-core">
+        <img src="/brand/monogram.svg" alt="" width="36" height="36" />
+      </div>
+    </div>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap">
+      <div class="foot-rows">
+        <div class="foot-col transmit-col">
+          <h4>Transmit</h4>
+          <a href={LINKS.email} class="email-link">{LINKS.email.replace('mailto:', '')}</a>
+          <p class="foot-desc">
+            Open to collaboration on orbital tooling, 3D interfaces, and anything that makes public space data usable.
+          </p>
+        </div>
+        <div class="foot-col">
+          <h4>Elsewhere</h4>
+          <a href={LINKS.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href={LINKS.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href={LINKS.x} target="_blank" rel="noopener noreferrer">X / Twitter</a>
+          <a href={LINKS.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
+        </div>
+        <div class="foot-col">
+          <h4>Routes</h4>
+          <a href="/">Home</a>
+          <a href="/research">Research</a>
+          <a href="/projects">Projects</a>
+          <a href="/cv">CV & Résumé</a>
+        </div>
+        <div class="foot-col">
+          <h4>Colophon</h4>
+          <span class="mono colophon-text">
+            Plus Jakarta Sans<br />
+            JetBrains Mono<br />
+            Built with Astro 5
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap foot-base mono">
+      <span>© <span id="yr">2026</span> Fenil Modi</span>
+      <span>Plate 01 · <span id="epochFoot">--:--:--</span> UTC</span>
+    </div>
+  </footer>
+</section>
+
+<style>
+  .plate-sec {
+    position: relative;
+    padding-top: var(--stack);
+    padding-bottom: 0;
+    overflow: hidden;
+  }
+  .plate-intro {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 32px 56px;
+    flex-wrap: wrap;
+    margin-bottom: clamp(36px, 5.5vw, 68px);
+  }
+  .h2 {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-top: 8px;
+  }
+  .plate-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--text-lo);
+    letter-spacing: 0.05em;
+  }
+  .plate-legend div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .sw {
+    width: 24px;
+    height: 1px;
+    background: var(--line-hi);
+    display: inline-block;
+  }
+  .sw.cy {
+    background: var(--cyan);
+  }
+  .sw.dash {
+    background: repeating-linear-gradient(90deg, var(--line-hi), var(--line-hi) 4px, transparent 4px, transparent 8px);
+  }
+
+  .plate-stage {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  .plate {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+  .plate svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .plate-core {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    filter: drop-shadow(0 0 10px rgba(0, 229, 255, 0.4));
+  }
+
+  .etch {
+    fill: none;
+    stroke: var(--line);
+    stroke-width: 0.8;
+  }
+  .etch-hi {
+    fill: none;
+    stroke: var(--line-hi);
+    stroke-width: 1;
+  }
+  .etch-cy {
+    fill: none;
+    stroke: var(--cyan);
+    stroke-width: 0.9;
+  }
+  .lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    fill: var(--text-lo);
+    letter-spacing: 0.1em;
+  }
+  .lbl-cy {
+    fill: var(--cyan);
+  }
+  .lbl-xs {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7.5px;
+    letter-spacing: 0.22em;
+    fill: var(--text-xlo);
+  }
+
+  .turn {
+    transform-origin: 500px 500px;
+    animation: plateSpin 240s linear infinite;
+  }
+  .turn-r {
+    transform-origin: 500px 500px;
+    animation: plateSpin 320s linear infinite reverse;
+  }
+  @keyframes plateSpin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Footer */
+  .foot {
+    border-top: 1px solid var(--line);
+    padding-top: clamp(48px, 8vw, 84px);
+    margin-top: clamp(40px, 6vw, 70px);
+    background: linear-gradient(to bottom, transparent, rgba(4, 7, 15, 0.8));
+  }
+  .foot-rows {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: clamp(24px, 4vw, 48px);
+    margin-bottom: clamp(40px, 6vw, 72px);
+  }
+  .foot-col h4 {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-xlo);
+    font-family: 'JetBrains Mono', monospace;
+    margin: 0 0 16px;
+  }
+  .foot-col a {
+    display: block;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13.5px;
+    line-height: 2;
+    transition: color var(--t-fast) var(--ease);
+  }
+  .foot-col a:hover {
+    color: var(--text-hi);
+  }
+  .email-link {
+    font-size: clamp(1rem, 2vw, 1.4rem) !important;
+    color: var(--text-hi) !important;
+    font-weight: 200 !important;
+    word-break: break-all;
+  }
+  .foot-desc {
+    margin: 12px 0 0;
+    font-size: 13px;
+    color: var(--text-lo);
+    line-height: 1.6;
+  }
+  .colophon-text {
+    font-size: 12px;
+    color: var(--text-lo);
+    line-height: 1.8;
+  }
+  .foot-base {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 24px var(--gutter);
+    border-top: 1px solid var(--line);
+    font-size: 11.5px;
+    color: var(--text-lo);
+  }
+
+  @media (max-width: 840px) {
+    .foot-rows {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 520px) {
+    .foot-rows {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  // SVG Generator for Plate
+  const C = 500;
+  const NS = 'http://www.w3.org/2000/svg';
+  const mk = (t: string, a: Record<string, string | number>) => {
+    const e = document.createElementNS(NS, t);
+    for (const k in a) e.setAttribute(k, String(a[k]));
+    return e;
+  };
+  const pt = (r: number, degFromUp: number): [number, number] => {
+    const t = ((degFromUp - 90) * Math.PI) / 180;
+    return [C + r * Math.cos(t), C + r * Math.sin(t)];
+  };
+
+  // Rim ticks
+  const ticks = document.getElementById('rimTicks');
+  if (ticks) {
+    for (let d = 0; d < 360; d += 3) {
+      const major = d % 15 === 0;
+      const cardinal = d % 90 === 0;
+      const r1 = 452;
+      const r2 = cardinal ? 476 : major ? 468 : 461;
+      const [x1, y1] = pt(r1, d);
+      const [x2, y2] = pt(r2, d);
+      ticks.appendChild(
+        mk('line', {
+          x1,
+          y1,
+          x2,
+          y2,
+          stroke: cardinal ? 'var(--cyan)' : 'var(--text-xlo)',
+          'stroke-width': cardinal ? 1.1 : major ? 0.8 : 0.55,
+          opacity: cardinal ? 0.7 : major ? 0.9 : 0.5,
+        }),
+      );
+    }
+  }
+
+  // Inclination fan
+  const fan = document.getElementById('fan');
+  if (fan) {
+    const INC = [
+      { i: 0, t: '0.0 EQUATORIAL' },
+      { i: 28.5, t: '28.5 CAPE' },
+      { i: 51.6, t: '51.6 ISS' },
+      { i: 63.4, t: '63.4 MOLNIYA' },
+      { i: 86.4, t: '86.4 POLAR' },
+      { i: 97.8, t: '97.8 SUN-SYNC' },
+    ];
+    INC.forEach(({ i, t }) => {
+      const live = i === 51.6;
+      const rays = i === 0 ? [90, 270] : [90 - i, 90 + i, 270 - i, 270 + i];
+      rays.forEach((d) => {
+        const [x1, y1] = pt(122, d);
+        const [x2, y2] = pt(388, d);
+        fan.appendChild(
+          mk('line', {
+            x1,
+            y1,
+            x2,
+            y2,
+            stroke: live ? 'var(--cyan)' : 'var(--text-xlo)',
+            'stroke-width': live ? 0.9 : 0.6,
+            opacity: live ? 0.8 : 0.4,
+          }),
+        );
+      });
+      const d = 90 - i;
+      const [lx, ly] = pt(406, d);
+      const flip = (d + 360) % 360 > 180;
+      const lab = mk('text', {
+        x: lx,
+        y: ly,
+        class: 'lbl-xs' + (live ? ' lbl-cy' : ''),
+        'text-anchor': flip ? 'end' : 'start',
+        'dominant-baseline': 'middle',
+        transform: 'rotate(' + (flip ? d + 90 : d - 90) + ' ' + lx + ' ' + ly + ')',
+      });
+      lab.textContent = t;
+      fan.appendChild(lab);
+    });
+  }
+
+  // Catalogue marks
+  const cat = document.getElementById('cat');
+  if (cat) {
+    let s = 4589;
+    const rnd = () => (s = (s * 1103515245 + 12345) % 2147483648) / 2147483648;
+    const FEATURED = 6;
+    for (let n = 0; n < 168; n++) {
+      const roll = rnd();
+      const r = roll < 0.68 ? 190 + rnd() * 22 : roll < 0.86 ? 282 + rnd() * 14 : 368 + rnd() * 9;
+      const [x, y] = pt(r, rnd() * 360);
+      const feat = n < FEATURED;
+      cat.appendChild(
+        mk('circle', {
+          cx: x,
+          cy: y,
+          r: feat ? 2.6 : roll < 0.68 ? 1.5 : 1.9,
+          fill: feat ? 'var(--cyan)' : 'var(--text-lo)',
+          opacity: feat ? 0.95 : 0.38 + rnd() * 0.34,
+        }),
+      );
+      if (feat) {
+        cat.appendChild(
+          mk('circle', {
+            cx: x,
+            cy: y,
+            r: 6.5,
+            fill: 'none',
+            stroke: 'var(--cyan)',
+            'stroke-width': 0.6,
+            opacity: 0.4,
+          }),
+        );
+      }
+    }
+  }
+
+  // Live UTC epoch in footer
+  const epochFoot = document.getElementById('epochFoot');
+  function updateEpoch() {
+    if (epochFoot) {
+      const now = new Date();
+      epochFoot.textContent = now.toISOString().slice(11, 19);
+    }
+  }
+  updateEpoch();
+  setInterval(updateEpoch, 1000);
+</script>

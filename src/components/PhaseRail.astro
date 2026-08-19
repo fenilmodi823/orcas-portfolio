@@ -1,0 +1,127 @@
+---
+import { ORCAS_PHASES, type PhaseEntry } from '@/data/phases';
+
+interface Props {
+  phases?: PhaseEntry[];
+}
+
+const { phases = ORCAS_PHASES } = Astro.props;
+---
+
+<div class="phase-rail-wrap">
+  <ol class="phase-rail">
+    {phases.map((p) => (
+      <li class:list={['phase-item', p.status]}>
+        <div class="phase-track">
+          <span class="phase-node mono">{p.id}</span>
+          <span class="phase-line" />
+        </div>
+        <div class="phase-content">
+          <div class="phase-head">
+            <h4 class="phase-title">{p.title}</h4>
+            <span class="phase-badge mono">{p.status}</span>
+          </div>
+          <p class="phase-desc">{p.description}</p>
+        </div>
+      </li>
+    ))}
+  </ol>
+</div>
+
+<style>
+  .phase-rail-wrap {
+    margin: clamp(32px, 5vw, 56px) 0;
+  }
+  .phase-rail {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .phase-item {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 20px;
+    position: relative;
+  }
+  .phase-track {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .phase-node {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border-radius: var(--r-chip);
+    font-size: 11px;
+    border: 1px solid var(--line);
+    background: var(--void-2);
+    color: var(--text-lo);
+    flex: none;
+    z-index: 1;
+  }
+  .phase-item.done .phase-node {
+    border-color: rgba(0, 229, 255, 0.4);
+    color: var(--cyan);
+    background: rgba(0, 229, 255, 0.05);
+  }
+  .phase-item.now .phase-node {
+    border-color: var(--cyan);
+    color: var(--void);
+    background: var(--cyan);
+    box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
+  }
+  .phase-line {
+    width: 1px;
+    flex: 1;
+    min-height: 24px;
+    background: var(--line);
+    margin: 4px 0;
+  }
+  .phase-item:last-child .phase-line {
+    display: none;
+  }
+  .phase-content {
+    padding-bottom: 28px;
+  }
+  .phase-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .phase-title {
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--text-hi);
+    margin: 0;
+  }
+  .phase-badge {
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: var(--r-chip);
+    border: 1px solid var(--line);
+    color: var(--text-xlo);
+  }
+  .phase-item.done .phase-badge {
+    color: var(--text-lo);
+    border-color: var(--line-hi);
+  }
+  .phase-item.now .phase-badge {
+    color: var(--cyan);
+    border-color: rgba(0, 229, 255, 0.35);
+    background: rgba(0, 229, 255, 0.06);
+  }
+  .phase-desc {
+    font-size: 13.5px;
+    color: var(--text);
+    line-height: 1.6;
+    margin: 0;
+  }
+</style>

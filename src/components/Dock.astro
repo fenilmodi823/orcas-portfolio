@@ -121,10 +121,12 @@ const { sections = [] } = Astro.props;
   .dock-prog i {
     display: block;
     height: 100%;
-    width: 0;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left;
     background: var(--cyan);
     opacity: 0.75;
-    transition: width 160ms linear;
+    transition: transform 160ms linear;
   }
   .dock-chev {
     width: 11px;
@@ -137,13 +139,12 @@ const { sections = [] } = Astro.props;
     transform: rotate(180deg);
   }
   .dock-panel {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height var(--t-slow) var(--ease);
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--t-slow) var(--ease);
   }
   .dock.open .dock-panel {
-    max-height: 60vh;
-    overflow-y: auto;
+    grid-template-rows: 1fr;
   }
   .dock-grid {
     display: grid;
@@ -151,6 +152,9 @@ const { sections = [] } = Astro.props;
     gap: 2px;
     padding: 2px 8px 10px;
     border-top: 1px solid var(--line);
+    overflow: hidden auto;
+    max-height: 60vh;
+    min-height: 0;
   }
   .dock-grid a {
     display: flex;
@@ -251,7 +255,7 @@ const { sections = [] } = Astro.props;
         const docHeight = document.documentElement.scrollHeight - window.innerHeight;
         const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
         if (dockProg) {
-          dockProg.style.width = `${progress}%`;
+          dockProg.style.transform = `scaleX(${progress / 100})`;
         }
 
         // Section observer highlight

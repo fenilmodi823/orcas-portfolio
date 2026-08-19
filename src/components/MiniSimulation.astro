@@ -103,6 +103,7 @@
     border-radius: 50%;
     background: var(--cyan);
     box-shadow: 0 0 8px var(--cyan);
+    animation: sim-pulse 1.8s var(--ease-io) infinite;
   }
   .sim-epoch {
     font-size: 11px;
@@ -227,6 +228,18 @@
     margin: 0;
   }
 
+  @keyframes sim-pulse {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.45;
+      transform: scale(0.8);
+    }
+  }
+
   @media (max-width: 720px) {
     .sim-stage {
       height: clamp(280px, 46svh, 400px);
@@ -288,7 +301,8 @@
       cy = 0,
       f = 1;
     let t = 0;
-    let rate = 60;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let rate = reduceMotion ? 0 : 60; // an explicit rate-button click still animates on request
     let sel = 0; // Select ISS by default
 
     function resize() {
@@ -420,7 +434,32 @@
     });
 
     let lastFrame = performance.now();
+    let loopRunning = false;
+
+    function startLoop() {
+      if (loopRunning) return;
+      loopRunning = true;
+      lastFrame = performance.now(); // avoid a huge dt jump from time spent paused
+      requestAnimationFrame(renderLoop);
+    }
+
+    // Nothing on screen to see and nothing worth redrawing — stop burning frames.
+    if ('IntersectionObserver' in window) {
+      const visibilityObserver = new IntersectionObserver(
+        (entries) => {
+          const visible = entries[0]?.isIntersecting ?? true;
+          if (visible) startLoop();
+          else loopRunning = false;
+        },
+        { threshold: 0 },
+      );
+      visibilityObserver.observe(stage);
+    } else {
+      startLoop();
+    }
+
     function renderLoop(now: number) {
+      if (!loopRunning) return;
       const dt = Math.min((now - lastFrame) / 1000, 0.1);
       lastFrame = now;
       t += dt * rate;
@@ -514,8 +553,7 @@
         }
       });
 
-      requestAnimationFrame(renderLoop);
+      if (loopRunning) requestAnimationFrame(renderLoop);
     }
-    requestAnimationFrame(renderLoop);
   }
 </script>

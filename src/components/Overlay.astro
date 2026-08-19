@@ -313,11 +313,13 @@ const { id = 'readme-overlay' } = Astro.props;
     el.classList.remove('in');
     window.removeEventListener('keydown', trap, true);
     document.body.style.overflow = '';
+    // Matches --t-base (see tokens.css) — the CSS transition on .ov-panel/.ov-scrim.
+    // Clearing sooner cuts the fade-out off mid-motion.
     setTimeout(() => {
       el.classList.remove('open');
       el.hidden = true;
       body.innerHTML = '';
-    }, 280);
+    }, 380);
     if (lastFocus && typeof lastFocus.focus === 'function') {
       lastFocus.focus();
     }

@@ -45,6 +45,25 @@ a {
     scroll-behavior: auto !important;
   }
 }
+
+/* page-to-page crossfade (astro:transitions ClientRouter) — matches the site's own timing instead of the browser default */
+::view-transition-old(root) {
+  animation: page-fade-out var(--t-fast) var(--ease) both;
+}
+::view-transition-new(root) {
+  animation: page-fade-in var(--t-base) var(--ease) both;
+}
+@keyframes page-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
 @font-face {
   font-family: "Plus Jakarta Sans";
   src: url("/fonts/plus-jakarta-sans-variable.woff2") format("woff2");

@@ -121,7 +121,7 @@ import { LINKS } from '@/data/links';
           <span class="mono colophon-text">
             Plus Jakarta Sans<br />
             JetBrains Mono<br />
-            Built with Astro 5
+            Built with Astro 7
           </span>
         </div>
       </div>
@@ -172,6 +172,23 @@ import { LINKS } from '@/data/links';
     display: flex;
     align-items: center;
     gap: 10px;
+  }
+
+  /* Scroll reveal — armed by script so content stays visible if JS fails to load */
+  .reveal-armed .rv {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity var(--t-slow) var(--ease), transform var(--t-slow) var(--ease);
+  }
+  .reveal-armed .rv.d1 {
+    transition-delay: 90ms;
+  }
+  .reveal-armed .rv.d2 {
+    transition-delay: 160ms;
+  }
+  .rv.in {
+    opacity: 1;
+    transform: none;
   }
   .sw {
     width: 24px;
@@ -489,4 +506,23 @@ import { LINKS } from '@/data/links';
   }
   updateEpoch();
   setInterval(updateEpoch, 1000);
+
+  // Reveal the plate intro once, the first time it scrolls into view.
+  const plateSec = document.querySelector('.plate-sec');
+  const revealEls = document.querySelectorAll<HTMLElement>('.plate-sec .rv');
+  if (plateSec && revealEls.length && 'IntersectionObserver' in window) {
+    plateSec.classList.add('reveal-armed');
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            revealObserver.unobserve(entry.target);
+          }
+        }
+      },
+      { threshold: 0.2 },
+    );
+    revealEls.forEach((el) => revealObserver.observe(el));
+  }
 </script>

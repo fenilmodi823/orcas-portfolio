@@ -1,6 +1,6 @@
 # orcas-portfolio
 
-Fenil Modi's personal/professional site. Astro 5, static output, no client framework.
+Fenil Modi's personal/professional site. Astro 7, static output, no client framework.
 
 ## Develop
 

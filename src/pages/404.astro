@@ -1,0 +1,88 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Background from '@/components/Background.astro';
+import Nav from '@/components/Nav.astro';
+import Plate from '@/components/Plate.astro';
+---
+
+<BaseLayout title="Not Found" description="Nothing tracked at this coordinate.">
+  <Background slot="background" />
+  <Nav currentPath="/404" />
+
+  <main class="wrap not-found-main">
+    <div class="not-found-card">
+      <p class="mono error-tag">404 · Uncatalogued Orbit</p>
+      <h1 class="not-found-title">Nothing tracked at this coordinate.</h1>
+      <p class="not-found-desc">
+        The requested state vector does not intersect any known object or page in the ORCAS catalogue.
+      </p>
+      <div style="margin-top: 24px;">
+        <a href="/" class="btn btn-pri">← Back to the surface</a>
+      </div>
+    </div>
+  </main>
+
+  <Plate />
+</BaseLayout>
+
+<style>
+  .not-found-main {
+    min-height: 65vh;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding-top: clamp(120px, 16vh, 180px);
+    padding-bottom: 60px;
+  }
+  .not-found-card {
+    max-width: 540px;
+    padding: clamp(32px, 5vw, 48px);
+    border: 1px solid var(--line);
+    border-radius: var(--r-panel);
+    background: var(--glass-fill);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  }
+  .error-tag {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 12px;
+    display: block;
+  }
+  .not-found-title {
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    font-weight: 200;
+    color: var(--text-hi);
+    letter-spacing: -0.03em;
+    margin: 0 0 16px;
+    line-height: 1.2;
+  }
+  .not-found-desc {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 22px;
+    border-radius: var(--r-pill);
+    font-size: 13px;
+    text-decoration: none;
+    border: 1px solid var(--line);
+    color: var(--text-hi);
+    transition: all var(--t-fast) var(--ease);
+  }
+  .btn-pri {
+    border-color: rgba(0, 229, 255, 0.4);
+    color: var(--cyan);
+    background: rgba(0, 229, 255, 0.06);
+  }
+  .btn-pri:hover {
+    border-color: var(--cyan);
+    background: rgba(0, 229, 255, 0.12);
+  }
+</style>

@@ -1,0 +1,153 @@
+---
+import { getEntry, render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Background from '@/components/Background.astro';
+import Nav from '@/components/Nav.astro';
+import Dock from '@/components/Dock.astro';
+import Plate from '@/components/Plate.astro';
+import PaperBlock from '@/components/PaperBlock.astro';
+import ResearchRow from '@/components/ResearchRow.astro';
+import { RESEARCH } from '@/data/research';
+
+const paperEntry = await getEntry('docs', 'paper');
+const { Content } = paperEntry ? await render(paperEntry) : { Content: null };
+
+const sections = [
+  { label: 'Paper', href: '#headline-paper' },
+  { label: 'Method Chain', href: '#method-chain' },
+  { label: 'Supporting Output', href: '#supporting' },
+  { label: 'Contact', href: '#contact' },
+];
+
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ScholarlyArticle',
+  headline: 'Probabilistic Space Debris Conjunction Assessment Using Machine Learning and Covariance Intersection Analysis',
+  author: [
+    { '@type': 'Person', name: 'Fenil Miteshkumar Modi' },
+    { '@type': 'Person', name: 'Satvik V. Khara' },
+    { '@type': 'Person', name: 'Gaurav D. Tivari' },
+    { '@type': 'Person', name: 'Jay Patel' },
+    { '@type': 'Person', name: 'Prathmesh Patel' },
+    { '@type': 'Person', name: 'Gautam Kumawat' },
+  ],
+  datePublished: '2026-06-24',
+  publication: '7th International Conference on Smart Systems and Inventive Technology (ICSSIT 2026)',
+  sponsor: 'IEEE Systems, Man, and Cybernetics Society',
+  description: 'A probabilistic conjunction assessment pipeline bridging SGP4 orbital mechanics with machine learning and B-plane covariance intersection.',
+};
+---
+
+<BaseLayout
+  title="Research & Publications"
+  description="Probabilistic space debris conjunction assessment, SGP4 propagation, covariance intersection, and orbital mechanics research by Fenil Modi."
+  jsonLd={articleLd}
+>
+  <Background slot="background" />
+  <Nav currentPath="/research" />
+  <Dock sections={sections} />
+
+  <main class="wrap" style="padding-top: clamp(100px, 14vh, 140px); padding-bottom: 60px;">
+    <!-- HEADLINE PAPER SECTION -->
+    <section id="headline-paper" style="margin-bottom: clamp(48px, 8vw, 84px);">
+      <div class="eyebrow"><span class="mono">Research Output · ICSSIT 2026</span></div>
+      <h1 class="page-title">Publications & Analysis</h1>
+      <p class="page-lead">
+        First-author research in space situational awareness, orbital collision prediction, and applied machine learning for satellite conjunction screening.
+      </p>
+
+      <div style="margin-top: 32px;">
+        <PaperBlock />
+      </div>
+    </section>
+
+    <!-- FULL PAPER BODY -->
+    {Content && (
+      <section id="method-chain" class="doc-sec">
+        <div class="sec-head">
+          <div>
+            <span class="mono sec-tag">Extended Paper Details</span>
+            <h2 class="sec-h2">Abstract & Methodology</h2>
+          </div>
+        </div>
+        <div class="doc" style="max-width: 800px; margin: 0 auto;">
+          <Content />
+        </div>
+      </section>
+    )}
+
+    <!-- SUPPORTING OUTPUT -->
+    <section id="supporting" class="sec">
+      <div class="sec-head">
+        <div>
+          <span class="mono sec-tag">Academic Output</span>
+          <h2 class="sec-h2">Supporting Research & Reports</h2>
+        </div>
+        <span class="mono sec-note">Theses, Literature Reviews & Presentations</span>
+      </div>
+
+      <div class="research-list">
+        {RESEARCH.map((row) => (
+          <ResearchRow row={row} />
+        ))}
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <Plate />
+  </main>
+</BaseLayout>
+
+<style>
+  .page-title {
+    font-size: clamp(2.4rem, 6vw, 4.4rem);
+    font-weight: 200;
+    letter-spacing: -0.04em;
+    color: var(--text-hi);
+    line-height: 1.05;
+    margin: 12px 0 16px;
+  }
+  .page-lead {
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    color: var(--text);
+    line-height: 1.6;
+    max-width: 62ch;
+    margin: 0;
+  }
+  .doc-sec {
+    padding: clamp(40px, 6vw, 72px) 0;
+    border-top: 1px solid var(--line);
+  }
+  .sec {
+    padding: clamp(40px, 6vw, 72px) 0;
+    border-top: 1px solid var(--line);
+  }
+  .sec-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 20px;
+    margin-bottom: clamp(28px, 4vw, 48px);
+    flex-wrap: wrap;
+  }
+  .sec-tag {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    display: block;
+    margin-bottom: 6px;
+  }
+  .sec-h2 {
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    color: var(--text-hi);
+    margin: 0;
+  }
+  .sec-note {
+    font-size: 11px;
+    color: var(--text-lo);
+    letter-spacing: 0.08em;
+  }
+</style>

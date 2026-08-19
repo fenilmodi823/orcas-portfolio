@@ -1,0 +1,438 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Background from '@/components/Background.astro';
+import Nav from '@/components/Nav.astro';
+import Dock from '@/components/Dock.astro';
+import Plate from '@/components/Plate.astro';
+import ProjectCard from '@/components/ProjectCard.astro';
+import { LINKS } from '@/data/links';
+import { TIMELINE } from '@/data/timeline';
+
+const sections = [
+  { label: 'Top', href: '#top' },
+  { label: 'Statement', href: '#statement' },
+  { label: 'About', href: '#about' },
+  { label: 'ORCAS', href: '#orcas' },
+  { label: 'Projects', href: '#work' },
+  { label: 'Contact', href: '#contact' },
+];
+
+const personLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Fenil Miteshkumar Modi',
+  url: 'https://orcas-portfolio.vercel.app',
+  sameAs: [LINKS.github, LINKS.linkedin, LINKS.x],
+  email: 'fenilmmodi@gmail.com',
+  jobTitle: 'Space Systems & Software Engineer',
+};
+---
+
+<BaseLayout
+  title="Systems that watch the sky"
+  description="Fenil Modi — Space systems, orbital mechanics, probabilistic conjunction assessment, and research software."
+  jsonLd={personLd}
+>
+  <Background slot="background" />
+  <Nav currentPath="/" />
+  <Dock sections={sections} />
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero wrap" id="hero">
+      <div class="eyebrow">
+        <span class="mono">Fenil Modi · Space Systems & Software</span>
+      </div>
+
+      <h1 class="hero-title">
+        <span class="ln">Systems</span>
+        <span class="ln">that watch</span>
+        <span class="ln accent-word">the sky</span>
+      </h1>
+
+      <div class="hero-foot">
+        <div class="hero-status mono">
+          <span class="status-dot"></span>
+          <span>Paper Accepted · ICSSIT 2026 (IEEE SMC)</span>
+        </div>
+        <p class="hero-lead">
+          Building probabilistic orbital conjunction pipelines, Keplerian propagation tools, and high-performance research interfaces for Low Earth Orbit.
+        </p>
+      </div>
+    </section>
+
+    <!-- STATEMENT -->
+    <section class="sec wrap" id="statement">
+      <div class="statement-grid">
+        <div class="statement-col">
+          <span class="mono sec-tag">The Core Problem</span>
+          <h2 class="sec-h2">Deterministic distances fail in crowded orbital regimes.</h2>
+        </div>
+        <div class="statement-col prose">
+          <p>
+            Radar telemetry carries covariance. When two uncertainty ellipsoids intersect in Low Earth Orbit, a deterministic miss distance of 500 metres can still hide a critical collision risk.
+          </p>
+          <p>
+            ORCAS bridges classical astrodynamics with machine-learning covariance screening, evaluating genuine probability of collision (<em>P<sub>c</sub></em>) across thousands of simultaneous objects.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT & TRAJECTORY -->
+    <section class="sec wrap" id="about">
+      <div class="sec-head">
+        <div>
+          <div class="eyebrow"><span class="mono">Trajectory</span></div>
+          <h2 class="sec-h2">Background & Path</h2>
+        </div>
+        <p class="sec-note mono">B.Tech Computer Engineering · Silver Oak University</p>
+      </div>
+
+      <div class="timeline-grid">
+        {TIMELINE.map((item) => (
+          <div class="timeline-card">
+            <span class="mono timeline-yr">{item.yr}</span>
+            <h3 class="timeline-title">{item.t}</h3>
+            <p class="timeline-desc">{item.d}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ORCAS TEASER -->
+    <section class="sec wrap" id="orcas">
+      <div class="sec-head">
+        <div>
+          <div class="eyebrow"><span class="mono">Featured System</span></div>
+          <h2 class="sec-h2">ORCAS Deep Dive</h2>
+        </div>
+        <a href="/projects/orcas" class="sec-link mono">Explore Case Study & Simulation →</a>
+      </div>
+
+      <div class="orcas-teaser-card">
+        <div class="teaser-content">
+          <span class="mono teaser-badge">Phase P1 Verified · Historical Golden-File Rebuilt</span>
+          <h3 class="teaser-title">Orbital Risk & Conjunction Assessment System</h3>
+          <p class="teaser-desc">
+            Reconstructing the 2009 Iridium 33 / Cosmos 2251 collision with time-decoupled SGP4 propagation, B-plane covariance projection, and Random Forest classification.
+          </p>
+          <div class="teaser-metrics mono">
+            <div>
+              <span class="k">Validation Altitude</span>
+              <span class="v">788.6 km</span>
+            </div>
+            <div>
+              <span class="k">Calculated <i>P<sub>c</sub></i></span>
+              <span class="v" style="color: var(--cyan);">4.2 × 10⁻³</span>
+            </div>
+            <div>
+              <span class="k">Alert Verdict</span>
+              <span class="v" style="color: #ff5252;">CRITICAL</span>
+            </div>
+          </div>
+          <div class="teaser-actions">
+            <a href="/projects/orcas" class="btn btn-pri">View Simulation & Case Study</a>
+            <a href="/research" class="btn">Read Paper Write-up</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WORK TEASER -->
+    <section class="sec wrap" id="work">
+      <div class="sec-head">
+        <div>
+          <div class="eyebrow"><span class="mono">Featured Projects</span></div>
+          <h2 class="sec-h2">Systems & Research</h2>
+        </div>
+        <a href="/projects" class="sec-link mono">View All Projects & Skills →</a>
+      </div>
+
+      <div class="work-grid">
+        <ProjectCard
+          variant="tall"
+          eyebrow="Lead Architect"
+          title="ORCAS"
+          description="Probabilistic conjunction assessment and orbital risk pipeline reconstructing historical LEO collision events."
+          tag="Python · Astrodynamics"
+          meta="Phase P1 Done · Paper Accepted"
+          href="/projects/orcas"
+        />
+        <ProjectCard
+          variant="tall"
+          eyebrow="Team Lead · 2024–Present"
+          title="Space Debris Tracking System"
+          description="Large-scale TLE ingestion and orbital trajectory propagation platform tracking 10,000+ objects via NASA APIs and Skyfield."
+          tag="Skyfield · SPICE · PyVista"
+          meta="Ongoing · Silver Oak University"
+          href="https://github.com/fenilmodi823/Space-Science"
+        />
+        <ProjectCard
+          variant="half"
+          eyebrow="Research Project"
+          title="Quantum-Enhanced AES"
+          description="Evaluating quantum-random key generation via Qiskit against classical PRNGs with NIST SP 800-22 statistical validation."
+          tag="Qiskit · Cryptography"
+          meta="Completed · NIST Validated"
+          href="https://github.com/fenilmodi823/Quantum-Enhanced-AES-Encryption"
+        />
+        <ProjectCard
+          variant="half"
+          eyebrow="Healthcare Tech"
+          title="Diablex Core"
+          description="Medical data analytics platform processing 1,000+ daily continuous glucose measurements with FHIR API interoperability."
+          tag="Node.js · React · FHIR"
+          meta="Ongoing Platform"
+          href="https://github.com/fenilmodi823/diablex-core"
+        />
+      </div>
+    </section>
+
+    <!-- PLATE FOOTER -->
+    <Plate />
+  </main>
+</BaseLayout>
+
+<style>
+  .hero {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: clamp(100px, 14vh, 140px);
+    padding-bottom: clamp(60px, 8vh, 90px);
+  }
+  .hero-title {
+    font-size: clamp(2.8rem, 8vw, 6.8rem);
+    font-weight: 200;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin: 16px 0 32px;
+  }
+  .hero-title .ln {
+    display: block;
+  }
+  .accent-word {
+    color: var(--cyan);
+  }
+  .hero-foot {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 60ch;
+  }
+  .hero-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    color: var(--cyan);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 8px var(--cyan);
+  }
+  .hero-lead {
+    font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+    color: var(--text);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Section styles */
+  .sec {
+    padding-top: var(--stack);
+    padding-bottom: var(--stack);
+    border-top: 1px solid var(--line);
+  }
+  .sec-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    margin-bottom: clamp(32px, 5vw, 56px);
+    flex-wrap: wrap;
+  }
+  .sec-h2 {
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    color: var(--text-hi);
+    margin: 8px 0 0;
+  }
+  .sec-note {
+    font-size: 11px;
+    color: var(--text-lo);
+    letter-spacing: 0.1em;
+  }
+  .sec-link {
+    font-size: 12px;
+    color: var(--cyan);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+  }
+  .sec-link:hover {
+    text-decoration: underline;
+  }
+  .sec-tag {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  /* Statement Grid */
+  .statement-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: clamp(32px, 5vw, 64px);
+    align-items: center;
+  }
+  .prose p {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.7;
+    margin: 0 0 16px;
+  }
+  .prose p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Timeline */
+  .timeline-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: clamp(16px, 2.5vw, 28px);
+  }
+  .timeline-card {
+    padding: 22px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-cell);
+    background: var(--glass-fill);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  }
+  .timeline-yr {
+    font-size: 11px;
+    color: var(--cyan);
+    letter-spacing: 0.15em;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .timeline-title {
+    font-size: 14.5px;
+    color: var(--text-hi);
+    font-weight: 400;
+    margin: 0 0 8px;
+  }
+  .timeline-desc {
+    font-size: 12.5px;
+    color: var(--text-lo);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  /* ORCAS Teaser */
+  .orcas-teaser-card {
+    padding: clamp(28px, 4vw, 48px);
+    border: 1px solid var(--line-hi);
+    border-radius: var(--r-panel);
+    background: linear-gradient(135deg, rgba(8, 145, 168, 0.08) 0%, rgba(4, 7, 15, 0.6) 100%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  }
+  .teaser-badge {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 12px;
+    display: block;
+  }
+  .teaser-title {
+    font-size: clamp(1.4rem, 2.5vw, 2rem);
+    font-weight: 300;
+    color: var(--text-hi);
+    margin: 0 0 12px;
+  }
+  .teaser-desc {
+    font-size: 14.5px;
+    color: var(--text);
+    line-height: 1.65;
+    max-width: 68ch;
+    margin: 0 0 24px;
+  }
+  .teaser-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 24px;
+  }
+  .teaser-metrics .k {
+    font-size: 9.5px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-xlo);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .teaser-metrics .v {
+    font-size: 14px;
+    color: var(--text-hi);
+  }
+  .teaser-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 9px 18px;
+    border-radius: var(--r-pill);
+    font-size: 12.5px;
+    text-decoration: none;
+    border: 1px solid var(--line);
+    color: var(--text-hi);
+    background: rgba(232, 237, 247, 0.04);
+    transition: all var(--t-fast) var(--ease);
+  }
+  .btn:hover {
+    border-color: var(--line-hi);
+    background: rgba(232, 237, 247, 0.08);
+  }
+  .btn-pri {
+    border-color: rgba(0, 229, 255, 0.4);
+    color: var(--cyan);
+    background: rgba(0, 229, 255, 0.06);
+  }
+  .btn-pri:hover {
+    border-color: var(--cyan);
+    background: rgba(0, 229, 255, 0.12);
+  }
+
+  /* Work Grid */
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: clamp(16px, 2.5vw, 28px);
+  }
+
+  @media (max-width: 840px) {
+    .statement-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+  }
+</style>

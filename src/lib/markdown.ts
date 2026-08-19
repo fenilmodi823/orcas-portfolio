@@ -98,7 +98,7 @@ export function renderMarkdown(src: string): string {
       continue;
     }
 
-    if (/^\s*([-*_])\s*\1\s*\1[\s\1]*$/.test(L)) {
+    if (/^\s*([-*_])\s*\1\s*\1[\s-*_]*$/.test(L)) {
       flushPara(para);
       out.push('<hr>');
       i++;

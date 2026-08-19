@@ -1,7 +1,7 @@
 ---
 /**
- * Procedural starfield/nebula background with scroll parallax.
- * Port from fenil-modi-portfolio.html background system.
+ * Procedural starfield, nebulae, and architectural ORCAS mark.
+ * Direct implementation of design spec §9-§10 and prototype.
  */
 ---
 
@@ -9,14 +9,12 @@
   <div class="bg-stars"></div>
   <div class="bg-neb"></div>
   <div class="bg-fil"></div>
-  <div class="bg-mark">
-    <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="mark-svg">
-      <circle cx="100" cy="100" r="60" stroke="currentColor" stroke-width="0.5" opacity="0.3" />
-      <ellipse cx="100" cy="100" rx="80" ry="30" stroke="currentColor" stroke-width="0.3" opacity="0.2" transform="rotate(-15 100 100)" />
-      <ellipse cx="100" cy="100" rx="70" ry="25" stroke="currentColor" stroke-width="0.3" opacity="0.15" transform="rotate(20 100 100)" />
-    </svg>
-  </div>
-  <div class="bg-veil"></div>
+
+  <!-- Architectural scale ORCAS mark -->
+  <svg class="bg-mark" id="bgMark" viewBox="62 45 88 120" data-rate="0.13"><use href="#g-orca"></use></svg>
+  <svg class="bg-mark-2" viewBox="62 45 88 120" data-rate="0.09"><use href="#g-orca"></use></svg>
+
+  <div class="bg-veil on"><div class="bg-vign"></div><div class="bg-floor"></div></div>
 </div>
 
 <style>
@@ -48,8 +46,8 @@
   .bg-neb {
     position: absolute;
     inset: -40%;
-    background: radial-gradient(ellipse 600px 400px at 30% 40%, rgba(0, 229, 255, 0.03), transparent),
-      radial-gradient(ellipse 500px 300px at 70% 60%, rgba(0, 229, 255, 0.02), transparent);
+    background: radial-gradient(ellipse 600px 400px at 30% 40%, rgba(0, 229, 255, 0.04), transparent),
+      radial-gradient(ellipse 500px 300px at 70% 60%, rgba(0, 229, 255, 0.025), transparent);
     filter: blur(60px);
     will-change: transform;
   }
@@ -70,67 +68,123 @@
 
   .bg-mark {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 60vmax;
-    height: 60vmax;
-    transform: translate(-50%, -50%);
-    opacity: var(--mark-op, 0.05);
+    left: 4vw;
+    top: 10vh;
+    width: min(72vw, 840px);
+    height: auto;
+    opacity: var(--mark-op, 0.065);
     filter: blur(var(--mark-blur, 0px));
-    color: var(--text-xlo);
-    transition: opacity var(--t-slow) var(--ease), filter var(--t-slow) var(--ease);
+    transition: opacity 1.2s var(--ease);
+    will-change: transform, filter;
+    --orca-body: var(--cyan);
+    --orca-mark: #061021;
   }
 
-  .mark-svg {
-    width: 100%;
-    height: 100%;
+  .bg-mark-2 {
+    position: absolute;
+    left: -15vw;
+    top: 160vh;
+    width: min(75vw, 850px);
+    height: auto;
+    opacity: 0.035;
+    transform: scaleX(-1) rotate(8deg);
+    --orca-body: #6ea8d8;
+    --orca-mark: #050b16;
+    filter: blur(2px);
+    will-change: transform;
   }
 
   .bg-veil {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, transparent 0%, var(--void) 100%);
-    opacity: 0.3;
+    opacity: 1;
+  }
+  .bg-vign {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 120% 78% at 50% 42%, transparent 24%, rgba(4, 7, 15, 0.62) 78%, var(--void) 100%);
+  }
+  .bg-floor {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 34vh;
+    background: linear-gradient(to bottom, transparent, var(--void));
   }
 </style>
 
 <script>
-  const bg = document.querySelector('.bg') as HTMLElement | null;
-  if (bg) {
-    const stars = bg.querySelector('.bg-stars') as HTMLElement;
-    const neb = bg.querySelector('.bg-neb') as HTMLElement;
-    const fil = bg.querySelector('.bg-fil') as HTMLElement;
+  const root = document.documentElement;
+  const mark1 = document.querySelector('.bg-mark') as HTMLElement | null;
+  const mark2 = document.querySelector('.bg-mark-2') as HTMLElement | null;
+  const stars = document.querySelector('.bg-stars') as HTMLElement | null;
+  const neb = document.querySelector('.bg-neb') as HTMLElement | null;
 
-    let ticking = false;
+  const STOPS = [
+    { p: 0.0, blur: 0.0, op: 0.075 },
+    { p: 0.9, blur: 17, op: 0.03 },
+    { p: 2.1, blur: 25, op: 0.02 },
+    { p: 3.4, blur: 12, op: 0.034 },
+  ];
 
-    function onScroll() {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        const y = window.scrollY;
-        const starY = Math.round(y * 0.05);
-        const nebY = Math.round(y * 0.02);
-        const filY = Math.round(y * 0.08);
+  function lerp(a: number, b: number, t: number) {
+    return a + (b - a) * t;
+  }
 
-        stars.style.transform = `translateY(${starY}px)`;
-        neb.style.transform = `translateY(${nebY}px)`;
-        fil.style.transform = `translateY(${filY}px)`;
+  function curve(p: number) {
+    if (p <= STOPS[0].p) return STOPS[0];
+    for (let i = 1; i < STOPS.length; i++) {
+      if (p <= STOPS[i].p) {
+        const a = STOPS[i - 1];
+        const b = STOPS[i];
+        const t = (p - a.p) / (b.p - a.p);
+        return { blur: lerp(a.blur, b.blur, t), op: lerp(a.op, b.op, t) };
+      }
+    }
+    return STOPS[STOPS.length - 1];
+  }
 
-        // Update mark opacity/blur based on scroll position
-        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = maxScroll > 0 ? y / maxScroll : 0;
-        document.documentElement.style.setProperty('--mark-blur', `${progress * 8}px`);
-        document.documentElement.style.setProperty('--mark-op', `${0.05 - progress * 0.03}`);
+  let y = 0;
+  let queued = false;
+  let lastBlur = -1;
 
-        ticking = false;
-      });
+  function frame() {
+    queued = false;
+    const vh = window.innerHeight || 800;
+    const progress = y / vh;
+
+    if (mark1) {
+      mark1.style.transform = `translate3d(0, ${(-y * 0.13).toFixed(2)}px, 0)`;
+    }
+    if (mark2) {
+      mark2.style.transform = `scaleX(-1) rotate(8deg) translate3d(0, ${(-y * 0.09).toFixed(2)}px, 0)`;
+    }
+    if (stars) {
+      stars.style.transform = `translate3d(0, ${(y * 0.04).toFixed(2)}px, 0)`;
+    }
+    if (neb) {
+      neb.style.transform = `translate3d(0, ${(y * 0.02).toFixed(2)}px, 0)`;
     }
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-
-    // Pause when hidden
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) onScroll();
-    });
+    const c = curve(progress);
+    const blur = Math.round(c.blur);
+    if (blur !== lastBlur) {
+      root.style.setProperty('--mark-blur', `${blur}px`);
+      lastBlur = blur;
+    }
+    root.style.setProperty('--mark-op', c.op.toFixed(4));
   }
+
+  function onScroll() {
+    y = window.scrollY || window.pageYOffset;
+    if (!queued) {
+      queued = true;
+      requestAnimationFrame(frame);
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+  onScroll();
 </script>

@@ -87,7 +87,7 @@ import { LINKS } from '@/data/links';
         <text class="lbl" x="500" y="118" text-anchor="middle">GEO</text>
       </svg>
       <div class="plate-core">
-        <img src="/brand/monogram.svg" alt="" width="36" height="36" />
+        <svg viewBox="62 45 88 120"><use href="#g-orca"></use></svg>
       </div>
     </div>
   </div>
@@ -125,6 +125,10 @@ import { LINKS } from '@/data/links';
           </span>
         </div>
       </div>
+    </div>
+
+    <div class="foot-big">
+      <svg viewBox="0 -80 408 62" preserveAspectRatio="xMidYMax meet"><use href="#g-word"></use></svg>
     </div>
 
     <div class="wrap foot-base mono">
@@ -206,8 +210,17 @@ import { LINKS } from '@/data/links';
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
     pointer-events: none;
-    filter: drop-shadow(0 0 10px rgba(0, 229, 255, 0.4));
+  }
+  .plate-core svg {
+    width: 32px;
+    height: auto;
+    --orca-body: var(--cyan);
+    --orca-mark: var(--void);
   }
 
   .etch {
@@ -313,6 +326,26 @@ import { LINKS } from '@/data/links';
     border-top: 1px solid var(--line);
     font-size: 11.5px;
     color: var(--text-lo);
+  }
+
+  .foot-big {
+    position: relative;
+    overflow: hidden;
+    line-height: 0;
+    margin-top: 20px;
+  }
+  .foot-big svg {
+    width: 100%;
+    height: auto;
+    color: var(--text-hi);
+    opacity: 0.055;
+    transform: translateY(19%);
+    pointer-events: none;
+  }
+  @media (max-width: 720px) {
+    .foot-big svg {
+      transform: translateY(24%);
+    }
   }
 
   @media (max-width: 840px) {

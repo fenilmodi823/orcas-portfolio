@@ -10,8 +10,8 @@ const { currentPath = '/' } = Astro.props;
 
 <nav class="nav" id="nav">
   <a class="nav-mark" href="/" aria-label="ORCAS — Home">
-    <img src="/brand/monogram.svg" alt="" class="m" width="20" height="20" />
-    <span class="mono brand-name">ORCAS</span>
+    <svg class="m" viewBox="62 45 88 120"><use href="#g-orca"></use></svg>
+    <svg class="w" viewBox="0 -80 408 86"><use href="#g-word"></use></svg>
   </a>
   <div class="nav-links">
     <a href="/" class:list={[{ on: currentPath === '/' }]}>Home</a>
@@ -43,17 +43,18 @@ const { currentPath = '/' } = Astro.props;
     align-items: center;
     gap: 11px;
     text-decoration: none;
+  }
+  .nav-mark svg.m {
+    width: 19px;
+    height: auto;
+    --orca-body: var(--cyan);
+    --orca-mark: var(--void);
+  }
+  .nav-mark svg.w {
+    width: 66px;
+    height: auto;
     color: var(--text-hi);
-  }
-  .nav-mark .m {
-    width: 20px;
-    height: 20px;
-    filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.4));
-  }
-  .brand-name {
-    font-size: 13px;
-    letter-spacing: 0.15em;
-    font-weight: 500;
+    opacity: 0.9;
   }
   .nav-links {
     display: flex;

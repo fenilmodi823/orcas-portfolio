@@ -51,13 +51,14 @@ const personLd = {
       </h1>
 
       <div class="hero-foot">
-        <div class="hero-status mono">
-          <span class="status-dot"></span>
-          <span>Paper Accepted · ICSSIT 2026 (IEEE SMC)</span>
-        </div>
-        <p class="hero-lead">
-          Building probabilistic orbital conjunction pipelines, Keplerian propagation tools, and high-performance research interfaces for Low Earth Orbit.
+        <p class="hero-note">
+          I build <strong>ORCAS</strong> — a space-debris conjunction assessment system that replaces deterministic miss-distance with probability of collision. It caught the 2009 Iridium 33 / Cosmos 2251 collision that traditional models called a safe pass.
         </p>
+        <div class="readout">
+          <div><span class="mono">Epoch · UTC</span><span class="v mono" id="utcClock">--:--:--</span></div>
+          <div><span class="mono">Paper</span><span class="v">ICSSIT 2026 · 1849</span></div>
+          <div><span class="mono">Status</span><span class="v" style="color: var(--cyan);">Accepted · IEEE SMC</span></div>
+        </div>
       </div>
     </section>
 
@@ -217,32 +218,54 @@ const personLd = {
     color: var(--cyan);
   }
   .hero-foot {
+    display: grid;
+    grid-template-columns: 1.3fr 0.9fr;
+    gap: clamp(24px, 4vw, 56px);
+    align-items: end;
+    margin-top: clamp(24px, 3.5vw, 40px);
+  }
+  .hero-note {
+    font-size: clamp(1.05rem, 1.4vw, 1.22rem);
+    line-height: 1.6;
+    color: var(--text);
+    margin: 0;
+  }
+  .hero-note strong {
+    color: var(--text-hi);
+  }
+  .readout {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    max-width: 60ch;
+    gap: 12px;
+    padding: 16px 20px;
+    border-left: 1px solid var(--line);
+    background: var(--glass-fill);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    border-radius: var(--r-cell);
   }
-  .hero-status {
+  .readout div {
     display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 11px;
-    color: var(--cyan);
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    font-size: 11.5px;
+  }
+  .readout span.mono {
+    color: var(--text-xlo);
     letter-spacing: 0.12em;
     text-transform: uppercase;
+    font-size: 10px;
   }
-  .status-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--cyan);
-    box-shadow: 0 0 8px var(--cyan);
+  .readout span.v {
+    color: var(--text-hi);
   }
-  .hero-lead {
-    font-size: clamp(1.05rem, 1.6vw, 1.25rem);
-    color: var(--text);
-    line-height: 1.6;
-    margin: 0;
+
+  @media (max-width: 760px) {
+    .hero-foot {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
   }
 
   /* Section styles */
@@ -436,3 +459,15 @@ const personLd = {
     }
   }
 </style>
+
+<script>
+  const clock = document.getElementById('utcClock');
+  function updateClock() {
+    if (clock) {
+      const now = new Date();
+      clock.textContent = now.toISOString().slice(11, 19);
+    }
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+</script>

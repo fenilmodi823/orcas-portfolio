@@ -13,7 +13,7 @@ const { sections = [] } = Astro.props;
 
 <div class="dock show" id="dock">
   <button class="dock-bar" id="dockBar" aria-expanded="false" aria-controls="dockPanel">
-    <img src="/brand/monogram.svg" alt="" class="dock-mark" width="16" height="16" />
+    <svg class="dock-mark" viewBox="62 45 88 120" aria-hidden="true"><use href="#g-orca"></use></svg>
     <span class="dock-now">
       <span class="k">Now</span>
       <span class="v" id="dockNow">{sections.length > 0 ? sections[0].label : 'Index'}</span>
@@ -82,9 +82,10 @@ const { sections = [] } = Astro.props;
   }
   .dock-mark {
     width: 16px;
-    height: 16px;
+    height: auto;
     flex: none;
-    filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.5));
+    --orca-body: var(--cyan);
+    --orca-mark: transparent;
   }
   .dock-now {
     flex: 1;

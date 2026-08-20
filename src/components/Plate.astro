@@ -9,10 +9,10 @@ import { LINKS } from '@/data/links';
         <div class="eyebrow rv"><span class="mono">Plate 01</span></div>
         <h2 class="h2 rv d1">A record of where everything was.</h2>
       </div>
-      <div class="plate-legend rv d2 mono">
-        <div><span class="sw cy"></span>Low Earth orbit · 550 km</div>
-        <div><span class="sw dash"></span>Medium Earth orbit · 20 200 km</div>
-        <div><span class="sw dash"></span>Geostationary · 35 786 km</div>
+      <div class="plate-legend rv d2 mono" id="plateLegend">
+        <button type="button" data-shell="LEO"><span class="sw cy"></span>Low Earth orbit · 550 km</button>
+        <button type="button" data-shell="MEO"><span class="sw dash"></span>Medium Earth orbit · 20 200 km</button>
+        <button type="button" data-shell="GEO"><span class="sw dash"></span>Geostationary · 35 786 km</button>
         <div><span class="sw"></span>Inclination fan · degrees</div>
       </div>
     </div>
@@ -186,7 +186,7 @@ import { LINKS } from '@/data/links';
   .reveal-armed .rv.d2 {
     transition-delay: 160ms;
   }
-  .rv.in {
+  .reveal-armed .rv.in {
     opacity: 1;
     transform: none;
   }

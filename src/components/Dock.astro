@@ -248,39 +248,50 @@ const { sections = [] } = Astro.props;
     });
 
     // Scroll progress & section detection
+    // Section list is static after load — query once, not on every scroll tick.
+    const sectionEls = Array.from(document.querySelectorAll<HTMLElement>('section[id]'));
+
+    function updateDock() {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      if (dockProg) {
+        dockProg.style.transform = `scaleX(${progress / 100})`;
+      }
+
+      for (let i = sectionEls.length - 1; i >= 0; i--) {
+        const el = sectionEls[i];
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= window.innerHeight * 0.4) {
+          if (dockNow) {
+            const heading = el.querySelector('h1, h2, h3');
+            dockNow.textContent = el.dataset.sec || heading?.textContent?.trim() || el.id;
+          }
+          dockLinks.forEach((link) => {
+            const href = link.getAttribute('href');
+            link.classList.toggle('on', href === `#${el.id}`);
+          });
+          break;
+        }
+      }
+    }
+
+    // requestAnimationFrame-throttled: getBoundingClientRect forces layout,
+    // and unthrottled scroll fires far more often than the display can paint.
+    let ticking = false;
     window.addEventListener(
       'scroll',
       () => {
-        const scrollTop = window.scrollY;
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-        if (dockProg) {
-          dockProg.style.transform = `scaleX(${progress / 100})`;
-        }
-
-        // Section observer highlight
-        const sectionEls = Array.from(document.querySelectorAll('section[id]'));
-        for (let i = sectionEls.length - 1; i >= 0; i--) {
-          const el = sectionEls[i];
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= window.innerHeight * 0.4) {
-            if (dockNow) {
-              const heading = el.querySelector('h1, h2, h3');
-              dockNow.textContent = heading ? heading.textContent?.trim() || el.id : el.id;
-            }
-            dockLinks.forEach((link) => {
-              const href = link.getAttribute('href');
-              if (href === `#${el.id}`) {
-                link.classList.add('on');
-              } else {
-                link.classList.remove('on');
-              }
-            });
-            break;
-          }
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(() => {
+            updateDock();
+            ticking = false;
+          });
         }
       },
       { passive: true },
     );
+    updateDock();
   }
 </script>

@@ -47,51 +47,53 @@ const articleLd = {
   <Nav currentPath="/research" />
   <Dock sections={sections} />
 
-  <main class="wrap" style="padding-top: clamp(100px, 14vh, 140px); padding-bottom: 60px;">
-    <!-- HEADLINE PAPER SECTION -->
-    <section id="headline-paper" style="margin-bottom: clamp(48px, 8vw, 84px);">
-      <div class="eyebrow"><span class="mono">Research Output · ICSSIT 2026</span></div>
-      <h1 class="page-title">Publications & Analysis</h1>
-      <p class="page-lead">
-        The research behind ORCAS: how measuring the uncertainty in a satellite's tracked position — not just its distance from another — catches a collision that classical tracking calls safe. First-author work in space situational awareness and applied machine learning for satellite conjunction screening.
-      </p>
+  <main id="top">
+    <div class="wrap" style="padding-top: clamp(100px, 14vh, 140px); padding-bottom: 60px;">
+      <!-- HEADLINE PAPER SECTION -->
+      <section id="headline-paper" style="margin-bottom: clamp(48px, 8vw, 84px);">
+        <div class="eyebrow"><span class="mono">Research Output · ICSSIT 2026</span></div>
+        <h1 class="page-title">Publications & Analysis</h1>
+        <p class="page-lead">
+          The research behind ORCAS: how measuring the uncertainty in a satellite's tracked position — not just its distance from another — catches a collision that classical tracking calls safe. First-author work in space situational awareness and applied machine learning for satellite conjunction screening.
+        </p>
 
-      <div style="margin-top: 32px;">
-        <PaperBlock />
-      </div>
-    </section>
-
-    <!-- FULL PAPER BODY -->
-    {Content && (
-      <section id="method-chain" class="doc-sec">
-        <div class="sec-head">
-          <div>
-            <span class="mono sec-tag">Extended Paper Details</span>
-            <h2 class="sec-h2">Abstract & Methodology</h2>
-          </div>
-        </div>
-        <div class="doc" style="max-width: 800px; margin: 0 auto;">
-          <Content />
+        <div style="margin-top: 32px;">
+          <PaperBlock />
         </div>
       </section>
-    )}
 
-    <!-- SUPPORTING OUTPUT -->
-    <section id="supporting" class="sec">
-      <div class="sec-head">
-        <div>
-          <span class="mono sec-tag">Academic Output</span>
-          <h2 class="sec-h2">Supporting Research & Reports</h2>
+      <!-- FULL PAPER BODY -->
+      {Content && (
+        <section id="method-chain" class="doc-sec">
+          <div class="sec-head">
+            <div>
+              <span class="mono sec-tag">Extended Paper Details</span>
+              <h2 class="sec-h2">Abstract & Methodology</h2>
+            </div>
+          </div>
+          <div class="doc" style="max-width: 800px; margin: 0 auto;">
+            <Content />
+          </div>
+        </section>
+      )}
+
+      <!-- SUPPORTING OUTPUT -->
+      <section id="supporting" class="sec">
+        <div class="sec-head">
+          <div>
+            <span class="mono sec-tag">Academic Output</span>
+            <h2 class="sec-h2">Supporting Research & Reports</h2>
+          </div>
+          <span class="mono sec-note">Theses, Literature Reviews & Presentations</span>
         </div>
-        <span class="mono sec-note">Theses, Literature Reviews & Presentations</span>
-      </div>
 
-      <div class="research-list">
-        {RESEARCH.map((row) => (
-          <ResearchRow row={row} />
-        ))}
-      </div>
-    </section>
+        <div class="research-list">
+          {RESEARCH.map((row) => (
+            <ResearchRow row={row} />
+          ))}
+        </div>
+      </section>
+    </div>
 
     <!-- FOOTER -->
     <Plate />

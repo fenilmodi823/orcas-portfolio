@@ -35,77 +35,79 @@ const sections = [
   <Nav currentPath="/cv" />
   <Dock sections={sections} />
 
-  <main class="wrap" style="padding-top: clamp(100px, 14vh, 140px); padding-bottom: 60px;">
-    <!-- HEADER & DOWNLOADS -->
-    <header style="margin-bottom: clamp(40px, 6vw, 70px);">
-      <div class="eyebrow"><span class="mono">Academic Record</span></div>
-      <h1 class="page-title">Curriculum Vitae</h1>
-      <p class="page-lead">
-        Space systems researcher and software engineer specializing in orbital conjunction assessment and scientific data systems.
-      </p>
+  <main id="top">
+    <div class="wrap" style="padding-top: clamp(100px, 14vh, 140px); padding-bottom: 60px;">
+      <!-- HEADER & DOWNLOADS -->
+      <header style="margin-bottom: clamp(40px, 6vw, 70px);">
+        <div class="eyebrow"><span class="mono">Academic Record</span></div>
+        <h1 class="page-title">Curriculum Vitae</h1>
+        <p class="page-lead">
+          Space systems researcher and software engineer specializing in orbital conjunction assessment and scientific data systems.
+        </p>
 
-      <div class="pdf-downloads">
-        {hasResumePdf ? (
-          <a href="/files/Fenil-Modi-Resume.pdf" download class="btn btn-pri">
-            <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-            Download Résumé (PDF)
-          </a>
-        ) : (
-          <button class="btn btn-disabled" disabled title="PDF will be available once uploaded">
-            Résumé PDF (Pending Upload)
-          </button>
-        )}
+        <div class="pdf-downloads">
+          {hasResumePdf ? (
+            <a href="/files/Fenil-Modi-Resume.pdf" download class="btn btn-pri">
+              <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Download Résumé (PDF)
+            </a>
+          ) : (
+            <button class="btn btn-disabled" disabled title="PDF will be available once uploaded">
+              Résumé PDF (Pending Upload)
+            </button>
+          )}
 
-        {hasCvPdf ? (
-          <a href="/files/Fenil-Modi-CV.pdf" download class="btn">
-            <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-            Download Full CV (PDF)
-          </a>
-        ) : (
-          <button class="btn btn-disabled" disabled title="PDF will be available once uploaded">
-            Full CV PDF (Pending Upload)
-          </button>
-        )}
-      </div>
-    </header>
+          {hasCvPdf ? (
+            <a href="/files/Fenil-Modi-CV.pdf" download class="btn">
+              <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Download Full CV (PDF)
+            </a>
+          ) : (
+            <button class="btn btn-disabled" disabled title="PDF will be available once uploaded">
+              Full CV PDF (Pending Upload)
+            </button>
+          )}
+        </div>
+      </header>
 
-    <!-- RÉSUMÉ DOCUMENT -->
-    {ResumeContent && (
-      <section id="resume" class="sec">
-        <div class="sec-head">
-          <div>
-            <span class="mono sec-tag">One-Page Summary</span>
-            <h2 class="sec-h2">Résumé</h2>
+      <!-- RÉSUMÉ DOCUMENT -->
+      {ResumeContent && (
+        <section id="resume" class="sec">
+          <div class="sec-head">
+            <div>
+              <span class="mono sec-tag">One-Page Summary</span>
+              <h2 class="sec-h2">Résumé</h2>
+            </div>
           </div>
-        </div>
-        <div class="doc" style="max-width: 800px; margin: 0 auto;">
-          <ResumeContent />
-        </div>
-      </section>
-    )}
-
-    <!-- CV DOCUMENT -->
-    {CvContent && (
-      <section id="cv" class="sec">
-        <div class="sec-head">
-          <div>
-            <span class="mono sec-tag">Comprehensive Record</span>
-            <h2 class="sec-h2">Curriculum Vitae</h2>
+          <div class="doc" style="max-width: 800px; margin: 0 auto;">
+            <ResumeContent />
           </div>
-        </div>
-        <div class="doc" style="max-width: 800px; margin: 0 auto;">
-          <CvContent />
-        </div>
-      </section>
-    )}
+        </section>
+      )}
+
+      <!-- CV DOCUMENT -->
+      {CvContent && (
+        <section id="cv" class="sec">
+          <div class="sec-head">
+            <div>
+              <span class="mono sec-tag">Comprehensive Record</span>
+              <h2 class="sec-h2">Curriculum Vitae</h2>
+            </div>
+          </div>
+          <div class="doc" style="max-width: 800px; margin: 0 auto;">
+            <CvContent />
+          </div>
+        </section>
+      )}
+    </div>
 
     <!-- FOOTER -->
     <Plate />

@@ -27,96 +27,98 @@ const sections = [
   <Dock sections={sections} />
   <Overlay id="readme-overlay" />
 
-  <main class="wrap" style="padding-top: clamp(100px, 14vh, 140px); padding-bottom: 60px;">
-    <!-- HEADER -->
-    <header style="margin-bottom: clamp(40px, 6vw, 70px);">
-      <div class="eyebrow"><span class="mono">Engineered Systems</span></div>
-      <h1 class="page-title">Projects & Systems</h1>
-      <p class="page-lead">
-        From orbital conjunction screening and celestial body propagation to quantum cryptography and full-stack health informatics.
-      </p>
-    </header>
+  <main id="top">
+    <div class="wrap" style="padding-top: clamp(100px, 14vh, 140px); padding-bottom: 60px;">
+      <!-- HEADER -->
+      <header style="margin-bottom: clamp(40px, 6vw, 70px);">
+        <div class="eyebrow"><span class="mono">Engineered Systems</span></div>
+        <h1 class="page-title">Projects & Systems</h1>
+        <p class="page-lead">
+          From orbital conjunction screening and celestial body propagation to quantum cryptography and full-stack health informatics.
+        </p>
+      </header>
 
-    <!-- FEATURED PROJECTS -->
-    <section id="featured" class="sec" style="border-top: none; padding-top: 0;">
-      <div class="sec-head">
-        <div>
-          <span class="mono sec-tag">Core Systems</span>
-          <h2 class="sec-h2">Featured Work</h2>
+      <!-- FEATURED PROJECTS -->
+      <section id="featured" class="sec" style="border-top: none; padding-top: 0;">
+        <div class="sec-head">
+          <div>
+            <span class="mono sec-tag">Core Systems</span>
+            <h2 class="sec-h2">Featured Work</h2>
+          </div>
         </div>
-      </div>
 
-      <div class="projects-grid">
-        <ProjectCard
-          variant="feature"
-          eyebrow="Primary Research System · Team Lead since Jan 2024"
-          title="ORCAS — Orbital Risk & Conjunction Assessment System"
-          description="Predicts whether two satellites will actually collide — not just how close they'll pass — and reconstructs real historical near-misses to prove it. Began as the Space Debris Tracking System team project at Silver Oak University."
-          tag="Python · Astrodynamics · SGP4"
-          meta="Phase P1 Complete · ICSSIT 2026 Paper"
-          href="/projects/orcas"
-        />
+        <div class="projects-grid">
+          <ProjectCard
+            variant="feature"
+            eyebrow="Primary Research System · Team Lead since Jan 2024"
+            title="ORCAS — Orbital Risk & Conjunction Assessment System"
+            description="Predicts whether two satellites will actually collide — not just how close they'll pass — and reconstructs real historical near-misses to prove it. Began as the Space Debris Tracking System team project at Silver Oak University."
+            tag="Python · Astrodynamics · SGP4"
+            meta="Phase P1 Complete · ICSSIT 2026 Paper"
+            href="/projects/orcas"
+          />
 
-        <ProjectCard
-          variant="tall"
-          eyebrow="Course Research Project"
-          title="Quantum-Enhanced AES Encryption"
-          description="Quantum-random key generation via Qiskit integrated into AES cipher suites. Evaluated against PRNGs with the NIST SP 800-22 statistical test suite for entropy and avalanche characteristics."
-          tag="Python · Qiskit · Cryptography"
-          meta="Completed · NIST SP 800-22 Validated"
-          href="https://github.com/fenilmodi823/Quantum-Enhanced-AES-Encryption"
-        />
+          <ProjectCard
+            variant="tall"
+            eyebrow="Course Research Project"
+            title="Quantum-Enhanced AES Encryption"
+            description="Quantum-random key generation via Qiskit integrated into AES cipher suites. Evaluated against PRNGs with the NIST SP 800-22 statistical test suite for entropy and avalanche characteristics."
+            tag="Python · Qiskit · Cryptography"
+            meta="Completed · NIST SP 800-22 Validated"
+            href="https://github.com/fenilmodi823/Quantum-Enhanced-AES-Encryption"
+          />
 
-        <ProjectCard
-          variant="half"
-          eyebrow="Healthcare Informatics"
-          title="Diablex Core"
-          description="Medical analytics dashboard handling noise reduction, outlier detection, and time-series normalization for 1,000+ daily continuous glucose measurements via FHIR APIs."
-          tag="Node.js · React · MongoDB · FHIR"
-          meta="Ongoing Platform"
-          href="https://github.com/fenilmodi823/diablex-core"
-        />
+          <ProjectCard
+            variant="half"
+            eyebrow="Healthcare Informatics"
+            title="Diablex Core"
+            description="Medical analytics dashboard handling noise reduction, outlier detection, and time-series normalization for 1,000+ daily continuous glucose measurements via FHIR APIs."
+            tag="Node.js · React · MongoDB · FHIR"
+            meta="Ongoing Platform"
+            href="https://github.com/fenilmodi823/diablex-core"
+          />
 
-        <ProjectCard
-          variant="half"
-          eyebrow="Academic Repository"
-          title="University Research & Lab Archives"
-          description="Collection of computational coursework, numerical methods simulations, and machine learning labs completed during B.Tech at Silver Oak University."
-          tag="Jupyter · Python · C++"
-          meta="Academic Portfolio"
-          href="https://github.com/fenilmodi823/University"
-        />
-      </div>
-    </section>
-
-    <!-- LIVE GITHUB REPOS -->
-    <section id="repositories" class="sec">
-      <div class="sec-head">
-        <div>
-          <span class="mono sec-tag">Open Source</span>
-          <h2 class="sec-h2">GitHub Repositories</h2>
+          <ProjectCard
+            variant="half"
+            eyebrow="Academic Repository"
+            title="University Research & Lab Archives"
+            description="Collection of computational coursework, numerical methods simulations, and machine learning labs completed during B.Tech at Silver Oak University."
+            tag="Jupyter · Python · C++"
+            meta="Academic Portfolio"
+            href="https://github.com/fenilmodi823/University"
+          />
         </div>
-      </div>
+      </section>
 
-      <RepoGrid />
-    </section>
-
-    <!-- SKILLS MATRIX -->
-    <section id="skills" class="sec">
-      <div class="sec-head">
-        <div>
-          <span class="mono sec-tag">Competencies</span>
-          <h2 class="sec-h2">Technical Skills & Tooling</h2>
+      <!-- LIVE GITHUB REPOS -->
+      <section id="repositories" class="sec">
+        <div class="sec-head">
+          <div>
+            <span class="mono sec-tag">Open Source</span>
+            <h2 class="sec-h2">GitHub Repositories</h2>
+          </div>
         </div>
-        <span class="mono sec-note">Propagators, Machine Learning, WebGL & Infrastructure</span>
-      </div>
 
-      <div class="skills-grid">
-        {SKILLS.map((group) => (
-          <SkillColumn group={group} />
-        ))}
-      </div>
-    </section>
+        <RepoGrid />
+      </section>
+
+      <!-- SKILLS MATRIX -->
+      <section id="skills" class="sec">
+        <div class="sec-head">
+          <div>
+            <span class="mono sec-tag">Competencies</span>
+            <h2 class="sec-h2">Technical Skills & Tooling</h2>
+          </div>
+          <span class="mono sec-note">Propagators, Machine Learning, WebGL & Infrastructure</span>
+        </div>
+
+        <div class="skills-grid">
+          {SKILLS.map((group) => (
+            <SkillColumn group={group} />
+          ))}
+        </div>
+      </section>
+    </div>
 
     <!-- FOOTER -->
     <Plate />

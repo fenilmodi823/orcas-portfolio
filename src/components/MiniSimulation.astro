@@ -479,25 +479,52 @@
         tgt[k] += (tgtWant[k] - tgt[k]) * 0.08;
       }
 
-      // Earth Wireframe
-      ctx.lineWidth = 0.7;
-      ctx.strokeStyle = 'rgba(110, 160, 200, 0.2)';
-      for (let lon = 0; lon < 360; lon += 30) {
+      // Earth: atmosphere glow ring, once per frame (cheap — closed-form circle, no per-point blur)
+      const earthCenter = proj([0, 0, 0]);
+      const sphereR = (f / 40000) * RE;
+      if (earthCenter) {
+        const [ecx, ecy] = earthCenter;
+        const glow = ctx.createRadialGradient(ecx, ecy, sphereR * 0.82, ecx, ecy, sphereR * 1.4);
+        glow.addColorStop(0, 'rgba(0, 229, 255, 0.22)');
+        glow.addColorStop(1, 'rgba(0, 229, 255, 0)');
+        ctx.fillStyle = glow;
         ctx.beginPath();
-        let on = false;
-        for (let lat = -90; lat <= 90; lat += 10) {
-          const p = proj(sphere(lat, lon, gmst));
-          if (!p) {
-            on = false;
-            continue;
-          }
-          if (on) ctx.lineTo(p[0], p[1]);
-          else {
-            ctx.moveTo(p[0], p[1]);
-            on = true;
-          }
-        }
+        ctx.arc(ecx, ecy, sphereR * 1.4, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = 'rgba(0, 229, 255, 0.6)';
+        ctx.strokeStyle = 'rgba(150, 220, 240, 0.5)';
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.arc(ecx, ecy, sphereR, 0, Math.PI * 2);
         ctx.stroke();
+        ctx.shadowBlur = 0;
+      }
+
+      // Earth: dot-matrix sphere. Backface-culled (y2 <= 0 is the far hemisphere)
+      // so it reads as a solid globe rather than the old X-ray wireframe.
+      const ca = Math.cos(cam.az),
+        sa = Math.sin(cam.az);
+      const ce = Math.cos(cam.el),
+        se = Math.sin(cam.el);
+      for (let lat = -84; lat <= 84; lat += 6) {
+        for (let lon = 0; lon < 360; lon += 7) {
+          const world = sphere(lat, lon, gmst);
+          const x = world[0] - tgt[0],
+            y = world[1] - tgt[1],
+            z = world[2] - tgt[2];
+          const y1 = -x * sa + y * ca;
+          const y2 = y1 * ce + z * se;
+          if (y2 <= 0) continue; // far side, culled
+          const p = proj(world);
+          if (!p) continue;
+          const limb = 1 - Math.min(1, y2 / RE); // 0 = facing camera, 1 = at the limb
+          ctx.beginPath();
+          ctx.fillStyle = `rgba(150, 210, 235, ${(0.14 + limb * 0.5).toFixed(2)})`;
+          ctx.arc(p[0], p[1], 0.6 + limb * 0.8, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
 
       // Orbits & Satellites
@@ -506,10 +533,13 @@
         const isSelected = sel === idx;
         const color = REGIME_COLORS[sat.regime] || CYAN;
 
-        // Orbit ellipse trail
+        // Orbit ellipse trail — glowing, colored by the satellite's real regime
+        // (the "arc" equivalent: information-bearing, not decorative)
         ctx.beginPath();
         ctx.strokeStyle = isSelected ? 'rgba(0, 229, 255, 0.55)' : 'rgba(232, 237, 247, 0.12)';
         ctx.lineWidth = isSelected ? 1.2 : 0.8;
+        ctx.shadowBlur = isSelected ? 8 : 4;
+        ctx.shadowColor = color;
         const steps = 60;
         let on = false;
         for (let s = 0; s <= steps; s++) {
@@ -527,6 +557,7 @@
           }
         }
         ctx.stroke();
+        ctx.shadowBlur = 0;
 
         // Current Satellite Position
         const curEci = propagateEci(sat, t);

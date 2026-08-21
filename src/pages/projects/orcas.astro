@@ -28,57 +28,59 @@ const sections = [
   <Nav currentPath="/projects" />
   <Dock sections={sections} />
 
-  <main class="wrap" style="padding-top: clamp(100px, 14vh, 140px); padding-bottom: 60px;">
-    <!-- HEADER -->
-    <section id="overview" style="margin-bottom: clamp(32px, 5vw, 56px);">
-      <div class="eyebrow"><span class="mono">Primary Engineering Project</span></div>
-      <h1 class="page-title">ORCAS</h1>
-      <p class="page-subtitle mono">Orbital Risk & Conjunction Assessment System</p>
-      <p class="page-lead">
-        Replacing Euclidean distance thresholds with rigorous collision probabilities in Low Earth Orbit using SGP4 propagation, B-plane covariance projection, and Random Forest classification.
-      </p>
-    </section>
+  <main id="top">
+    <div class="wrap" style="padding-top: clamp(100px, 14vh, 140px); padding-bottom: 60px;">
+      <!-- HEADER -->
+      <section id="overview" style="margin-bottom: clamp(32px, 5vw, 56px);">
+        <div class="eyebrow"><span class="mono">Primary Engineering Project</span></div>
+        <h1 class="page-title">ORCAS</h1>
+        <p class="page-subtitle mono">Orbital Risk & Conjunction Assessment System</p>
+        <p class="page-lead">
+          Replacing Euclidean distance thresholds with rigorous collision probabilities in Low Earth Orbit using SGP4 propagation, B-plane covariance projection, and Random Forest classification.
+        </p>
+      </section>
 
-    <!-- INTERACTIVE MINI-SIMULATION -->
-    <section id="simulation" class="sec" style="border-top: none; padding-top: 0;">
-      <div class="sec-head">
-        <div>
-          <span class="mono sec-tag">Interactive Simulation</span>
-          <h2 class="sec-h2">Two-Body Keplerian Orbit Viewer</h2>
-        </div>
-        <span class="mono sec-note">Live ECI Projection · Drag to Orbit · Click to Select</span>
-      </div>
-
-      <MiniSimulation />
-    </section>
-
-    <!-- PHASE RAIL PROGRESS -->
-    <section id="phases" class="sec">
-      <div class="sec-head">
-        <div>
-          <span class="mono sec-tag">Architecture Roadmap</span>
-          <h2 class="sec-h2">Development Progress</h2>
-        </div>
-        <span class="mono sec-note">Verified Against Backend Milestones</span>
-      </div>
-
-      <PhaseRail />
-    </section>
-
-    <!-- CASE STUDY LONG-FORM DOC -->
-    {Content && (
-      <section id="case-study" class="sec">
+      <!-- INTERACTIVE MINI-SIMULATION -->
+      <section id="simulation" class="sec" style="border-top: none; padding-top: 0;">
         <div class="sec-head">
           <div>
-            <span class="mono sec-tag">Complete System Record</span>
-            <h2 class="sec-h2">Case Study & Validation</h2>
+            <span class="mono sec-tag">Interactive Simulation</span>
+            <h2 class="sec-h2">Two-Body Keplerian Orbit Viewer</h2>
           </div>
+          <span class="mono sec-note">Live ECI Projection · Drag to Orbit · Click to Select</span>
         </div>
-        <div class="doc" style="max-width: 820px; margin: 0 auto;">
-          <Content />
-        </div>
+
+        <MiniSimulation />
       </section>
-    )}
+
+      <!-- PHASE RAIL PROGRESS -->
+      <section id="phases" class="sec">
+        <div class="sec-head">
+          <div>
+            <span class="mono sec-tag">Architecture Roadmap</span>
+            <h2 class="sec-h2">Development Progress</h2>
+          </div>
+          <span class="mono sec-note">Verified Against Backend Milestones</span>
+        </div>
+
+        <PhaseRail />
+      </section>
+
+      <!-- CASE STUDY LONG-FORM DOC -->
+      {Content && (
+        <section id="case-study" class="sec">
+          <div class="sec-head">
+            <div>
+              <span class="mono sec-tag">Complete System Record</span>
+              <h2 class="sec-h2">Case Study & Validation</h2>
+            </div>
+          </div>
+          <div class="doc" style="max-width: 820px; margin: 0 auto;">
+            <Content />
+          </div>
+        </section>
+      )}
+    </div>
 
     <!-- FOOTER -->
     <Plate />

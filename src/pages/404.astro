@@ -9,15 +9,17 @@ import Plate from '@/components/Plate.astro';
   <Background slot="background" />
   <Nav currentPath="/404" />
 
-  <main class="wrap not-found-main">
-    <div class="not-found-card">
-      <p class="mono error-tag">404 · Uncatalogued Orbit</p>
-      <h1 class="not-found-title">Nothing tracked at this coordinate.</h1>
-      <p class="not-found-desc">
-        The requested state vector does not intersect any known object or page in the ORCAS catalogue.
-      </p>
-      <div style="margin-top: 24px;">
-        <a href="/" class="btn btn-pri">← Back to the surface</a>
+  <main class="not-found-main" id="top">
+    <div class="wrap">
+      <div class="not-found-card">
+        <p class="mono error-tag">404 · Uncatalogued Orbit</p>
+        <h1 class="not-found-title">Nothing tracked at this coordinate.</h1>
+        <p class="not-found-desc">
+          The requested state vector does not intersect any known object or page in the ORCAS catalogue.
+        </p>
+        <div style="margin-top: 24px;">
+          <a href="/" class="btn btn-pri">← Back to the surface</a>
+        </div>
       </div>
     </div>
   </main>

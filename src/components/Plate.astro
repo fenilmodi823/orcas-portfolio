@@ -139,9 +139,9 @@ import { LINKS } from '@/data/links';
       </div>
     </div>
 
-    <!-- Giant edge-to-edge ORCAS wordmark touching the bottom -->
-    <div class="foot-big">
-      <svg viewBox="0 -80 408 62" preserveAspectRatio="xMidYMax meet"><use href="#g-word"></use></svg>
+    <!-- Interactive Dot Matrix ORCAS Footer Stage -->
+    <div class="foot-big foot-matrix-stage" id="footMatrixStage" aria-label="Interactive ORCAS dot matrix logo">
+      <canvas id="footMatrixCanvas" class="foot-matrix-canvas"></canvas>
     </div>
 
     <!-- Metadata line overlaid directly on the bottom part of the ORCAS wordmark -->
@@ -474,26 +474,28 @@ import { LINKS } from '@/data/links';
     line-height: 1.75;
   }
 
+  /* Interactive Dot Matrix Canvas Stage */
   .foot-big {
     position: relative;
     width: 100%;
     overflow: hidden;
     line-height: 0;
-    pointer-events: none;
   }
-  .foot-big svg {
+  .foot-matrix-stage {
+    position: relative;
     width: 100%;
-    height: auto;
-    color: var(--text-hi);
-    opacity: 0.055;
-    display: block;
-    transform: translateY(19%);
-    pointer-events: none;
+    height: clamp(90px, 15.2vw, 220px);
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    background: transparent;
   }
-  @media (max-width: 720px) {
-    .foot-big svg {
-      transform: translateY(24%);
-    }
+  .foot-matrix-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: default;
+    pointer-events: auto;
   }
 
   .foot-base {
@@ -510,6 +512,10 @@ import { LINKS } from '@/data/links';
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--text-lo);
+    pointer-events: none;
+  }
+  .foot-base span {
+    pointer-events: auto;
   }
 
   @media (max-width: 840px) {
@@ -744,6 +750,250 @@ import { LINKS } from '@/data/links';
         };
       });
     }
+
+    // ══════════════════════════════════════════════════════════════════════
+    // DOT MATRIX ORCAS FOOTER INTERACTION (Magnetic Repel + Scroll Reveal)
+    // ══════════════════════════════════════════════════════════════════════
+    initDotMatrix();
+  }
+
+  function initDotMatrix() {
+    const stage = document.getElementById('footMatrixStage') as HTMLElement;
+    const canvas = document.getElementById('footMatrixCanvas') as HTMLCanvasElement;
+    if (!stage || !canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const PATH_STRINGS = [
+      // O
+      'M43.9 1.2Q35.6 1.2 28.6 -1.7Q21.5 -4.6 16.2 -9.8Q10.9 -15 7.9 -22Q5 -29.1 5 -37.3Q5 -45.6 7.9 -52.6Q10.8 -59.6 16.1 -64.8Q21.4 -70 28.5 -72.8Q35.6 -75.7 43.9 -75.7Q52.2 -75.7 59.3 -72.8Q66.4 -69.9 71.7 -64.7Q77 -59.6 79.9 -52.6Q82.9 -45.6 82.9 -37.3Q82.9 -29.1 79.9 -22Q76.9 -15 71.6 -9.8Q66.3 -4.6 59.2 -1.7Q52.2 1.2 43.9 1.2ZM43.9 -11.2Q49.4 -11.2 54 -13.1Q58.6 -15.1 62 -18.6Q65.5 -22.1 67.3 -26.9Q69.2 -31.7 69.2 -37.3Q69.2 -42.9 67.3 -47.7Q65.5 -52.4 62 -56Q58.6 -59.5 54 -61.4Q49.4 -63.3 43.9 -63.3Q38.5 -63.3 33.9 -61.4Q29.2 -59.5 25.8 -56Q22.4 -52.4 20.5 -47.7Q18.6 -42.9 18.6 -37.3Q18.6 -31.7 20.5 -26.9Q22.4 -22.1 25.8 -18.6Q29.2 -15.1 33.9 -13.1Q38.5 -11.2 43.9 -11.2Z',
+      // R
+      'M103 0V-74.5H130.7Q138.3 -74.5 144.2 -71.8Q150 -69 153.3 -63.8Q156.6 -58.5 156.6 -51Q156.6 -43.3 153 -37.9Q149.3 -32.5 143.1 -29.9L160.2 0H144.8L126.5 -32.7L135.3 -27.5H116.6V0ZM116.6 -39.5H130.9Q134.6 -39.5 137.3 -40.9Q140 -42.4 141.5 -45Q143 -47.6 143 -51Q143 -54.5 141.5 -57Q140 -59.6 137.3 -61.1Q134.6 -62.5 130.9 -62.5H116.6Z',
+      // C
+      'M212.1 1.2Q204.1 1.2 197.3 -1.7Q190.6 -4.6 185.5 -9.8Q180.5 -15 177.7 -22Q174.8 -29 174.8 -37.3Q174.8 -45.6 177.6 -52.6Q180.4 -59.7 185.4 -64.8Q190.5 -70 197.3 -72.8Q204.1 -75.7 212.1 -75.7Q220.1 -75.7 226.4 -73Q232.8 -70.3 237.2 -65.9Q241.6 -61.4 243.5 -56.1L231.3 -50.4Q229.2 -56 224.2 -59.7Q219.2 -63.3 212.1 -63.3Q205.1 -63.3 199.8 -60Q194.4 -56.7 191.4 -50.9Q188.5 -45.1 188.5 -37.3Q188.5 -29.5 191.4 -23.6Q194.4 -17.8 199.8 -14.5Q205.1 -11.2 212.1 -11.2Q219.2 -11.2 224.2 -14.8Q229.2 -18.4 231.3 -24.1L243.5 -18.4Q241.6 -13.1 237.2 -8.6Q232.8 -4.2 226.4 -1.5Q220.1 1.2 212.1 1.2Z',
+      // A
+      'M256.4 0 282.1 -74.5H299.7L325.4 0H310.6L305.3 -16H276.5L271.1 0ZM280.4 -28H301.4L289 -65H292.8Z',
+      // S
+      'M368.2 1.2Q361.2 1.2 355.2 -1.4Q349.1 -4 344.8 -8.6Q340.4 -13.3 338.4 -19.5L349.7 -24.4Q352.4 -17.9 357.5 -14.3Q362.6 -10.7 369 -10.7Q372.6 -10.7 375.2 -11.9Q377.9 -13 379.4 -15Q380.8 -17 380.8 -19.8Q380.8 -23.1 378.9 -25.2Q376.9 -27.4 373 -28.6L358.7 -33.2Q350 -35.9 345.6 -41.3Q341.1 -46.7 341.1 -54Q341.1 -60.4 344.3 -65.3Q347.5 -70.2 353.1 -73Q358.8 -75.7 366.1 -75.7Q372.8 -75.7 378.4 -73.4Q384 -71 388 -66.9Q392.1 -62.7 394.1 -57.1L382.9 -52.1Q380.7 -57.7 376.3 -60.7Q371.9 -63.8 366.1 -63.8Q362.7 -63.8 360.1 -62.7Q357.5 -61.5 356.1 -59.4Q354.6 -57.4 354.6 -54.6Q354.6 -51.5 356.6 -49.1Q358.6 -46.8 362.7 -45.5L376.4 -41.2Q385.3 -38.3 389.8 -33.2Q394.2 -28.1 394.2 -20.6Q394.2 -14.2 390.9 -9.3Q387.6 -4.4 381.8 -1.6Q375.9 1.2 368.2 1.2Z',
+    ];
+
+    const combinedPath = new Path2D(PATH_STRINGS.join(' '));
+
+    const VB_W = 408;
+    const VB_H = 62;
+    const Y_MIN = -78;
+    const GRID_STEP = 2.2;
+
+    const samplePoints: { u: number; v: number }[] = [];
+    const offCanvas = document.createElement('canvas');
+    const offCtx = offCanvas.getContext('2d');
+
+    if (offCtx) {
+      for (let gy = -76; gy <= 2; gy += GRID_STEP) {
+        for (let gx = 0; gx <= 408; gx += GRID_STEP) {
+          if (offCtx.isPointInPath(combinedPath, gx, gy)) {
+            samplePoints.push({
+              u: gx / VB_W,
+              v: (gy - Y_MIN) / VB_H,
+            });
+          }
+        }
+      }
+    }
+
+    interface DotParticle {
+      u: number;
+      v: number;
+      ox: number;
+      oy: number;
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      scatterX: number;
+      scatterY: number;
+      baseR: number;
+    }
+
+    let particles: DotParticle[] = [];
+    let W = 0;
+    let H = 0;
+    let DPR = 1;
+    const mouse = { x: -9999, y: -9999, active: false };
+    let isRevealed = false;
+    let revealProgress = 0;
+    let isRunning = false;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function resize() {
+      const rect = stage.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+
+      DPR = Math.min(window.devicePixelRatio || 1, 2);
+      W = rect.width;
+      H = rect.height;
+      canvas.width = Math.round(W * DPR);
+      canvas.height = Math.round(H * DPR);
+      ctx!.setTransform(DPR, 0, 0, DPR, 0, 0);
+
+      const scale = W / VB_W;
+      const dotRadius = Math.max(0.8, Math.min(2.0, scale * 0.44));
+
+      particles = samplePoints.map((pt) => {
+        const ox = pt.u * W;
+        const oy = pt.v * (VB_H * scale);
+
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 30 + Math.random() * 80;
+        const scatterX = Math.cos(angle) * dist;
+        const scatterY = Math.sin(angle) * dist;
+
+        return {
+          u: pt.u,
+          v: pt.v,
+          ox,
+          oy,
+          x: isRevealed || reduceMotion ? ox : ox + scatterX,
+          y: isRevealed || reduceMotion ? oy : oy + scatterY,
+          vx: 0,
+          vy: 0,
+          scatterX,
+          scatterY,
+          baseR: dotRadius,
+        };
+      });
+
+      if (!isRunning) {
+        isRunning = true;
+        requestAnimationFrame(render);
+      }
+    }
+
+    function onPointerMove(e: PointerEvent) {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+      mouse.active = true;
+
+      if (!isRunning) {
+        isRunning = true;
+        requestAnimationFrame(render);
+      }
+    }
+
+    function onPointerLeave() {
+      mouse.active = false;
+    }
+
+    stage.onpointermove = onPointerMove;
+    stage.onpointerleave = onPointerLeave;
+
+    if ('IntersectionObserver' in window && !reduceMotion) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting && !isRevealed) {
+              isRevealed = true;
+              if (!isRunning) {
+                isRunning = true;
+                requestAnimationFrame(render);
+              }
+              observer.unobserve(entry.target);
+            }
+          }
+        },
+        { threshold: 0.05 },
+      );
+      observer.observe(stage);
+    } else {
+      isRevealed = true;
+    }
+
+    function easeOutCubic(x: number): number {
+      return 1 - Math.pow(1 - x, 3);
+    }
+
+    function render() {
+      if (!ctx) return;
+
+      if (isRevealed && revealProgress < 1 && !reduceMotion) {
+        revealProgress = Math.min(1, revealProgress + 0.024);
+      } else if (reduceMotion) {
+        revealProgress = 1;
+      }
+
+      const revealEase = easeOutCubic(revealProgress);
+      const repelRadius = Math.max(70, Math.min(140, W * 0.12));
+      const repelStrength = 1.35;
+      const springK = 0.09;
+      const friction = 0.82;
+
+      ctx.clearRect(0, 0, W, H);
+
+      let maxVelocity = 0;
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+
+        const tx = p.ox + p.scatterX * (1 - revealEase);
+        const ty = p.oy + p.scatterY * (1 - revealEase);
+
+        if (mouse.active) {
+          const dx = p.x - mouse.x;
+          const dy = p.y - mouse.y;
+          const dist = Math.hypot(dx, dy);
+
+          if (dist < repelRadius && dist > 0.1) {
+            const force = Math.pow(1 - dist / repelRadius, 1.9) * repelStrength;
+            p.vx += (dx / dist) * force * 1.8;
+            p.vy += (dy / dist) * force * 1.8;
+          }
+        }
+
+        p.vx += (tx - p.x) * springK;
+        p.vy += (ty - p.y) * springK;
+        p.vx *= friction;
+        p.vy *= friction;
+
+        p.x += p.vx;
+        p.y += p.vy;
+
+        const speed = Math.hypot(p.vx, p.vy);
+        if (speed > maxVelocity) maxVelocity = speed;
+
+        const disp = Math.hypot(p.x - p.ox, p.y - p.oy);
+        const isDisplaced = disp > 2.2;
+
+        let r = p.baseR;
+        let fillStyle = '';
+
+        if (isDisplaced) {
+          const t = Math.min(1, (disp - 2.2) / 28);
+          r = p.baseR * (1 + t * 0.45);
+          const alpha = Math.min(0.92, 0.25 + t * 0.65);
+          fillStyle = `rgba(0, 229, 255, ${alpha.toFixed(2)})`;
+        } else {
+          const alpha = 0.15 + revealEase * 0.08;
+          fillStyle = `rgba(232, 237, 247, ${alpha.toFixed(2)})`;
+        }
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+        ctx.fillStyle = fillStyle;
+        ctx.fill();
+      }
+
+      if (mouse.active || maxVelocity > 0.04 || revealProgress < 1) {
+        requestAnimationFrame(render);
+      } else {
+        isRunning = false;
+      }
+    }
+
+    window.removeEventListener('resize', resize);
+    window.addEventListener('resize', resize, { passive: true });
+    resize();
   }
 
   if (document.readyState === 'loading') {

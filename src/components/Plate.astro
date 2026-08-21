@@ -809,10 +809,9 @@ import { LINKS } from '@/data/links';
       oy: number;
       x: number;
       y: number;
-      vx: number;
-      vy: number;
       scatterX: number;
       scatterY: number;
+      stagger: number;
       baseR: number;
     }
 
@@ -838,16 +837,16 @@ import { LINKS } from '@/data/links';
       ctx!.setTransform(DPR, 0, 0, DPR, 0, 0);
 
       const scale = W / VB_W;
-      const dotRadius = Math.max(0.42, Math.min(1.02, scale * 0.22));
+      const dotRadius = Math.max(0.46, Math.min(1.05, scale * 0.23));
 
       particles = samplePoints.map((pt) => {
         const ox = pt.u * W;
         const oy = pt.v * (VB_H * scale);
 
-        const angle = Math.random() * Math.PI * 2;
-        const dist = 32 + Math.random() * 75;
-        const scatterX = Math.cos(angle) * dist;
-        const scatterY = Math.sin(angle) * dist;
+        // Coordinated initial dispersed cloud beneath and across the footer
+        const scatterY = (34 + (1 - pt.v) * 28 + Math.sin(pt.u * Math.PI * 4) * 14 + (Math.random() - 0.5) * 16) * (scale * 0.85);
+        const scatterX = (Math.sin(pt.u * Math.PI * 6 + pt.v * Math.PI * 2) * 20 + (Math.random() - 0.5) * 14) * (scale * 0.85);
+        const stagger = (1 - pt.v) * 0.22 + Math.abs(pt.u - 0.5) * 0.18;
 
         return {
           u: pt.u,
@@ -856,10 +855,9 @@ import { LINKS } from '@/data/links';
           oy,
           x: isRevealed || reduceMotion ? ox : ox + scatterX,
           y: isRevealed || reduceMotion ? oy : oy + scatterY,
-          vx: 0,
-          vy: 0,
           scatterX,
           scatterY,
+          stagger,
           baseR: dotRadius,
         };
       });
@@ -910,74 +908,84 @@ import { LINKS } from '@/data/links';
       isRevealed = true;
     }
 
-    function easeOutQuart(x: number): number {
-      return 1 - Math.pow(1 - x, 4);
+    function easeOutCubic(x: number): number {
+      return 1 - Math.pow(1 - x, 3);
     }
 
     function render() {
       if (!ctx) return;
 
-      // Extended scroll grouping reveal (~1.9s duration at 60fps)
+      // Progressive 1.3s formation animation
       if (isRevealed && revealProgress < 1 && !reduceMotion) {
-        revealProgress = Math.min(1, revealProgress + 0.0088);
+        revealProgress = Math.min(1, revealProgress + 0.013);
       } else if (reduceMotion) {
         revealProgress = 1;
       }
 
-      const revealEase = easeOutQuart(revealProgress);
-      const repelRadius = Math.max(85, Math.min(175, W * 0.135));
-      const repelStrength = 1.05;
-      const springK = 0.11;
-      const damping = 0.74;
+      const repelRadius = Math.max(80, Math.min(160, W * 0.12));
+      const maxDisp = Math.max(10, Math.min(18, W * 0.015));
+      const lerpSpeed = 0.135;
 
       ctx.clearRect(0, 0, W, H);
 
-      let maxVelocity = 0;
+      let maxDelta = 0;
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
 
-        const tx = p.ox + p.scatterX * (1 - revealEase);
-        const ty = p.oy + p.scatterY * (1 - revealEase);
+        // Individual progressive convergence
+        let localEase = 1;
+        if (revealProgress < 1 && !reduceMotion) {
+          const raw = (revealProgress - p.stagger) / (1 - 0.35);
+          const clamped = Math.max(0, Math.min(1, raw));
+          localEase = easeOutCubic(clamped);
+        }
 
-        if (mouse.active) {
-          const dx = p.x - mouse.x;
-          const dy = p.y - mouse.y;
+        // Formation target position
+        const formedX = p.ox + p.scatterX * (1 - localEase);
+        const formedY = p.oy + p.scatterY * (1 - localEase);
+
+        let targetX = formedX;
+        let targetY = formedY;
+
+        // Magnetic repulsion once formed / forming
+        if (mouse.active && localEase > 0.6) {
+          const dx = formedX - mouse.x;
+          const dy = formedY - mouse.y;
           const dist = Math.hypot(dx, dy);
 
           if (dist < repelRadius && dist > 0.1) {
-            const normDist = dist / repelRadius;
-            const force = Math.pow(1 - normDist, 2.2) * repelStrength;
-            p.vx += (dx / dist) * force * 1.15;
-            p.vy += (dy / dist) * force * 1.15;
+            const norm = dist / repelRadius;
+            const fieldStrength = Math.pow(1 - norm, 2.0);
+            const disp = fieldStrength * maxDisp * localEase;
+            targetX = formedX + (dx / dist) * disp;
+            targetY = formedY + (dy / dist) * disp;
           }
         }
 
-        // Controlled ease-out return with zero overshoot/wobble
-        p.vx += (tx - p.x) * springK;
-        p.vy += (ty - p.y) * springK;
-        p.vx *= damping;
-        p.vy *= damping;
+        // Smooth ease-out interpolation (no bounce, no overshoot)
+        const diffX = targetX - p.x;
+        const diffY = targetY - p.y;
+        p.x += diffX * lerpSpeed;
+        p.y += diffY * lerpSpeed;
 
-        p.x += p.vx;
-        p.y += p.vy;
+        const moveDelta = Math.hypot(diffX, diffY);
+        if (moveDelta > maxDelta) maxDelta = moveDelta;
 
-        const speed = Math.hypot(p.vx, p.vy);
-        if (speed > maxVelocity) maxVelocity = speed;
-
+        // Measure magnetic displacement from authentic formation home
         const disp = Math.hypot(p.x - p.ox, p.y - p.oy);
-        const isDisplaced = disp > 1.5;
+        const isDisplaced = disp > 1.2 && localEase > 0.8;
 
         let r = p.baseR;
         let fillStyle = '';
 
         if (isDisplaced) {
-          const t = Math.min(1, (disp - 1.5) / 22);
-          r = p.baseR * (1 + t * 0.28);
-          const alpha = Math.min(0.92, 0.22 + t * 0.70);
+          const t = Math.min(1, (disp - 1.2) / maxDisp);
+          r = p.baseR * (1 + t * 0.25);
+          const alpha = Math.min(0.92, 0.25 + t * 0.65);
           fillStyle = `rgba(0, 229, 255, ${alpha.toFixed(2)})`;
         } else {
-          const alpha = 0.14 + revealEase * 0.08;
+          const alpha = 0.16 + localEase * 0.08;
           fillStyle = `rgba(232, 237, 247, ${alpha.toFixed(2)})`;
         }
 
@@ -987,7 +995,7 @@ import { LINKS } from '@/data/links';
         ctx.fill();
       }
 
-      if (mouse.active || maxVelocity > 0.03 || revealProgress < 1) {
+      if (mouse.active || maxDelta > 0.04 || revealProgress < 1) {
         requestAnimationFrame(render);
       } else {
         isRunning = false;

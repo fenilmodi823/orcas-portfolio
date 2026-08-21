@@ -52,7 +52,7 @@ const personLd = {
 
       <div class="hero-foot">
         <p class="hero-note">
-          I build <strong>ORCAS</strong> — a space-debris conjunction assessment system that replaces deterministic miss-distance with probability of collision. It caught the 2009 Iridium 33 / Cosmos 2251 collision that traditional models called a safe pass.
+          In February 2009, two satellites were tracked as a safe miss — half a kilometre apart. They collided anyway, at 11.7 km/s, scattering thousands of fragments across low Earth orbit. The tools that missed it measured distance. I build <strong>ORCAS</strong>: software that measures probability instead, and would have flagged that collision as critical.
         </p>
         <div class="readout">
           <div><span class="mono">Epoch · UTC</span><span class="v mono" id="utcClock">--:--:--</span></div>
@@ -67,14 +67,17 @@ const personLd = {
       <div class="statement-grid">
         <div class="statement-col">
           <span class="mono sec-tag">The Core Problem</span>
-          <h2 class="sec-h2">Deterministic distances fail in crowded orbital regimes.</h2>
+          <h2 class="sec-h2">A “safe distance” isn’t always safe.</h2>
         </div>
         <div class="statement-col prose">
           <p>
-            Radar telemetry carries covariance. When two uncertainty ellipsoids intersect in Low Earth Orbit, a deterministic miss distance of 500 metres can still hide a critical collision risk.
+            Every tracked satellite position carries some uncertainty — less a point than a small cloud of possible locations. Two satellites can be reported half a kilometre apart and still have those clouds overlap enough to collide. Distance alone can’t see that; only the shape of the uncertainty can.
           </p>
           <p>
-            ORCAS bridges classical astrodynamics with machine-learning covariance screening, evaluating genuine probability of collision (<em>P<sub>c</sub></em>) across thousands of simultaneous objects.
+            ORCAS combines classical orbital mechanics with machine learning to compute that risk directly — a real probability of collision (<em>P<sub>c</sub></em>), for thousands of objects at once, not just a yes/no distance check.
+          </p>
+          <p>
+            They weren’t wrong about the distance in 2009. They were wrong to treat it as a distance.
           </p>
         </div>
       </div>
@@ -116,7 +119,7 @@ const personLd = {
           <span class="mono teaser-badge">Phase P1 Verified · Historical Golden-File Rebuilt</span>
           <h3 class="teaser-title">Orbital Risk & Conjunction Assessment System</h3>
           <p class="teaser-desc">
-            Reconstructing the 2009 Iridium 33 / Cosmos 2251 collision with time-decoupled SGP4 propagation, B-plane covariance projection, and Random Forest classification.
+            A full reconstruction of the 2009 Iridium–Cosmos collision, rebuilt from real historical data — not a demo dataset. Under the hood: the same orbit propagation, uncertainty projection, and classification techniques used in operational space-traffic systems.
           </p>
           <div class="teaser-metrics mono">
             <div>
@@ -155,7 +158,7 @@ const personLd = {
           variant="feature"
           eyebrow="Lead Architect · Team Lead since Jan 2024"
           title="ORCAS"
-          description="Probabilistic conjunction assessment and orbital risk pipeline reconstructing historical LEO collision events. Began as the Space Debris Tracking System team project at Silver Oak University."
+          description="Predicts whether two satellites will actually collide — not just how close they'll pass — and reconstructs real historical near-misses to prove it. Began as the Space Debris Tracking System team project at Silver Oak University."
           tag="Python · Astrodynamics"
           meta="Phase P1 Done · Paper Accepted"
           href="/projects/orcas"

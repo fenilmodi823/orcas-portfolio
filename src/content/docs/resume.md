@@ -21,7 +21,7 @@ six-member orbital-analysis research team. Available for international relocatio
 **Probabilistic Space Debris Conjunction Assessment using Machine Learning and Covariance
 Intersection Analysis** — F. M. Modi, S. V. Khara, G. D. Tivari, J. Patel, P. Patel,
 G. Kumawat. *Accepted*, ICSSIT 2026 (7th International Conference on Smart Systems and
-Inventive Technology), Paper ID 1849, technically co-sponsored by the IEEE SMC Society.
+Inventive Technology), Paper ID 1849, technically sponsored by the IEEE SMC Society.
 Presented online, 28–30 July 2026. *Not yet indexed in IEEE Xplore.*
 
 First author and presenter. Showed that a nominal miss distance can remain statistically

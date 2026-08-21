@@ -259,10 +259,10 @@ const { id = 'readme-overlay' } = Astro.props;
     }
   }
 
-  const el = document.getElementById('readme-overlay');
-  const body = document.getElementById('ovBody');
-  const title = document.getElementById('ovTitle');
-  const kind = document.getElementById('ovKind');
+  let el: HTMLElement | null = null;
+  let body: HTMLElement | null = null;
+  let title: HTMLElement | null = null;
+  let kind: HTMLElement | null = null;
   let lastFocus: HTMLElement | null = null;
   let isOpen = false;
 
@@ -300,8 +300,10 @@ const { id = 'readme-overlay' } = Astro.props;
     el.classList.add('open');
     document.body.style.overflow = 'hidden';
     requestAnimationFrame(() => {
-      el.classList.add('in');
-      body.focus();
+      if (el && body) {
+        el.classList.add('in');
+        body.focus();
+      }
     });
     isOpen = true;
     window.addEventListener('keydown', trap, true);
@@ -316,9 +318,11 @@ const { id = 'readme-overlay' } = Astro.props;
     // Matches --t-base (see tokens.css) — the CSS transition on .ov-panel/.ov-scrim.
     // Clearing sooner cuts the fade-out off mid-motion.
     setTimeout(() => {
-      el.classList.remove('open');
-      el.hidden = true;
-      body.innerHTML = '';
+      if (el && body) {
+        el.classList.remove('open');
+        el.hidden = true;
+        body.innerHTML = '';
+      }
     }, 380);
     if (lastFocus && typeof lastFocus.focus === 'function') {
       lastFocus.focus();
@@ -355,11 +359,24 @@ const { id = 'readme-overlay' } = Astro.props;
     }
   };
 
-  window.closeOverlay = close;
+  function initOverlay() {
+    el = document.getElementById('readme-overlay');
+    body = document.getElementById('ovBody');
+    title = document.getElementById('ovTitle');
+    kind = document.getElementById('ovKind');
 
-  if (el) {
-    el.querySelectorAll('[data-close]').forEach((btn) => {
-      btn.addEventListener('click', close);
-    });
+    if (el) {
+      el.querySelectorAll('[data-close]').forEach((btn) => {
+        btn.removeEventListener('click', close);
+        btn.addEventListener('click', close);
+      });
+    }
   }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initOverlay);
+  } else {
+    initOverlay();
+  }
+  document.addEventListener('astro:page-load', initOverlay);
 </script>

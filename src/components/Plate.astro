@@ -9,17 +9,25 @@ import { LINKS } from '@/data/links';
         <div class="eyebrow"><span class="mono">Plate 01</span></div>
         <h2 class="h2">A record of where everything was.</h2>
       </div>
-      <div class="plate-legend mono" id="plateLegend">
-        <div><span class="sw cy"></span>Low Earth orbit · 550 km</div>
-        <div><span class="sw dash"></span>Medium Earth orbit · 20 200 km</div>
-        <div><span class="sw dash"></span>Geostationary · 35 786 km</div>
-        <div><span class="sw"></span>Inclination fan · degrees</div>
+      <div class="plate-legend mono" id="plateLegend" role="group" aria-label="Orbital shell filters">
+        <button type="button" class="legend-btn" data-shell="LEO" aria-pressed="false">
+          <span class="sw cy"></span><span>Low Earth orbit · 550 km</span>
+        </button>
+        <button type="button" class="legend-btn" data-shell="MEO" aria-pressed="false">
+          <span class="sw dash meo"></span><span>Medium Earth orbit · 20 200 km</span>
+        </button>
+        <button type="button" class="legend-btn" data-shell="GEO" aria-pressed="false">
+          <span class="sw dash geo"></span><span>Geostationary · 35 786 km</span>
+        </button>
+        <button type="button" class="legend-btn" data-shell="FAN" aria-pressed="false">
+          <span class="sw"></span><span>Inclination fan · degrees</span>
+        </button>
       </div>
     </div>
   </div>
 
   <div class="plate-stage">
-    <div class="plate">
+    <div class="plate" id="mainPlate">
       <svg viewBox="0 0 1000 1000" role="img" aria-label="The ORCAS Plate — orbital shells, inclination fan and catalogue marks">
         <defs>
           <path id="ringTextA" fill="none" d="M500 68 a432 432 0 1 1 -.1 0"></path>
@@ -52,12 +60,12 @@ import { LINKS } from '@/data/links';
         </text>
 
         <!-- shells -->
-        <circle class="etch" cx="500" cy="500" r="372" stroke-dasharray="5 9"></circle>
-        <circle class="etch" cx="500" cy="500" r="288" stroke-dasharray="5 9"></circle>
-        <circle class="etch-cy" cx="500" cy="500" r="198"></circle>
+        <circle class="etch shell-geo" data-shell="GEO" cx="500" cy="500" r="372" stroke-dasharray="5 9"></circle>
+        <circle class="etch shell-meo" data-shell="MEO" cx="500" cy="500" r="288" stroke-dasharray="5 9"></circle>
+        <circle class="etch-cy shell-leo" data-shell="LEO" cx="500" cy="500" r="198"></circle>
 
         <!-- inclination fan -->
-        <g id="fan"></g>
+        <g id="fan" data-shell="FAN"></g>
 
         <!-- two eccentric paths across the shells -->
         <ellipse class="etch" cx="500" cy="428" rx="180" ry="330" transform="rotate(-24 500 500)" opacity=".7"></ellipse>
@@ -82,9 +90,9 @@ import { LINKS } from '@/data/links';
         <text class="lbl" x="500" y="988" text-anchor="middle">12h</text>
         <text class="lbl" x="12" y="504">18h</text>
 
-        <text class="lbl lbl-cy" x="500" y="292" text-anchor="middle">LEO</text>
-        <text class="lbl" x="500" y="202" text-anchor="middle">MEO</text>
-        <text class="lbl" x="500" y="118" text-anchor="middle">GEO</text>
+        <text class="lbl lbl-cy lbl-leo" data-shell="LEO" x="500" y="292" text-anchor="middle">LEO</text>
+        <text class="lbl lbl-meo" data-shell="MEO" x="500" y="202" text-anchor="middle">MEO</text>
+        <text class="lbl lbl-geo" data-shell="GEO" x="500" y="118" text-anchor="middle">GEO</text>
       </svg>
       <div class="plate-core">
         <svg viewBox="62 45 88 120"><use href="#g-orca"></use></svg>
@@ -98,7 +106,10 @@ import { LINKS } from '@/data/links';
       <div class="foot-rows">
         <div class="foot-col transmit-col">
           <h4>Transmit</h4>
-          <a href={LINKS.email} class="email-link">{LINKS.email.replace('mailto:', '')}</a>
+          <a href={LINKS.email} class="email-link" id="footerEmailLink" title="Click to email or copy address">
+            {LINKS.email.replace('mailto:', '')}
+            <span class="copy-badge" id="emailCopyBadge">Copied ✓</span>
+          </a>
           <p class="foot-desc">
             Open to collaboration on orbital tooling, 3D interfaces, and anything that makes public space data usable.
           </p>
@@ -182,31 +193,61 @@ import { LINKS } from '@/data/links';
 
   .plate-legend {
     display: grid;
-    gap: 11px;
-    min-width: 236px;
+    gap: 6px;
+    min-width: 260px;
   }
-  .plate-legend div {
+  .legend-btn {
     display: flex;
     align-items: center;
     gap: 11px;
-    font-size: 10px;
-    letter-spacing: 0.14em;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: var(--r-cell);
+    padding: 6px 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--text-lo);
+    cursor: pointer;
+    text-align: left;
+    transition: all var(--t-fast) var(--ease);
+    width: 100%;
+    user-select: none;
   }
-  .plate-legend .sw {
+  .legend-btn:hover {
+    background: rgba(232, 237, 247, 0.05);
+    color: var(--text-hi);
+    border-color: rgba(232, 237, 247, 0.15);
+  }
+  .legend-btn.active {
+    background: rgba(0, 229, 255, 0.09);
+    color: var(--cyan);
+    border-color: rgba(0, 229, 255, 0.4);
+    box-shadow: 0 0 12px rgba(0, 229, 255, 0.15);
+  }
+  .legend-btn .sw {
     width: 16px;
     height: 1px;
     background: var(--text-xlo);
     flex: none;
+    transition: all var(--t-fast) var(--ease);
   }
-  .plate-legend .sw.dash {
+  .legend-btn .sw.dash {
     background: none;
     border-top: 1px dashed var(--text-xlo);
   }
-  .plate-legend .sw.cy {
+  .legend-btn .sw.cy {
     background: var(--cyan);
     opacity: 0.8;
+  }
+  .legend-btn.active .sw {
+    background: var(--cyan) !important;
+    box-shadow: 0 0 8px var(--cyan);
+  }
+  .legend-btn.active .sw.dash {
+    border-color: var(--cyan) !important;
+    box-shadow: 0 0 8px var(--cyan);
   }
 
   .plate-stage {
@@ -252,6 +293,7 @@ import { LINKS } from '@/data/links';
     fill: none;
     stroke: var(--text-xlo);
     stroke-width: 0.7;
+    transition: all var(--t-base) var(--ease);
   }
   .etch-hi {
     fill: none;
@@ -263,6 +305,7 @@ import { LINKS } from '@/data/links';
     stroke: var(--cyan);
     stroke-width: 0.9;
     opacity: 0.62;
+    transition: all var(--t-base) var(--ease);
   }
   .lbl {
     font-family: 'JetBrains Mono', monospace;
@@ -270,6 +313,7 @@ import { LINKS } from '@/data/links';
     letter-spacing: 0.2em;
     fill: var(--text-lo);
     text-transform: uppercase;
+    transition: all var(--t-base) var(--ease);
   }
   .lbl-cy {
     fill: var(--cyan);
@@ -280,6 +324,47 @@ import { LINKS } from '@/data/links';
     font-size: 7.5px;
     letter-spacing: 0.24em;
     fill: var(--text-xlo);
+  }
+
+  /* Filter highlight states for shells */
+  .plate.filter-active circle[data-shell],
+  .plate.filter-active ellipse,
+  .plate.filter-active #fan line,
+  .plate.filter-active #fan text,
+  .plate.filter-active .turn-r circle {
+    opacity: 0.12;
+    transition: opacity var(--t-base) var(--ease), stroke var(--t-base) var(--ease), fill var(--t-base) var(--ease);
+  }
+  .plate.filter-active.filter-LEO .shell-leo,
+  .plate.filter-active.filter-LEO .turn-r circle[data-shell="LEO"],
+  .plate.filter-active.filter-LEO .lbl-leo {
+    opacity: 1 !important;
+    stroke: var(--cyan) !important;
+    fill: var(--cyan);
+    filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.7));
+  }
+  .plate.filter-active.filter-MEO .shell-meo,
+  .plate.filter-active.filter-MEO .turn-r circle[data-shell="MEO"],
+  .plate.filter-active.filter-MEO .lbl-meo {
+    opacity: 1 !important;
+    stroke: var(--cyan) !important;
+    fill: var(--cyan);
+    filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.7));
+  }
+  .plate.filter-active.filter-GEO .shell-geo,
+  .plate.filter-active.filter-GEO .turn-r circle[data-shell="GEO"],
+  .plate.filter-active.filter-GEO .lbl-geo {
+    opacity: 1 !important;
+    stroke: var(--cyan) !important;
+    fill: var(--cyan);
+    filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.7));
+  }
+  .plate.filter-active.filter-FAN #fan line,
+  .plate.filter-active.filter-FAN #fan text {
+    opacity: 1 !important;
+    stroke: var(--cyan) !important;
+    fill: var(--cyan) !important;
+    filter: drop-shadow(0 0 5px rgba(0, 229, 255, 0.6));
   }
 
   .turn {
@@ -355,6 +440,27 @@ import { LINKS } from '@/data/links';
     font-weight: 200 !important;
     letter-spacing: -0.02em !important;
     word-break: break-all;
+    position: relative;
+  }
+  .copy-badge {
+    position: absolute;
+    right: -70px;
+    top: 50%;
+    transform: translateY(-50%) scale(0.8);
+    background: var(--cyan);
+    color: var(--void);
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 180ms ease;
+  }
+  .copy-badge.show {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
   }
   .foot-desc {
     margin: 12px 0 0;
@@ -428,170 +534,222 @@ import { LINKS } from '@/data/links';
 </style>
 
 <script>
-  // SVG Generator for Plate
-  const C = 500;
-  const NS = 'http://www.w3.org/2000/svg';
-  const mk = (t: string, a: Record<string, string | number>) => {
-    const e = document.createElementNS(NS, t);
-    for (const k in a) e.setAttribute(k, String(a[k]));
-    return e;
-  };
-  const pt = (r: number, degFromUp: number): [number, number] => {
-    const t = ((degFromUp - 90) * Math.PI) / 180;
-    return [C + r * Math.cos(t), C + r * Math.sin(t)];
-  };
+  function initPlate() {
+    const C = 500;
+    const NS = 'http://www.w3.org/2000/svg';
+    const mk = (t: string, a: Record<string, string | number>) => {
+      const e = document.createElementNS(NS, t);
+      for (const k in a) e.setAttribute(k, String(a[k]));
+      return e;
+    };
+    const pt = (r: number, degFromUp: number): [number, number] => {
+      const t = ((degFromUp - 90) * Math.PI) / 180;
+      return [C + r * Math.cos(t), C + r * Math.sin(t)];
+    };
 
-  // Rim ticks
-  const ticks = document.getElementById('rimTicks');
-  if (ticks && ticks.children.length === 0) {
-    for (let d = 0; d < 360; d += 3) {
-      const major = d % 15 === 0;
-      const cardinal = d % 90 === 0;
-      const r1 = 452;
-      const r2 = cardinal ? 476 : major ? 468 : 461;
-      const [x1, y1] = pt(r1, d);
-      const [x2, y2] = pt(r2, d);
-      ticks.appendChild(
-        mk('line', {
-          x1,
-          y1,
-          x2,
-          y2,
-          stroke: cardinal ? 'var(--cyan)' : 'var(--text-xlo)',
-          'stroke-width': cardinal ? 1.1 : major ? 0.8 : 0.55,
-          opacity: cardinal ? 0.7 : major ? 0.9 : 0.5,
-        }),
-      );
-    }
-  }
-
-  // Inclination fan
-  const fan = document.getElementById('fan');
-  if (fan && fan.children.length === 0) {
-    const INC = [
-      { i: 0, t: '0.0 EQUATORIAL' },
-      { i: 28.5, t: '28.5 CAPE' },
-      { i: 51.6, t: '51.6 ISS' },
-      { i: 63.4, t: '63.4 MOLNIYA' },
-      { i: 86.4, t: '86.4 POLAR' },
-      { i: 97.8, t: '97.8 SUN-SYNC' },
-    ];
-    INC.forEach(({ i, t }) => {
-      const live = i === 51.6;
-      const rays = i === 0 ? [90, 270] : [90 - i, 90 + i, 270 - i, 270 + i];
-      rays.forEach((d) => {
-        const [x1, y1] = pt(122, d);
-        const [x2, y2] = pt(388, d);
-        fan.appendChild(
+    // Rim ticks
+    const ticks = document.getElementById('rimTicks');
+    if (ticks && ticks.children.length === 0) {
+      for (let d = 0; d < 360; d += 3) {
+        const major = d % 15 === 0;
+        const cardinal = d % 90 === 0;
+        const r1 = 452;
+        const r2 = cardinal ? 476 : major ? 468 : 461;
+        const [x1, y1] = pt(r1, d);
+        const [x2, y2] = pt(r2, d);
+        ticks.appendChild(
           mk('line', {
             x1,
             y1,
             x2,
             y2,
-            stroke: live ? 'var(--cyan)' : 'var(--text-xlo)',
-            'stroke-width': live ? 0.9 : 0.6,
-            opacity: live ? 0.8 : 0.4,
-          }),
-        );
-      });
-      const d = 90 - i;
-      const [lx, ly] = pt(406, d);
-      const flip = (d + 360) % 360 > 180;
-      const lab = mk('text', {
-        x: lx,
-        y: ly,
-        class: 'lbl-xs' + (live ? ' lbl-cy' : ''),
-        'text-anchor': flip ? 'end' : 'start',
-        'dominant-baseline': 'middle',
-        transform: 'rotate(' + (flip ? d + 90 : d - 90) + ' ' + lx + ' ' + ly + ')',
-      });
-      lab.textContent = t;
-      fan.appendChild(lab);
-    });
-  }
-
-  // Catalogue marks
-  const cat = document.getElementById('cat');
-  if (cat && cat.children.length === 0) {
-    let s = 4589;
-    const rnd = () => (s = (s * 1103515245 + 12345) % 2147483648) / 2147483648;
-    const FEATURED = 6;
-    for (let n = 0; n < 168; n++) {
-      const roll = rnd();
-      const shell = roll < 0.68 ? 'LEO' : roll < 0.86 ? 'MEO' : 'GEO';
-      const r = shell === 'LEO' ? 190 + rnd() * 22 : shell === 'MEO' ? 282 + rnd() * 14 : 368 + rnd() * 9;
-      const [x, y] = pt(r, rnd() * 360);
-      const feat = n < FEATURED;
-      cat.appendChild(
-        mk('circle', {
-          cx: x,
-          cy: y,
-          r: feat ? 2.6 : shell === 'LEO' ? 1.5 : 1.9,
-          fill: feat ? 'var(--cyan)' : 'var(--text-lo)',
-          opacity: feat ? 0.95 : 0.38 + rnd() * 0.34,
-        }),
-      );
-      if (feat) {
-        cat.appendChild(
-          mk('circle', {
-            cx: x,
-            cy: y,
-            r: 6.5,
-            fill: 'none',
-            stroke: 'var(--cyan)',
-            'stroke-width': 0.6,
-            opacity: 0.4,
+            stroke: cardinal ? 'var(--cyan)' : 'var(--text-xlo)',
+            'stroke-width': cardinal ? 1.1 : major ? 0.8 : 0.55,
+            opacity: cardinal ? 0.7 : major ? 0.9 : 0.5,
           }),
         );
       }
     }
-  }
 
-  // Live UTC epoch in footer
-  const epochFoot = document.getElementById('epochFoot');
-  const yr = document.getElementById('yr');
-  function updateEpoch() {
-    const d = new Date();
-    const p = (n: number) => String(n).padStart(2, '0');
-    if (yr) yr.textContent = String(d.getUTCFullYear());
-    if (epochFoot) {
-      epochFoot.textContent = `${d.getUTCFullYear()}-${p(d.getUTCMonth() + 1)}-${p(d.getUTCDate())}`;
+    // Inclination fan
+    const fan = document.getElementById('fan');
+    if (fan && fan.children.length === 0) {
+      const INC = [
+        { i: 0, t: '0.0 EQUATORIAL' },
+        { i: 28.5, t: '28.5 CAPE' },
+        { i: 51.6, t: '51.6 ISS' },
+        { i: 63.4, t: '63.4 MOLNIYA' },
+        { i: 86.4, t: '86.4 POLAR' },
+        { i: 97.8, t: '97.8 SUN-SYNC' },
+      ];
+      INC.forEach(({ i, t }) => {
+        const live = i === 51.6;
+        const rays = i === 0 ? [90, 270] : [90 - i, 90 + i, 270 - i, 270 + i];
+        rays.forEach((d) => {
+          const [x1, y1] = pt(122, d);
+          const [x2, y2] = pt(388, d);
+          fan.appendChild(
+            mk('line', {
+              x1,
+              y1,
+              x2,
+              y2,
+              stroke: live ? 'var(--cyan)' : 'var(--text-xlo)',
+              'stroke-width': live ? 0.9 : 0.6,
+              opacity: live ? 0.8 : 0.4,
+            }),
+          );
+        });
+        const d = 90 - i;
+        const [lx, ly] = pt(406, d);
+        const flip = (d + 360) % 360 > 180;
+        const lab = mk('text', {
+          x: lx,
+          y: ly,
+          class: 'lbl-xs' + (live ? ' lbl-cy' : ''),
+          'text-anchor': flip ? 'end' : 'start',
+          'dominant-baseline': 'middle',
+          transform: 'rotate(' + (flip ? d + 90 : d - 90) + ' ' + lx + ' ' + ly + ')',
+        });
+        lab.textContent = t;
+        fan.appendChild(lab);
+      });
+    }
+
+    // Catalogue marks
+    const cat = document.getElementById('cat');
+    if (cat && cat.children.length === 0) {
+      let s = 4589;
+      const rnd = () => (s = (s * 1103515245 + 12345) % 2147483648) / 2147483648;
+      const FEATURED = 6;
+      for (let n = 0; n < 168; n++) {
+        const roll = rnd();
+        const shell = roll < 0.68 ? 'LEO' : roll < 0.86 ? 'MEO' : 'GEO';
+        const r = shell === 'LEO' ? 190 + rnd() * 22 : shell === 'MEO' ? 282 + rnd() * 14 : 368 + rnd() * 9;
+        const [x, y] = pt(r, rnd() * 360);
+        const feat = n < FEATURED;
+        cat.appendChild(
+          mk('circle', {
+            cx: x,
+            cy: y,
+            r: feat ? 2.6 : shell === 'LEO' ? 1.5 : 1.9,
+            fill: feat ? 'var(--cyan)' : 'var(--text-lo)',
+            opacity: feat ? 0.95 : 0.38 + rnd() * 0.34,
+            'data-shell': shell,
+          }),
+        );
+        if (feat) {
+          cat.appendChild(
+            mk('circle', {
+              cx: x,
+              cy: y,
+              r: 6.5,
+              fill: 'none',
+              stroke: 'var(--cyan)',
+              'stroke-width': 0.6,
+              opacity: 0.4,
+              'data-shell': shell,
+            }),
+          );
+        }
+      }
+    }
+
+    // Shell filter buttons in Legend
+    const legendBtns = document.querySelectorAll<HTMLButtonElement>('.legend-btn');
+    const plateEl = document.getElementById('mainPlate');
+
+    legendBtns.forEach((btn) => {
+      btn.onclick = () => {
+        const shell = btn.dataset.shell;
+        const isActive = btn.classList.contains('active');
+
+        legendBtns.forEach((b) => {
+          b.classList.remove('active');
+          b.setAttribute('aria-pressed', 'false');
+        });
+
+        if (plateEl) {
+          plateEl.classList.remove('filter-active', 'filter-LEO', 'filter-MEO', 'filter-GEO', 'filter-FAN');
+        }
+
+        if (!isActive && shell && plateEl) {
+          btn.classList.add('active');
+          btn.setAttribute('aria-pressed', 'true');
+          plateEl.classList.add('filter-active', `filter-${shell}`);
+        }
+      };
+    });
+
+    // Email click & copy helper
+    const emailLink = document.getElementById('footerEmailLink');
+    const copyBadge = document.getElementById('emailCopyBadge');
+    if (emailLink) {
+      emailLink.onclick = () => {
+        const email = 'fenilmmodi@gmail.com';
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(email).then(() => {
+            if (copyBadge) {
+              copyBadge.classList.add('show');
+              setTimeout(() => copyBadge.classList.remove('show'), 2000);
+            }
+          }).catch(() => {});
+        }
+      };
+    }
+
+    // Live UTC epoch in footer
+    const epochFoot = document.getElementById('epochFoot');
+    const yr = document.getElementById('yr');
+    function updateEpoch() {
+      const d = new Date();
+      const p = (n: number) => String(n).padStart(2, '0');
+      if (yr) yr.textContent = String(d.getUTCFullYear());
+      if (epochFoot) {
+        epochFoot.textContent = `${d.getUTCFullYear()}-${p(d.getUTCMonth() + 1)}-${p(d.getUTCDate())}`;
+      }
+    }
+    updateEpoch();
+
+    // 3D Interactive Tilt on the Keplerian Plate
+    const stages = document.querySelectorAll<HTMLElement>('.plate-stage');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduceMotion) {
+      stages.forEach((stage) => {
+        const plate = stage.querySelector<HTMLElement>('.plate');
+        if (!plate) return;
+        let raf = 0;
+        let curX = 0;
+        let curY = 0;
+        const TILT_DEG = 8;
+
+        stage.onpointermove = (e) => {
+          const rect = stage.getBoundingClientRect();
+          const px = (e.clientX - rect.left) / rect.width;
+          const py = (e.clientY - rect.top) / rect.height;
+          curX = (px - 0.5) * TILT_DEG * 2;
+          curY = (0.5 - py) * TILT_DEG * 2;
+          if (!raf) {
+            raf = requestAnimationFrame(() => {
+              plate.style.setProperty('--tiltX', `${curX.toFixed(2)}deg`);
+              plate.style.setProperty('--tiltY', `${curY.toFixed(2)}deg`);
+              raf = 0;
+            });
+          }
+        };
+
+        stage.onpointerleave = () => {
+          plate.style.setProperty('--tiltX', '0deg');
+          plate.style.setProperty('--tiltY', '0deg');
+        };
+      });
     }
   }
-  updateEpoch();
-  setInterval(updateEpoch, 1000);
 
-  // 3D Interactive Tilt on the Keplerian Plate
-  const stages = document.querySelectorAll<HTMLElement>('.plate-stage');
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!reduceMotion) {
-    stages.forEach((stage) => {
-      const plate = stage.querySelector<HTMLElement>('.plate');
-      if (!plate) return;
-      let raf = 0;
-      let curX = 0;
-      let curY = 0;
-      const TILT_DEG = 8;
-
-      stage.addEventListener('pointermove', (e) => {
-        const rect = stage.getBoundingClientRect();
-        const px = (e.clientX - rect.left) / rect.width;
-        const py = (e.clientY - rect.top) / rect.height;
-        curX = (px - 0.5) * TILT_DEG * 2;
-        curY = (0.5 - py) * TILT_DEG * 2;
-        if (!raf) {
-          raf = requestAnimationFrame(() => {
-            plate.style.setProperty('--tiltX', `${curX.toFixed(2)}deg`);
-            plate.style.setProperty('--tiltY', `${curY.toFixed(2)}deg`);
-            raf = 0;
-          });
-        }
-      });
-
-      stage.addEventListener('pointerleave', () => {
-        plate.style.setProperty('--tiltX', '0deg');
-        plate.style.setProperty('--tiltY', '0deg');
-      });
-    });
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPlate);
+  } else {
+    initPlate();
   }
+  document.addEventListener('astro:page-load', initPlate);
 </script>

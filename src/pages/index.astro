@@ -471,13 +471,22 @@ const personLd = {
 </style>
 
 <script>
-  const clock = document.getElementById('utcClock');
-  function updateClock() {
-    if (clock) {
-      const now = new Date();
-      clock.textContent = now.toISOString().slice(11, 19);
+  function initHeroClock() {
+    const clock = document.getElementById('utcClock');
+    function updateClock() {
+      if (clock) {
+        const now = new Date();
+        clock.textContent = now.toISOString().slice(11, 19);
+      }
     }
+    updateClock();
+    setInterval(updateClock, 1000);
   }
-  updateClock();
-  setInterval(updateClock, 1000);
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHeroClock);
+  } else {
+    initHeroClock();
+  }
+  document.addEventListener('astro:page-load', initHeroClock);
 </script>

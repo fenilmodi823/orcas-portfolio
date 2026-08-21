@@ -263,16 +263,18 @@
 <script>
   import { CATALOG, propagateEci, type OrbitalElements } from '@/lib/orbital';
 
-  const cv = document.getElementById('simCanvas') as HTMLCanvasElement;
-  const stage = document.getElementById('simStage') as HTMLElement;
-  const epochEl = document.getElementById('simEpoch');
-  const viewEl = document.getElementById('simView');
-  const nameEl = document.getElementById('simName');
-  const elsEl = document.getElementById('simEls');
-  const resetBtn = document.getElementById('simReset');
-  const rateBtns = document.querySelectorAll('.rate-btn');
+  function initMiniSimulation() {
+    const cv = document.getElementById('simCanvas') as HTMLCanvasElement;
+    const stage = document.getElementById('simStage') as HTMLElement;
+    const epochEl = document.getElementById('simEpoch');
+    const viewEl = document.getElementById('simView');
+    const nameEl = document.getElementById('simName');
+    const elsEl = document.getElementById('simEls');
+    const resetBtn = document.getElementById('simReset');
+    const rateBtns = document.querySelectorAll('.rate-btn');
 
-  if (cv && stage) {
+    if (!cv || !stage) return;
+
     const ctx = cv.getContext('2d')!;
     const RE = 6371;
     const D2R = Math.PI / 180;
@@ -587,4 +589,11 @@
       if (loopRunning) requestAnimationFrame(renderLoop);
     }
   }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMiniSimulation);
+  } else {
+    initMiniSimulation();
+  }
+  document.addEventListener('astro:page-load', initMiniSimulation);
 </script>

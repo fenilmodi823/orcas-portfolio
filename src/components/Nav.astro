@@ -1,6 +1,4 @@
 ---
-import { LINKS } from '@/data/links';
-
 interface Props {
   currentPath?: string;
 }
@@ -18,7 +16,7 @@ const { currentPath = '/' } = Astro.props;
     <a href="/research" class:list={[{ on: currentPath === '/research' }]}>Research</a>
     <a href="/projects" class:list={[{ on: currentPath.startsWith('/projects') }]}>Projects</a>
     <a href="/cv" class:list={[{ on: currentPath === '/cv' }]}>CV</a>
-    <a href={LINKS.email} class="cta">Contact</a>
+    <a href="#contact" class="cta" id="navContactBtn">Contact</a>
   </div>
 </nav>
 
@@ -127,20 +125,45 @@ const { currentPath = '/' } = Astro.props;
 </style>
 
 <script>
-  let lastY = 0;
-  const nav = document.getElementById('nav');
+  function initNav() {
+    let lastY = 0;
+    const nav = document.getElementById('nav');
+    const contactBtn = document.getElementById('navContactBtn');
 
-  function onScroll() {
-    const y = window.scrollY;
-    if (nav) {
-      if (y > 260 && y > lastY) {
-        nav.classList.add('hide');
-      } else {
-        nav.classList.remove('hide');
+    function onScroll() {
+      const y = window.scrollY;
+      if (nav) {
+        if (y > 260 && y > lastY) {
+          nav.classList.add('hide');
+        } else {
+          nav.classList.remove('hide');
+        }
       }
+      lastY = y;
     }
-    lastY = y;
+
+    window.removeEventListener('scroll', onScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    if (contactBtn) {
+      contactBtn.onclick = (e) => {
+        const contactEl = document.getElementById('contact');
+        if (contactEl) {
+          e.preventDefault();
+          contactEl.scrollIntoView({ behavior: 'smooth' });
+          const emailLink = contactEl.querySelector<HTMLAnchorElement>('.email-link');
+          if (emailLink) {
+            emailLink.focus();
+          }
+        }
+      };
+    }
   }
 
-  window.addEventListener('scroll', onScroll, { passive: true });
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initNav);
+  } else {
+    initNav();
+  }
+  document.addEventListener('astro:page-load', initNav);
 </script>

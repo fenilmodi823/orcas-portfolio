@@ -783,7 +783,7 @@ import { LINKS } from '@/data/links';
     const VB_W = 408;
     const VB_H = 62;
     const Y_MIN = -78;
-    const GRID_STEP = 2.2;
+    const GRID_STEP = 1.4;
 
     const samplePoints: { u: number; v: number }[] = [];
     const offCanvas = document.createElement('canvas');
@@ -838,14 +838,14 @@ import { LINKS } from '@/data/links';
       ctx!.setTransform(DPR, 0, 0, DPR, 0, 0);
 
       const scale = W / VB_W;
-      const dotRadius = Math.max(0.8, Math.min(2.0, scale * 0.44));
+      const dotRadius = Math.max(0.55, Math.min(1.25, scale * 0.28));
 
       particles = samplePoints.map((pt) => {
         const ox = pt.u * W;
         const oy = pt.v * (VB_H * scale);
 
         const angle = Math.random() * Math.PI * 2;
-        const dist = 30 + Math.random() * 80;
+        const dist = 24 + Math.random() * 64;
         const scatterX = Math.cos(angle) * dist;
         const scatterY = Math.sin(angle) * dist;
 
@@ -918,16 +918,16 @@ import { LINKS } from '@/data/links';
       if (!ctx) return;
 
       if (isRevealed && revealProgress < 1 && !reduceMotion) {
-        revealProgress = Math.min(1, revealProgress + 0.024);
+        revealProgress = Math.min(1, revealProgress + 0.022);
       } else if (reduceMotion) {
         revealProgress = 1;
       }
 
       const revealEase = easeOutCubic(revealProgress);
-      const repelRadius = Math.max(70, Math.min(140, W * 0.12));
-      const repelStrength = 1.35;
-      const springK = 0.09;
-      const friction = 0.82;
+      const repelRadius = Math.max(65, Math.min(125, W * 0.10));
+      const repelStrength = 1.15;
+      const springK = 0.12;
+      const damping = 0.73;
 
       ctx.clearRect(0, 0, W, H);
 
@@ -945,16 +945,17 @@ import { LINKS } from '@/data/links';
           const dist = Math.hypot(dx, dy);
 
           if (dist < repelRadius && dist > 0.1) {
-            const force = Math.pow(1 - dist / repelRadius, 1.9) * repelStrength;
-            p.vx += (dx / dist) * force * 1.8;
-            p.vy += (dy / dist) * force * 1.8;
+            const force = Math.pow(1 - dist / repelRadius, 1.8) * repelStrength;
+            p.vx += (dx / dist) * force * 1.25;
+            p.vy += (dy / dist) * force * 1.25;
           }
         }
 
+        // Controlled ease-out return with zero overshoot/wobble
         p.vx += (tx - p.x) * springK;
         p.vy += (ty - p.y) * springK;
-        p.vx *= friction;
-        p.vy *= friction;
+        p.vx *= damping;
+        p.vy *= damping;
 
         p.x += p.vx;
         p.y += p.vy;
@@ -963,15 +964,15 @@ import { LINKS } from '@/data/links';
         if (speed > maxVelocity) maxVelocity = speed;
 
         const disp = Math.hypot(p.x - p.ox, p.y - p.oy);
-        const isDisplaced = disp > 2.2;
+        const isDisplaced = disp > 1.8;
 
         let r = p.baseR;
         let fillStyle = '';
 
         if (isDisplaced) {
-          const t = Math.min(1, (disp - 2.2) / 28);
-          r = p.baseR * (1 + t * 0.45);
-          const alpha = Math.min(0.92, 0.25 + t * 0.65);
+          const t = Math.min(1, (disp - 1.8) / 24);
+          r = p.baseR * (1 + t * 0.35);
+          const alpha = Math.min(0.92, 0.24 + t * 0.68);
           fillStyle = `rgba(0, 229, 255, ${alpha.toFixed(2)})`;
         } else {
           const alpha = 0.15 + revealEase * 0.08;
@@ -984,7 +985,7 @@ import { LINKS } from '@/data/links';
         ctx.fill();
       }
 
-      if (mouse.active || maxVelocity > 0.04 || revealProgress < 1) {
+      if (mouse.active || maxVelocity > 0.03 || revealProgress < 1) {
         requestAnimationFrame(render);
       } else {
         isRunning = false;

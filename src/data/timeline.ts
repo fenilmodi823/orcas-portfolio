@@ -18,7 +18,7 @@ export const TIMELINE: TimelineEntry[] = [
   {
     yr: 'Jan 2024',
     t: 'Team Lead — Space Debris Tracking',
-    d: 'Leading a multi-member team building orbital debris tracking, prediction and visualisation on NASA APIs and TLE data.',
+    d: 'Leading a multi-member team building orbital debris tracking, prediction and visualisation on NASA APIs and public satellite tracking data (TLEs).',
   },
   {
     yr: 'Jun 2026',

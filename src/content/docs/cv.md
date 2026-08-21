@@ -34,7 +34,7 @@ primitives; scientific data visualisation.
 Intersection Analysis**
 F. M. Modi, S. V. Khara, G. D. Tivari, J. Patel, P. Patel, G. Kumawat
 *International Conference on Sustainable Systems and Innovative Technologies (ICSSIT 2026)*,
-Paper ID 1849. Technically co-sponsored by the IEEE Systems, Man and Cybernetics Society.
+Paper ID 1849. Technically sponsored by the IEEE Systems, Man and Cybernetics Society.
 **Accepted**; presented online 28–30 July 2026. Awaiting IEEE Xplore indexing.
 
 *Contribution (first author):* led the study design and analysis — fusing state estimates of

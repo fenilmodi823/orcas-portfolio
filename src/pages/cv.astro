@@ -15,8 +15,8 @@ const { Content: ResumeContent } = resumeDoc ? await render(resumeDoc) : { Conte
 const { Content: CvContent } = cvDoc ? await render(cvDoc) : { Content: null };
 
 // Check if PDF files exist in public/files
-const resumePdfPath = path.resolve('public/files/Fenil-Modi-Resume.pdf');
-const cvPdfPath = path.resolve('public/files/Fenil-Modi-CV.pdf');
+const resumePdfPath = path.resolve('public/files/Fenil_Modi_Resume.pdf');
+const cvPdfPath = path.resolve('public/files/Fenil_Modi_CV.pdf');
 const hasResumePdf = fs.existsSync(resumePdfPath);
 const hasCvPdf = fs.existsSync(cvPdfPath);
 

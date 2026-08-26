@@ -3,9 +3,11 @@ kind: Paper
 title: "Probabilistic Space Debris Conjunction Assessment"
 ---
 
-**Accepted — ICSSIT 2026 · Paper ID 1849 · technically sponsored by the IEEE Systems, Man
-and Cybernetics Society.** Presented online 28–30 July 2026. Not yet indexed in IEEE
-Xplore; this page will say *published* the day that changes, and not before.
+**Published — IEEE Xplore.** *2026 7th International Conference on Smart Systems and
+Inventive Technology (ICSSIT)*, pp. 1957–1962. Paper ID 1849, technically sponsored by the
+IEEE Systems, Man and Cybernetics Society. Presented online 28–30 July 2026.
+DOI: [10.1109/ICSSIT69151.2026.11656410](https://doi.org/10.1109/ICSSIT69151.2026.11656410)
+· [Read on IEEE Xplore](https://ieeexplore.ieee.org/document/11656410)
 
 *Fenil Miteshkumar Modi, Satvik V. Khara, Gaurav D. Tivari, Jay Patel, Prathmesh Patel,
 Gautam Kumawat — Department of Computer Engineering, Silver Oak University, Ahmedabad.*

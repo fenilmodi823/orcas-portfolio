@@ -26,16 +26,17 @@ primitives; scientific data visualisation.
 - Self-directed study: orbital mechanics (two-body dynamics, Keplerian elements, SGP4/SDP4
   propagation), numerical methods, probabilistic modelling and Bayesian inference (in progress).
 - Final-year work: probabilistic conjunction assessment under positional uncertainty — basis of
-  the accepted ICSSIT 2026 paper.
+  the published ICSSIT 2026 paper.
 
 ## Publications
 
 **Probabilistic Space Debris Conjunction Assessment using Machine Learning and Covariance
 Intersection Analysis**
 F. M. Modi, S. V. Khara, G. D. Tivari, J. Patel, P. Patel, G. Kumawat
-*International Conference on Sustainable Systems and Innovative Technologies (ICSSIT 2026)*,
-Paper ID 1849. Technically sponsored by the IEEE Systems, Man and Cybernetics Society.
-**Accepted**; presented online 28–30 July 2026. Awaiting IEEE Xplore indexing.
+*2026 7th International Conference on Smart Systems and Inventive Technology (ICSSIT)*,
+pp. 1957–1962. Paper ID 1849. Technically sponsored by the IEEE Systems, Man and
+Cybernetics Society. **Published in IEEE Xplore**; presented online 28–30 July 2026.
+DOI: [10.1109/ICSSIT69151.2026.11656410](https://doi.org/10.1109/ICSSIT69151.2026.11656410)
 
 *Contribution (first author):* led the study design and analysis — fusing state estimates of
 unknown cross-correlation via covariance intersection and applying machine learning to

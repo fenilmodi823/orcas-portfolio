@@ -26,6 +26,11 @@ export const TIMELINE: TimelineEntry[] = [
     d: 'ICSSIT 2026, Paper ID 1849, technically sponsored by the IEEE SMC Society. Presented 28–30 July.',
   },
   {
+    yr: 'Aug 2026',
+    t: 'Paper published',
+    d: 'Indexed in IEEE Xplore. ICSSIT 2026 proceedings, pp. 1957–1962.',
+  },
+  {
     yr: '2026',
     t: 'Graduating',
     d: 'B.Tech complete. Targeting research groups working on space situational awareness.',

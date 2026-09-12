@@ -45,9 +45,12 @@ Surviving pairs go to the narrow phase, which is where the actual argument lives
    by exact quadrature rather than an asymptotic approximation.
 
 A separately trained Random Forest classifies tracked objects by type — payload, debris,
-rocket body — from their mean orbital elements. It never sees the Mahalanobis distance
-and isn't part of the P_c pipeline above; scored on held-out data it reaches 0.98
-accuracy against a 0.79 majority-class baseline.
+rocket body — from their mean orbital elements. It never sees the Mahalanobis distance and
+isn't part of the P_c pipeline above. It's also retired from the product: a rigorous
+launch-grouped validation — the split that matters, since fragments of one breakup can
+otherwise land on both sides of a naive random split — found it reaches only 0.7604 ±
+0.1609 accuracy, underperforming a naive majority-class baseline in 4 of 10 splits. No API
+route or screen uses its output today.
 
 ### Rendering
 

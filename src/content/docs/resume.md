@@ -59,17 +59,18 @@ screening candidate conjunctions with machine learning.
   measured by end-to-end runtime over a ∼10,000-object TLE catalogue, by building a Python
   ingestion pipeline that validates checksums, resolves epoch drift and de-duplicates records.
 - Narrowed the conjunction search space before expensive computation, as measured by the count
-  of candidate object pairs surviving each filter stage, by implementing a coarse-to-fine
-  screening cascade using perigee–apogee and geometric pre-filters.
-- Replaced single point estimates with quantified confidence, as measured by 95% confidence
-  intervals on probability of collision, by running Monte Carlo sampling over positional
-  covariance in a batch-parallel workload.
-- Established propagator correctness before publishing any result, as measured by position
+  of candidate object pairs surviving a single broad-phase pass, by implementing spatial-hash
+  screening over a `scipy.spatial.cKDTree`.
+- Replaced single point estimates with a validated probability of collision, as measured by
+  matching NASA's own conjunction-assessment reference implementation on 12 of 12 published
+  benchmark cases, by computing P_c via exact 2D quadrature over the B-plane rather than an
+  asymptotic approximation.
+- Validated propagator correctness against independent reference outputs, as measured by position
   residuals against published reference ephemerides across a multi-day horizon, by
-  cross-validating the SGP4 implementation against independent reference outputs.
-- Kept a six-member team shipping reproducibly, as measured by full reconstruction of every
-  published figure from versioned source, by instituting Git-based code review and
-  parameterised analysis notebooks.
+  cross-validating the SGP4 implementation during the system's post-publication rebuild.
+- Kept a six-member team shipping reproducibly, as measured by a golden-file regression test that
+  reproduces the 2009 historical reconstruction from versioned code on every run, by instituting
+  Git-based code review and parameterised analysis notebooks.
 
 ## Selected projects
 

@@ -26,11 +26,11 @@ ORCAS replaces the distance threshold with a probability of collision.
 
 ### Broad phase
 
-A Python/FastAPI backend ingests dynamic Two-Line Element sets from CelesTrak and
-propagates them with SGP4. Screening every object against every other object is O(n²) and
-does not survive a real catalogue, so the broad phase uses volumetric spatial hashing
-over a `scipy.spatial.cKDTree` to reduce it to roughly O(n log n) — enough to hold a
-constellation-wide sweep inside a frame budget.
+An early prototype ingested Two-Line Element sets from CelesTrak and screened every
+object against every other with a single `scipy.spatial.cKDTree` pass, cutting an O(n²)
+sweep to roughly O(n log n). The rebuild takes OMM JSON as its canonical ingest format —
+CelesTrak's own TLE catalogue ran out of five-digit numbers in 2026 — keeping TLE only as
+a legacy import adapter; full broad-phase screening is designed but not yet built.
 
 ### Narrow phase
 
@@ -41,23 +41,32 @@ Surviving pairs go to the narrow phase, which is where the actual argument lives
 3. Project onto the **B-plane**, the plane perpendicular to relative velocity at TCA —
    `C_B = P · C_c · Pᵀ`. This collapses a three-dimensional encounter into the
    two-dimensional geometry that actually determines whether the objects intersect.
-4. Integrate the 2D Gaussian over the combined hardbody cross-section to get **P_c**.
+4. Integrate the 2D Gaussian over the combined hardbody cross-section to get **P_c**,
+   by exact quadrature rather than an asymptotic approximation.
 
-A Random Forest ensemble classifies the encounter from these kinematic features —
-principally the **Mahalanobis distance**, which measures separation in units of the
-uncertainty itself rather than in metres.
+A separately trained Random Forest classifies tracked objects by type — payload, debris,
+rocket body — from their mean orbital elements. It never sees the Mahalanobis distance
+and isn't part of the P_c pipeline above; scored on held-out data it reaches 0.98
+accuracy against a 0.79 majority-class baseline.
 
 ### Rendering
 
-A React-Three-Fiber frontend renders the result: dynamic Earth synced to GMST,
-selectable satellite meshes, orbit paths, and — for the Kessler case — a
-`THREE.InstancedMesh` swarm of ten thousand fragments with additive-blended volumetric
-density heatmaps, at a continuous 60 fps.
+The prototype rendered a GMST-synced rotating Earth with a ten-thousand-fragment
+`THREE.InstancedMesh` Kessler-debris swarm and volumetric density heatmaps. The rebuild's
+React-Three-Fiber renderer — selectable satellite meshes, orbit paths — is mid-build:
+Earth's rotation and the debris swarm are both roadmap items below, and the current scene
+holds a median 19 ms frame time at rest and a 41.8 ms p95 while dragging, at roughly
+16,500 tracked objects.
 
 ## The validation
 
-The method is only interesting if it changes an answer. So the system re-runs 2009,
-time-decoupled, using the historical elements:
+The method is only interesting if it changes an answer. Two things are worth keeping
+separate: what the published paper reported, and what the system can independently
+reproduce from real data.
+
+**As published (ICSSIT 2026).** Running the paper's historical elements through the
+pipeline above, under the *simulated* covariance the paper itself specifies — real public
+element sets carry none — gives:
 
 | Quantity | Value |
 | --- | --- |
@@ -69,9 +78,16 @@ time-decoupled, using the historical elements:
 | **Probability of collision P_c** | **4.2 × 10⁻³** |
 | Alert threshold | 1.0 × 10⁻⁴ |
 
-P_c comes out two orders of magnitude above the alert threshold. The deterministic models
-of the day flagged this encounter as a miss. The probabilistic pipeline flags it
+That's roughly 42× the alert threshold — under this assumed covariance, deterministic
+models of the day flagged the encounter as a miss; the probabilistic pipeline flags it
 **critical**.
+
+**Independently reproduced.** Using only element sets published *before* the collision —
+no hindsight, no simulated covariance — the rebuilt engine puts closest approach at
+16:55:59.796 UTC with a 698.0 m miss: inside the real-world SOCRATES warning system's own
+584 m call that week, and its 117 m – 1.812 km range. Separately, the P_c integration
+itself is checked directly against NASA's own conjunction-assessment reference
+implementation, matching it on 12 of 12 published benchmark cases.
 
 ## Status and scope
 

@@ -61,6 +61,9 @@ which is what allows the whole chain to run while holding 60 fps.
 
 ## Results — Iridium 33 / Cosmos 2251, T₀ = 2009-02-10 16:56:00 UTC
 
+As published, under the paper's own simulated covariance matrices (§V.C — real public
+element sets carry none):
+
 | Quantity | Value |
 | --- | --- |
 | Altitude | 788.6 km |
@@ -71,9 +74,12 @@ which is what allows the whole chain to run while holding 60 fps.
 | Probability of collision P_c | 4.2 × 10⁻³ |
 | Alert threshold | 1.0 × 10⁻⁴ |
 
-Deterministic Euclidean models in 2009 classified this encounter as a miss. The Random
-Forest and covariance-intersection pipeline classifies it as **critical**, two orders of
-magnitude above threshold.
+Deterministic Euclidean models in 2009 classified this encounter as a miss. Under this
+assumed covariance, the pipeline classifies it as **critical** — roughly 42× above
+threshold. The [case study](/projects/orcas) has the independent follow-up: the same P_c
+integration checked against NASA's own reference implementation on 12 of 12 published
+benchmark cases, and a from-first-principles reconstruction using only element sets
+published before the collision.
 
 ## Future work
 

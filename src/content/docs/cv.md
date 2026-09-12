@@ -63,17 +63,19 @@ ICSSIT 2026, 28–30 July 2026 (online).
   distributions across LEO/MEO/GEO and inclination bands, by performing exploratory data
   analysis on the cleaned catalogue.
 - Narrowed the conjunction search space ahead of expensive computation, as measured by candidate
-  object pairs surviving each filter stage, by implementing a coarse-to-fine screening cascade
-  with perigee–apogee and geometric pre-filters.
-- Replaced point estimates with quantified confidence, as measured by 95% confidence intervals
-  on probability of collision, by running Monte Carlo sampling over positional covariance as a
-  batch-parallel workload.
-- Established propagator correctness before publication, as measured by position residuals
-  against published reference ephemerides over a multi-day horizon, by cross-validating the
-  SGP4 implementation against independent reference outputs.
+  object pairs surviving a single broad-phase pass, by implementing spatial-hash screening over
+  a `scipy.spatial.cKDTree`.
+- Replaced point estimates with a validated probability of collision, as measured by matching
+  NASA's own conjunction-assessment reference implementation on 12 of 12 published benchmark
+  cases, by computing P_c via exact 2D quadrature over the B-plane rather than an asymptotic
+  approximation.
+- Validated propagator correctness against independent reference outputs, as measured by
+  position residuals against published reference ephemerides over a multi-day horizon, by
+  cross-validating the SGP4 implementation during the system's post-publication rebuild.
 - Coordinated a six-member research team — the co-author group of the ICSSIT 2026 paper —
-  keeping work reproducible, as measured by full reconstruction of every published figure from
-  versioned source, through Git-based code review and parameterised analysis notebooks.
+  keeping work reproducible, as measured by a golden-file regression test that reproduces the
+  2009 historical reconstruction from versioned code on every run, through Git-based code
+  review and parameterised analysis notebooks.
 - Stack: Python, SGP4/Skyfield, NumPy, SciPy, Pandas, Scikit-learn, FastAPI, React.
 
 ### Quantum-Enhanced AES Encryption using Quantum Random Walks — Aug 2023 to Dec 2023

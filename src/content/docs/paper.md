@@ -56,8 +56,10 @@ SGP4 propagation
   → 2D Gaussian integral over hardbody     P_c = ∬ 𝒩(x,y) dA
 ```
 
-Broad-phase spatial hashing reduces pair screening from O(N²) to approximately O(N log N),
-which is what allows the whole chain to run while holding 60 fps.
+A single spatial-hash pass narrowed pair screening from O(N²) to approximately O(N log N)
+in the paper-era prototype. Full broad-phase screening for the rebuilt system is designed
+but not yet built, and its renderer currently holds a 41.8 ms p95 frame time under load —
+not the paper's claimed continuous 60 fps.
 
 ## Results — Iridium 33 / Cosmos 2251, T₀ = 2009-02-10 16:56:00 UTC
 

@@ -57,9 +57,9 @@ route or screen uses its output today.
 The prototype rendered a GMST-synced rotating Earth with a ten-thousand-fragment
 `THREE.InstancedMesh` Kessler-debris swarm and volumetric density heatmaps. The rebuild's
 React-Three-Fiber renderer — selectable satellite meshes, orbit paths — is mid-build:
-Earth's rotation and the debris swarm are both roadmap items below, and the current scene
-holds a median 19 ms frame time at rest and a 41.8 ms p95 while dragging, at roughly
-16,500 tracked objects.
+Earth's rotation and the debris swarm are both roadmap items below. Measured once, on
+2026-09-14 in the scene's debug view, at roughly 16,500 tracked objects and before debris
+was added, a frame took about 7.5 ms of JavaScript and 1.7 ms of GPU time.
 
 ## The validation
 

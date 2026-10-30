@@ -24,7 +24,7 @@
 
   <aside class="paper-result">
     <div class="pr-head mono">
-      <span>Validation · T₀ 2009-02-10 16:56 UTC</span>
+      <span>As Published · Simulated Covariance · T₀ 2009-02-10 16:56 UTC</span>
       <h4>Iridium 33 / Cosmos 2251</h4>
     </div>
 
@@ -39,7 +39,12 @@
     </dl>
 
     <p class="pr-verdict">
-      Two orders of magnitude above threshold. Deterministic models called this a <b>miss</b>. The probabilistic pipeline flags it <span class="crit mono">CRITICAL</span>.
+      Roughly 42× above threshold under this assumed covariance — real public element sets carry none. Deterministic models of the day called this a <b>miss</b>. The probabilistic pipeline flags it <span class="crit mono">CRITICAL</span>.
+    </p>
+
+    <p class="pr-note mono">
+      Independently reproduced from data published <em>before</em> the collision: 698.0 m closest-approach miss, inside the real-world SOCRATES warning system's own window that week — and the P_c integration matches NASA's own conjunction-assessment reference implementation on 12 of 12 published benchmark cases.
+      <a href="/projects/orcas">Full case study →</a>
     </p>
   </aside>
 </div>
@@ -178,6 +183,19 @@
     margin: 0;
     padding-top: 12px;
     border-top: 1px solid var(--line);
+  }
+  .pr-note {
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--text-lo);
+    margin: 10px 0 0;
+  }
+  .pr-note a {
+    color: var(--cyan);
+    text-decoration: none;
+  }
+  .pr-note a:hover {
+    text-decoration: underline;
   }
   .crit {
     color: var(--critical);

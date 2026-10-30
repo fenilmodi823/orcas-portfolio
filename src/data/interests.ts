@@ -14,7 +14,7 @@ export const INTERESTS: Interest[] = [
   },
   {
     k: 'Method',
-    v: 'Uncertainty as a first-class object. Covariance propagation, B-plane geometry, and why a scalar miss distance is the wrong abstraction.',
+    v: 'Uncertainty as a first-class object. An assumed covariance rotated between frames, B-plane geometry, and why a scalar miss distance is the wrong abstraction.',
   },
   {
     k: 'Event',

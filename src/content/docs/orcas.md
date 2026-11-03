@@ -30,7 +30,11 @@ An early prototype ingested Two-Line Element sets from CelesTrak and screened ev
 object against every other with a single `scipy.spatial.cKDTree` pass, cutting an O(n²)
 sweep to roughly O(n log n). The rebuild takes OMM JSON as its canonical ingest format —
 CelesTrak's own TLE catalogue ran out of five-digit numbers in 2026 — keeping TLE only as
-a legacy import adapter; full broad-phase screening is designed but not yet built.
+a legacy import adapter. The rebuilt catalogue screen propagates every object with SGP4,
+finds close pairs with a k-d tree search whose radius provably catches every encounter
+under 5 km, and refines each one to its time of closest approach. Given only a two-hour
+window and no named pair, it rediscovers the 2009 Iridium 33 / Cosmos 2251 encounter from
+the pre-event element sets.
 
 ### Narrow phase
 
@@ -56,8 +60,9 @@ route or screen uses its output today.
 
 The prototype rendered a GMST-synced rotating Earth with a ten-thousand-fragment
 `THREE.InstancedMesh` Kessler-debris swarm and volumetric density heatmaps. The rebuild's
-React-Three-Fiber renderer — selectable satellite meshes, orbit paths — is mid-build:
-Earth's rotation and the debris swarm are both roadmap items below. Measured once, on
+React-Three-Fiber renderer draws the whole public catalogue as GPU points, with picking,
+orbit paths, and the Earth, Sun and Moon on the simulation clock, checked against JPL
+DE421; the synthetic debris swarm is a roadmap item below. Measured once, on
 2026-09-14 in the scene's debug view, at roughly 16,500 tracked objects and before debris
 was added, a frame took about 7.5 ms of JavaScript and 1.7 ms of GPU time.
 
@@ -67,9 +72,9 @@ The method is only interesting if it changes an answer. Two things are worth kee
 separate: what the published paper reported, and what the system can independently
 reproduce from real data.
 
-**As published (ICSSIT 2026).** Running the paper's historical elements through the
-pipeline above, under the *simulated* covariance the paper itself specifies — real public
-element sets carry none — gives:
+**As published (ICSSIT 2026).** For the paper's historical elements, under the
+*simulated* covariance the paper itself specifies — real public element sets carry
+none — the paper reports:
 
 | Quantity | Value |
 | --- | --- |
@@ -82,8 +87,10 @@ element sets carry none — gives:
 | Alert threshold | 1.0 × 10⁻⁴ |
 
 That's roughly 42× the alert threshold — under this assumed covariance, deterministic
-models of the day flagged the encounter as a miss; the probabilistic pipeline flags it
-**critical**.
+models of the day flagged the encounter as a miss; the paper's probabilistic pipeline
+flags it **critical**. Those covariances can't be recovered from public data, so the
+covariance-dependent figures above are quoted as published, not reproduced; for
+catalogue objects ORCAS reports a labelled maximum P_c instead.
 
 **Independently reproduced.** Using only element sets published *before* the collision —
 no hindsight, no simulated covariance — the rebuilt engine puts closest approach at
@@ -94,19 +101,22 @@ implementation, matching it on 12 of 12 published benchmark cases.
 
 ## Status and scope
 
-**Done:** SGP4 propagation engine, covariance/conjunction pipeline, Random Forest
-classifier, OMM ingestion with legacy TLE adapter, and a golden-file test of the
-2009 Iridium 33 / Cosmos 2251 historical reconstruction.
+**Done:** SGP4 propagation engine, covariance/conjunction pipeline, catalogue-wide
+conjunction screening with a labelled maximum P_c, a close-approach warning, OMM
+ingestion with legacy TLE adapter, the planets and their major moons, and a golden-file
+test of the 2009 Iridium 33 / Cosmos 2251 historical reconstruction. The object
+classifier was built and is retired (above).
 
-**Roadmap:** Kessler swarm visualisation, density heatmaps, CSV export, J2 and
-atmospheric drag perturbations in the propagator, ML-driven orbital decay prediction,
-and full backend collision integration.
+**Roadmap:** the Kessler debris swarm, scheduled ingestion and screening, 3D satellite
+models, spacecraft in the Solar System view, and the galactic scale.
 
-**Honest scope note:** the interactive simulation on this page is a deliberately small
-slice — two-body Keplerian propagation, no perturbations, representative elements rather
-than live TLEs. The real engine is a separate application.
+**Honest scope note:** the simulation on this page is the real application, published
+as a static site: the public catalogue and the latest screening run, baked and refreshed
+by hand, so its data is as old as the element-set epoch it shows. The backend and its
+database run locally.
 
 ## Reproducibility
 
-The repository isn't public yet — full open-sourcing is planned once the simulation
-reaches parity (Phase P6). It will be a one-command `docker compose up` when it opens.
+The repository is public at
+[github.com/fenilmodi823/orcas](https://github.com/fenilmodi823/orcas). The full system —
+backend, database and simulation — starts locally with one `docker compose up`.

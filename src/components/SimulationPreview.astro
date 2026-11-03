@@ -1,0 +1,133 @@
+---
+// The real ORCAS simulation, loaded into this window only when asked for:
+// until then a screenshot stands in, so the page never downloads the
+// catalogue or starts a 3D scene for a visitor who doesn't want one.
+const SIM_URL = 'https://orcas-simulation.vercel.app/';
+---
+
+<div class="sim">
+  <div class="sim-stage" id="simStage">
+    <img
+      class="sim-poster"
+      src="/images/orcas-simulation.webp"
+      alt="The ORCAS simulation: the Earth with satellite orbits, and a close-approach warning between two Starlink satellites."
+      width="1600"
+      height="900"
+      loading="lazy"
+      decoding="async"
+    />
+    <button type="button" class="sim-launch" id="simLaunch">
+      <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M7 4l13 8-13 8z" fill="currentColor"></path></svg>
+      Launch live simulation
+    </button>
+  </div>
+
+  <div class="sim-foot">
+    <p class="sim-note mono">
+      The real build: the public satellite catalogue propagated with SGP4 in your browser, with the day's screened close
+      approaches. Best on a desktop browser.
+    </p>
+    <a class="sim-open mono" href={SIM_URL} target="_blank" rel="noopener">Open full screen ↗</a>
+  </div>
+</div>
+
+<style>
+  .sim {
+    border: 1px solid var(--line);
+    border-radius: var(--r-panel);
+    overflow: hidden;
+    background: rgba(5, 9, 18, 0.5);
+    margin: clamp(24px, 4vw, 40px) 0;
+  }
+  .sim-stage {
+    position: relative;
+    /* A definite width, or the min-height widens the box through the ratio. */
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    min-height: 340px;
+    background: var(--void);
+  }
+  .sim-poster,
+  .sim-stage :global(iframe) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+  .sim-poster {
+    object-fit: cover;
+    object-position: top center;
+    opacity: 0.75;
+  }
+  .sim-launch {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 26px;
+    border-radius: var(--r-pill);
+    border: 1px solid rgba(0, 229, 255, 0.4);
+    background: rgba(4, 7, 15, 0.72);
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur));
+    color: var(--cyan);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all var(--t-fast) var(--ease);
+  }
+  .sim-launch:hover {
+    border-color: var(--cyan);
+    background: rgba(0, 229, 255, 0.12);
+  }
+  .sim-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 14px clamp(16px, 2.5vw, 24px) 16px;
+    border-top: 1px solid var(--line);
+  }
+  .sim-note {
+    margin: 0;
+    max-width: 72ch;
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--text-lo);
+  }
+  .sim-open {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--cyan);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .sim-open:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<script>
+  function initSimulationPreview() {
+    const stage = document.getElementById('simStage');
+    const launch = document.getElementById('simLaunch');
+    if (!stage || !launch || launch.dataset.bound) return;
+    launch.dataset.bound = '1';
+    launch.addEventListener('click', () => {
+      const frame = document.createElement('iframe');
+      frame.src = 'https://orcas-simulation.vercel.app/';
+      frame.title = 'ORCAS simulation';
+      frame.allow = 'fullscreen';
+      stage.replaceChildren(frame);
+      frame.focus();
+    });
+  }
+
+  initSimulationPreview();
+  document.addEventListener('astro:page-load', initSimulationPreview);
+</script>

@@ -57,9 +57,9 @@ SGP4 propagation
 ```
 
 A single spatial-hash pass narrowed pair screening from O(N²) to approximately O(N log N)
-in the paper-era prototype. Full broad-phase screening for the rebuilt system is designed
-but not yet built, so the rebuild does not yet support the paper's claim that the whole
-chain runs at a continuous 60 fps.
+in the paper-era prototype. The rebuilt system now screens the whole catalogue, but as a
+batch job — the next 24 hours at a 10 s step, in about half an hour — so the rebuild does
+not support the paper's claim that the whole chain runs at a continuous 60 fps.
 
 ## Results — Iridium 33 / Cosmos 2251, T₀ = 2009-02-10 16:56:00 UTC
 

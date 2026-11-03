@@ -6,7 +6,7 @@ import Nav from '@/components/Nav.astro';
 import Dock from '@/components/Dock.astro';
 import Plate from '@/components/Plate.astro';
 import PhaseRail from '@/components/PhaseRail.astro';
-import MiniSimulation from '@/components/MiniSimulation.astro';
+import SimulationPreview from '@/components/SimulationPreview.astro';
 
 const orcasDoc = await getEntry('docs', 'orcas');
 const { Content } = orcasDoc ? await render(orcasDoc) : { Content: null };
@@ -36,21 +36,22 @@ const sections = [
         <h1 class="page-title">ORCAS</h1>
         <p class="page-subtitle mono">Orbital Risk & Conjunction Assessment System</p>
         <p class="page-lead">
-          Replacing Euclidean distance thresholds with rigorous collision probabilities in Low Earth Orbit using SGP4 propagation, B-plane covariance projection, and Random Forest classification.
+          Replacing Euclidean distance thresholds with rigorous collision probabilities in Low Earth Orbit using SGP4 propagation and B-plane covariance projection.
         </p>
+        <a href="https://orcas-simulation.vercel.app/" class="btn btn-pri" target="_blank" rel="noopener">Open the full simulation</a>
       </section>
 
-      <!-- INTERACTIVE MINI-SIMULATION -->
+      <!-- THE REAL SIMULATION, LOADED ON REQUEST -->
       <section id="simulation" class="sec" style="border-top: none; padding-top: 0;">
         <div class="sec-head">
           <div>
-            <span class="mono sec-tag">Interactive Simulation</span>
-            <h2 class="sec-h2">Two-Body Keplerian Orbit Viewer</h2>
+            <span class="mono sec-tag">Live Simulation</span>
+            <h2 class="sec-h2">The Public Catalogue in 3D</h2>
           </div>
-          <span class="mono sec-note">Live ECI Projection · Drag to Orbit · Click to Select</span>
+          <span class="mono sec-note">SGP4 in Your Browser · Loads on Click</span>
         </div>
 
-        <MiniSimulation />
+        <SimulationPreview />
       </section>
 
       <!-- PHASE RAIL PROGRESS -->
@@ -109,7 +110,27 @@ const sections = [
     color: var(--text);
     line-height: 1.65;
     max-width: 68ch;
-    margin: 0;
+    margin: 0 0 24px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 22px;
+    border-radius: var(--r-pill);
+    font-size: 13px;
+    text-decoration: none;
+    border: 1px solid var(--line);
+    color: var(--text-hi);
+    transition: all var(--t-fast) var(--ease);
+  }
+  .btn-pri {
+    border-color: rgba(0, 229, 255, 0.4);
+    color: var(--cyan);
+    background: rgba(0, 229, 255, 0.06);
+  }
+  .btn-pri:hover {
+    border-color: var(--cyan);
+    background: rgba(0, 229, 255, 0.12);
   }
   .sec {
     padding: clamp(40px, 6vw, 72px) 0;

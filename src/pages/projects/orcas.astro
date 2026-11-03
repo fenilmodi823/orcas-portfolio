@@ -38,6 +38,7 @@ const sections = [
         <p class="page-lead">
           Replacing Euclidean distance thresholds with rigorous collision probabilities in Low Earth Orbit using SGP4 propagation, B-plane covariance projection, and Random Forest classification.
         </p>
+        <a href="https://orcas-simulation.vercel.app/" class="btn btn-pri" target="_blank" rel="noopener">Open the full simulation</a>
       </section>
 
       <!-- INTERACTIVE MINI-SIMULATION -->
@@ -109,7 +110,27 @@ const sections = [
     color: var(--text);
     line-height: 1.65;
     max-width: 68ch;
-    margin: 0;
+    margin: 0 0 24px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 22px;
+    border-radius: var(--r-pill);
+    font-size: 13px;
+    text-decoration: none;
+    border: 1px solid var(--line);
+    color: var(--text-hi);
+    transition: all var(--t-fast) var(--ease);
+  }
+  .btn-pri {
+    border-color: rgba(0, 229, 255, 0.4);
+    color: var(--cyan);
+    background: rgba(0, 229, 255, 0.06);
+  }
+  .btn-pri:hover {
+    border-color: var(--cyan);
+    background: rgba(0, 229, 255, 0.12);
   }
   .sec {
     padding: clamp(40px, 6vw, 72px) 0;

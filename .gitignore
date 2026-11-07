@@ -26,3 +26,6 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+
+# Local symlink to private notes. Never commit it (no trailing slash: git sees a link as a file)
+Portfolio Vault
